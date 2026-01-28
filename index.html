@@ -97,16 +97,16 @@
 </div>
 
 <script>
-    let dC = JSON.parse(localStorage.getItem('QD_V6_C')) || [];
-    let dE = JSON.parse(localStorage.getItem('QD_V6_E')) || [];
-    let dS = JSON.parse(localStorage.getItem('QD_V6_S')) || {};
+    let dC = JSON.parse(localStorage.getItem('QD_V7_C')) || [];
+    let dE = JSON.parse(localStorage.getItem('QD_V7_E')) || [];
+    let dS = JSON.parse(localStorage.getItem('QD_V7_S')) || {};
 
     const m = v => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
 
     function salvarTudo() {
-        localStorage.setItem('QD_V6_C', JSON.stringify(dC));
-        localStorage.setItem('QD_V6_E', JSON.stringify(dE));
-        localStorage.setItem('QD_V6_S', JSON.stringify(dS));
+        localStorage.setItem('QD_V7_C', JSON.stringify(dC));
+        localStorage.setItem('QD_V7_E', JSON.stringify(dE));
+        localStorage.setItem('QD_V7_S', JSON.stringify(dS));
     }
 
     function getEmbalagemUn() {
@@ -186,7 +186,8 @@
                     <div class="item-info">
                         <span class="nome-label">${it.n}</span>
                         <span class="enviado-label">Enviado: ${it.q} und</span>
-                        <span class="venda-label">ID: ${it.id} | Unitário: ${m(it.v)}</span>
+                        <span class="id-label">ID: ${it.id}</span>
+                        <span class="venda-label">Unitário: ${m(it.v)}</span>
                     </div>
                     <input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:55px; background:#000; color:#fff; border:1px solid var(--verde); padding:8px; border-radius:5px; font-weight:bold; font-size:16px;">
                 </div>`;
@@ -242,3 +243,4 @@
 </script>
 </body>
 </html>
+
