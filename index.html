@@ -29,6 +29,7 @@
         td { padding: 10px 2px; border-bottom: 1px solid #333; vertical-align: middle; }
         .thumb { width: 45px; height: 45px; object-fit: cover; border-radius: 5px; border: 1px solid #444; }
         .id-label { color: var(--ouro); font-size: 10px; font-weight: bold; display: block; }
+        .venda-label { color: #aaa; font-size: 11px; font-weight: normal; }
         .nome-label { color: #fff; font-weight: bold; display: block; }
         .perc-verde { color: var(--verde); font-weight: bold; }
         .salao-container { margin-top: 15px; border-radius: 12px; background: #222; overflow: hidden; border: 1px solid #444; }
@@ -95,16 +96,16 @@
 </div>
 
 <script>
-    let dC = JSON.parse(localStorage.getItem('QD_V4_C')) || [];
-    let dE = JSON.parse(localStorage.getItem('QD_V4_E')) || [];
-    let dS = JSON.parse(localStorage.getItem('QD_V4_S')) || {};
+    let dC = JSON.parse(localStorage.getItem('QD_V5_C')) || [];
+    let dE = JSON.parse(localStorage.getItem('QD_V5_E')) || [];
+    let dS = JSON.parse(localStorage.getItem('QD_V5_S')) || {};
 
     const m = v => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
 
     function salvarTudo() {
-        localStorage.setItem('QD_V4_C', JSON.stringify(dC));
-        localStorage.setItem('QD_V4_E', JSON.stringify(dE));
-        localStorage.setItem('QD_V4_S', JSON.stringify(dS));
+        localStorage.setItem('QD_V5_C', JSON.stringify(dC));
+        localStorage.setItem('QD_V5_E', JSON.stringify(dE));
+        localStorage.setItem('QD_V5_S', JSON.stringify(dS));
     }
 
     function getEmbalagemUn() {
@@ -150,26 +151,12 @@
     function addS() {
         let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
         if(!s || idx === "") return;
-        
-        // TRAVA DE COMISSÃO DIFERENTE
-        if(dS[s] && dS[s].com !== com) {
-            alert(`Atenção: Este salão já tem itens com ${dS[s].com}%. Altere a comissão para ${dS[s].com}% para continuar.`);
-            return;
-        }
-
+        if(dS[s] && dS[s].com !== com) { alert(`Atenção: Use ${dS[s].com}% para este salão.`); return; }
         let pecaOriginal = dE[idx];
         if(pecaOriginal.q < q) { alert("Estoque insuficiente!"); return; }
-
         if(!dS[s]) dS[s] = { itens: [], com: com };
-
-        // JUNTAR SE JÁ EXISTIR NO SALÃO
         let itemNoSalao = dS[s].itens.find(it => it.id === pecaOriginal.id);
-        if(itemNoSalao) {
-            itemNoSalao.q += q;
-        } else {
-            dS[s].itens.push({ ...pecaOriginal, q: q });
-        }
-        
+        if(itemNoSalao) { itemNoSalao.q += q; } else { dS[s].itens.push({ ...pecaOriginal, q: q }); }
         pecaOriginal.q -= q;
         salvarTudo(); render();
     }
@@ -193,7 +180,15 @@
         for(let s in dS) {
             let rws = '';
             dS[s].itens.forEach((it, i) => {
-                rws += `<div class="item-salao"><img src="${it.f}" class="thumb"><div class="item-info"><span class="nome-label">${it.n}</span><span class="id-label">ID: ${it.id} | Enviado: ${it.q}un</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:55px; background:#000; color:#fff; border:1px solid var(--verde); padding:8px; border-radius:5px;"></div>`;
+                rws += `<div class="item-salao">
+                    <img src="${it.f}" class="thumb">
+                    <div class="item-info">
+                        <span class="nome-label">${it.n}</span>
+                        <span class="id-label">ID: ${it.id} | Enviado: ${it.q}un</span>
+                        <span class="venda-label">Unitário: ${m(it.v)}</span>
+                    </div>
+                    <input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:55px; background:#000; color:#fff; border:1px solid var(--verde); padding:8px; border-radius:5px;">
+                </div>`;
             });
             htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} (${dS[s].com}%)</span><span>Ver ▾</span></div><div class="salao-corpo">${rws}<div style="display:flex; justify-content:space-around; margin-top:15px;"><div class="v-box"><small>Comissão</small><br><strong class="comissao" id="c-${s}">R$ 0,00</strong></div><div class="v-box"><small>Receber</small><br><strong class="receber" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-add" style="background:var(--ouro); color:black; margin-top:15px; font-size:12px;" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
         }
