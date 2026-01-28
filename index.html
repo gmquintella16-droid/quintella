@@ -205,13 +205,33 @@
     }
 
     function fechar(s) {
-        if(!confirm("Fechar acerto?")) return;
-        dS[s].itens.forEach((it, i) => {
-            let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
-            let p = dE.find(e => e.id === it.id); if(p) p.q += (it.q - v);
-        });
-        delete dS[s]; salvarTudo(); render();
-    }
+    let erro = false;
+    
+    // Validar se as quantidades digitadas são permitidas
+    dS[s].itens.forEach((it, i) => {
+        let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
+        if (v > it.q) {
+            alert(`Erro na peça ${it.n}: O salão possui apenas ${it.q} unidades, você tentou dar baixa em ${v}.`);
+            erro = true;
+        }
+    });
+
+    if (erro) return; // Interrompe o fechamento se houver erro
+
+    if (!confirm("Confirmar fechamento de acerto para " + s + "?")) return;
+
+    dS[s].itens.forEach((it, i) => {
+        let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
+        // O que não foi vendido (it.q - v) volta para o estoque principal
+        let p = dE.find(e => e.id === it.id); 
+        if (p) p.q += (it.q - v);
+    });
+
+    delete dS[s]; 
+    salvarTudo(); 
+    render();
+    alert("Acerto concluído com sucesso!");
+}
 
     async function comprimirFoto(f) {
         return new Promise(res => {
@@ -241,3 +261,4 @@
 </script>
 </body>
 </html>
+
