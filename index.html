@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <title>Quintella Diamond</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
         :root { --preto: #0f0f0f; --ouro: #d4af37; --card: #1a1a1a; --texto: #f0f0f0; --verde: #2ecc71; --azul: #3498db; --vermelho: #e74c3c; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--preto); color: var(--texto); padding: 15px; margin: 0; padding-top: env(safe-area-inset-top); }
@@ -24,7 +22,7 @@
         label { display: block; font-size: 10px; color: var(--ouro); margin-bottom: 5px; text-transform: uppercase; font-weight: bold; }
         input, select { background: #111; border: 1px solid #444; color: white; padding: 14px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
         .btn-add { background: var(--verde); color: white; border: none; padding: 16px; border-radius: 10px; font-weight: bold; width: 100%; font-size: 1rem; text-transform: uppercase; }
-        .thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid #444; }
+        .thumb { width: 45px; height: 45px; object-fit: cover; border-radius: 6px; border: 1px solid #444; }
         .id-label { color: var(--ouro); font-size: 10px; font-weight: bold; display: block; margin-top: 2px; }
         .nome-label { color: #fff; font-weight: bold; display: block; font-size: 14px; }
         .enviado-label { color: var(--ouro); font-size: 13px; font-weight: bold; display: block; margin: 3px 0; }
@@ -44,7 +42,7 @@
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px; }
         th { text-align: left; color: var(--ouro); padding: 8px 2px; border-bottom: 1px solid var(--ouro); font-size: 9px; }
         td { padding: 10px 2px; border-bottom: 1px solid #333; vertical-align: middle; }
-        .btn-mini-del { background: var(--vermelho); color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 10px; }
+        .btn-mini { background: #333; color: white; border: 1px solid #555; border-radius: 4px; padding: 5px; font-size: 10px; margin-left: 2px; }
     </style>
 </head>
 <body>
@@ -55,10 +53,14 @@
         <button class="btn-backup" onclick="document.getElementById('imp').click()">📤 ABRIR</button>
         <input type="file" id="imp" style="display:none" onchange="importar(this)">
     </div>
+    
+    <input type="file" id="edit_foto_input" style="display:none" accept="image/*" capture="environment">
+
     <div class="resumo-topo">
         <div>EMBALAGEM/UN<span id="fixo">R$ 0,00</span></div>
         <div>ESTOQUE TOTAL<span id="totalEst">0</span></div>
     </div>
+    
     <div class="menu">
         <button class="btn-menu active" onclick="trocar(1, this)">CUSTOS</button>
         <button class="btn-menu" onclick="trocar(2, this)">ESTOQUE</button>
@@ -110,21 +112,17 @@
 </div>
 
 <script>
-    let dC = JSON.parse(localStorage.getItem('QD_V14_C')) || [];
-    let dE = JSON.parse(localStorage.getItem('QD_V14_E')) || [];
-    let dS = JSON.parse(localStorage.getItem('QD_V14_S')) || {};
+    let dC = JSON.parse(localStorage.getItem('QD_V15_C')) || [];
+    let dE = JSON.parse(localStorage.getItem('QD_V15_E')) || [];
+    let dS = JSON.parse(localStorage.getItem('QD_V15_S')) || {};
+    let itemParaEditarFoto = null;
 
     const m = v => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
 
     function salvarTudo() {
-        localStorage.setItem('QD_V14_C', JSON.stringify(dC));
-        localStorage.setItem('QD_V14_E', JSON.stringify(dE));
-        localStorage.setItem('QD_V14_S', JSON.stringify(dS));
-    }
-
-    function getEmbalagemUn() {
-        let total = 0; dC.forEach(c => { total += (c.v / c.q); });
-        return total;
+        localStorage.setItem('QD_V15_C', JSON.stringify(dC));
+        localStorage.setItem('QD_V15_E', JSON.stringify(dE));
+        localStorage.setItem('QD_V15_S', JSON.stringify(dS));
     }
 
     function trocar(n, btn) {
@@ -140,6 +138,11 @@
         if(c > 0) document.getElementById('p_venda').value = ((c + f) / (1 - (ma >= 1 ? 0.9 : ma))).toFixed(2);
     }
 
+    function getEmbalagemUn() {
+        let total = 0; dC.forEach(c => { total += (c.v / c.q); });
+        return total;
+    }
+
     function addC() {
         let n = document.getElementById('c_nome').value, v = parseFloat(document.getElementById('c_valor').value), q = parseInt(document.getElementById('c_qtd').value);
         if(n && v > 0) { dC.push({n, v, q}); salvarTudo(); render(); }
@@ -147,12 +150,11 @@
 
     async function addE() {
         let n = document.getElementById('p_nome').value, q = parseInt(document.getElementById('p_qtd').value), c = parseFloat(document.getElementById('p_custo').value), v = parseFloat(document.getElementById('p_venda').value), f = document.getElementById('p_foto').files[0];
-        let margem = document.getElementById('p_margem').value;
         let ex = dE.find(item => item.id == n || item.n == n);
         if(ex) { ex.q += q; } else {
             let id = Math.floor(1000 + Math.random() * 9000);
             let b64 = f ? await comprimirFoto(f) : "";
-            dE.push({id, n, q, c, v, f: b64, ma: margem});
+            dE.push({id, n, q, c, v, f: b64, ma: document.getElementById('p_margem').value});
         }
         salvarTudo(); render();
     }
@@ -160,34 +162,65 @@
     function addS() {
         let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
         if(!s || idx === "") return;
-        
-        // TRAVA DE COMISSÃO: Se o salão já existe, avisa e usa a comissão antiga
-        if(dS[s] && dS[s].com !== com) {
-            alert(`Atenção: Este salão já possui um acerto aberto com ${dS[s].com}%. Usaremos a comissão original.`);
-            com = dS[s].com;
-        }
-
+        if(dS[s] && dS[s].com !== com) { alert("Comissão original mantida."); com = dS[s].com; }
         let peca = dE[idx];
-        if(peca.q < q) { alert("Estoque insuficiente!"); return; }
+        if(peca.q < q) { alert("Estoque baixo!"); return; }
         if(!dS[s]) dS[s] = { itens: [], com: com };
         let it = dS[s].itens.find(i => i.id === peca.id);
-        if(it) { it.q += q; } else { dS[s].itens.push({ ...peca, q: q }); }
+        if(it) it.q += q; else dS[s].itens.push({ ...peca, q: q });
         peca.q -= q; salvarTudo(); render();
     }
+
+    // NOVA FUNÇÃO: INICIAR TROCA DE FOTO
+    function abrirTrocarFoto(id) {
+        itemParaEditarFoto = id;
+        document.getElementById('edit_foto_input').click();
+    }
+
+    // LISTENER PARA O INPUT DE EDIÇÃO
+    document.getElementById('edit_foto_input').onchange = async function(e) {
+        if(e.target.files[0] && itemParaEditarFoto) {
+            let novaB64 = await comprimirFoto(e.target.files[0]);
+            
+            // Atualiza no Estoque
+            let p = dE.find(x => x.id === itemParaEditarFoto);
+            if(p) p.f = novaB64;
+
+            // Atualiza nos Salões (Sincronização total)
+            for(let s in dS) {
+                let it = dS[s].itens.find(x => x.id === itemParaEditarFoto);
+                if(it) it.f = novaB64;
+            }
+
+            salvarTudo(); render();
+            alert("Foto atualizada em todos os lugares!");
+        }
+    };
 
     function render() {
         let embUn = getEmbalagemUn();
         document.getElementById('fixo').innerText = m(embUn);
-        let htmlC = ''; dC.forEach((c, i) => { htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(c.v/c.q)}</td><td><button class="btn-mini-del" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
+        let htmlC = ''; dC.forEach((c, i) => { htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(c.v/c.q)}</td><td><button class="btn-mini" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
         document.getElementById('listaC').innerHTML = htmlC;
 
         let totalEst = 0, htmlE = '', htmlCat = '', htmlSel = '<option value="">Selecione...</option>', comSim = (parseFloat(document.getElementById('cat_com').value) || 0) / 100;
+        
         dE.forEach((p, i) => {
             totalEst += p.q;
-            htmlE += `<tr><td><img src="${p.f}" class="thumb"></td><td><span class="nome-label">${p.n}</span><span class="id-label">ID: ${p.id}</span></td><td>${p.q}</td><td>${m(p.c + embUn)}</td><td>${m(p.v)}</td><td class="perc-verde">${p.ma}%</td><td><button class="btn-mini-del" onclick="dE.splice(${i},1);salvarTudo();render()">X</button></td></tr>`;
+            htmlE += `<tr>
+                <td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td>
+                <td><span class="nome-label">${p.n}</span><span class="id-label">ID: ${p.id}</span></td>
+                <td>${p.q}</td><td>${m(p.c + embUn)}</td><td>${m(p.v)}</td>
+                <td class="perc-verde">${p.ma}%</td>
+                <td>
+                    <button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button>
+                    <button class="btn-mini" style="color:red" onclick="dE.splice(${i},1);salvarTudo();render()">X</button>
+                </td>
+            </tr>`;
             htmlCat += `<div class="card-peca"><img src="${p.f || ''}"><div class="card-info"><span class="id-label">ID: ${p.id}</span><span class="nome-label">${p.n}</span><span class="card-venda">${m(p.v)}</span><span class="card-comissao">Sua Comissão: ${m(p.v * comSim)}</span></div></div>`;
             if(p.q > 0) htmlSel += `<option value="${i}">${p.n} | ID: ${p.id} (Estoque: ${p.q})</option>`;
         });
+        
         document.getElementById('listaE').innerHTML = htmlE;
         document.getElementById('listaCat').innerHTML = htmlCat;
         document.getElementById('totalEst').innerText = totalEst;
@@ -197,10 +230,9 @@
         for(let s in dS) {
             let rws = '';
             dS[s].itens.forEach((it, i) => {
-                rws += `<div class="item-salao"><img src="${it.f}" class="thumb"><div class="item-info"><span class="nome-label">${it.n}</span><span class="enviado-label">Enviado: ${it.q} und</span><span class="id-label">ID: ${it.id}</span><span class="venda-label">Unitário: ${m(it.v)}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:55px; background:#000; color:#fff; border:1px solid var(--verde); padding:8px; border-radius:5px;"></div>`;
+                rws += `<div class="item-salao"><img src="${it.f}" class="thumb"><div class="item-info"><span class="nome-label">${it.n}</span><span class="enviado-label">Enviado: ${it.q}</span><span class="id-label">ID: ${it.id}</span><span class="venda-label">${m(it.v)}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:50px; background:#000; color:#fff; border:1px solid var(--verde); padding:5px;"></div>`;
             });
-            // PORCENTAGEM VOLTOU PARA O NOME DO SALÃO AQUI:
-            htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>Ver ▾</span></div><div class="salao-corpo">${rws}<div style="display:flex; justify-content:space-around; margin-top:15px;"><div><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-add" style="background:var(--ouro); color:black; margin-top:15px; font-size:12px;" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
+            htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div><div class="salao-corpo">${rws}<div style="display:flex; justify-content:space-around; margin-top:10px;"><div><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-add" style="background:var(--ouro); color:black; margin-top:10px; font-size:12px;" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
         }
         document.getElementById('listaS').innerHTML = htmlS;
     }
@@ -216,21 +248,15 @@
         let erro = false;
         dS[s].itens.forEach((it, i) => {
             let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
-            if(v > it.q) {
-                alert(`Erro! O salão só tem ${it.q} unidades da peça ${it.n}. Você não pode vender ${v}.`);
-                erro = true;
-            }
-            if(v < 0) { alert("Valor inválido."); erro = true; }
+            if(v > it.q || v < 0) erro = true;
         });
-        if(erro) return;
-        if(!confirm("Fechar acerto de " + s + "?")) return;
+        if(erro) { alert("Quantidade inválida!"); return; }
+        if(!confirm("Fechar acerto?")) return;
         dS[s].itens.forEach((it, i) => {
             let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
-            let p = dE.find(e => e.id === it.id); 
-            if(p) p.q += (it.q - v);
+            let p = dE.find(e => e.id === it.id); if(p) p.q += (it.q - v);
         });
         delete dS[s]; salvarTudo(); render();
-        alert("Acerto finalizado!");
     }
 
     async function comprimirFoto(f) {
@@ -254,7 +280,7 @@
     }
     function importar(i) {
         const r = new FileReader();
-        r.onload = (e) => { const d = JSON.parse(e.target.result); dC=d.dC; dE=d.dE; dS=d.dS; salvarTudo(); render(); alert("Importado!"); };
+        r.onload = (e) => { const d = JSON.parse(e.target.result); dC=d.dC; dE=d.dE; dS=d.dS; salvarTudo(); render(); };
         r.readAsText(i.files[0]);
     }
     render();
