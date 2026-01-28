@@ -3,274 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>Quintella Diamond | Premium</title>
+    <title>Quintella Diamond</title>
     <style>
-        :root {
-            --bg-principal: #f4f7f6;
-            --dark-bg: #1e1e1e;
-            --ouro: #d4af37;
-            --branco: #ffffff;
-            --texto-dark: #333;
-            --verde: #27ae60;
-            --vermelho: #e74c3c;
-            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+        /* CORES E ESTÉTICA DA FOTO */
+        :root { 
+            --preto-bg: #121212; 
+            --card-bg: #1e1e1e; 
+            --ouro: #d4af37; 
+            --texto: #ffffff; 
+            --verde: #2ecc71; 
+            --vermelho: #e74c3c; 
+            --azul: #3498db;
         }
 
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: var(--bg-principal);
-            color: var(--texto-dark);
-            margin: 0;
-            padding: 20px;
+        body { 
+            font-family: -apple-system, system-ui, sans-serif; 
+            background: var(--preto-bg); 
+            color: var(--texto); 
+            padding: 15px; 
+            margin: 0; 
+            padding-top: env(safe-area-inset-top); 
         }
 
-        .app-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: var(--branco);
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            padding-bottom: 50px;
-        }
+        .container { max-width: 600px; margin: 0 auto; padding-bottom: 80px; }
 
-        header {
-            background: var(--branco);
-            padding: 30px;
-            text-align: center;
-            border-bottom: 1px solid #eee;
-        }
-
-        header h1 {
-            font-family: 'serif';
-            font-size: 2.5rem;
-            margin: 0;
-            color: #000;
+        h1 { 
+            color: var(--ouro); 
+            text-align: center; 
+            text-transform: uppercase; 
+            font-size: 1.5rem; 
+            margin: 20px 0; 
             letter-spacing: 2px;
+            font-weight: 300;
         }
 
-        /* Resumo Topo Estilizado */
-        .resumo-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            padding: 20px;
-            background: #f9f9f9;
-        }
-
-        .resumo-card {
-            background: var(--branco);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        /* CARDS IGUAL À FOTO */
+        .resumo-topo { 
+            background: var(--card-bg); 
+            border: 1px solid #333; 
+            padding: 20px; 
+            border-radius: 15px; 
+            display: flex; 
+            justify-content: space-around; 
+            margin-bottom: 20px; 
             text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        .resumo-card span {
-            display: block;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--ouro);
-            margin-top: 5px;
-        }
+        .resumo-topo div { font-size: 0.7rem; color: #888; text-transform: uppercase; }
+        .resumo-topo span { display: block; color: var(--ouro); font-size: 1.2rem; font-weight: bold; margin-top: 5px; }
 
-        /* Menu de Navegação Horizontal */
-        .nav-menu {
-            display: flex;
-            background: var(--dark-bg);
-            padding: 10px;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .nav-btn {
-            background: #333;
-            border: none;
-            color: #999;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
+        /* MENU ESTILIZADO */
+        .menu { display: flex; gap: 8px; margin-bottom: 20px; sticky; top: 0; background: var(--preto-bg); padding: 10px 0; z-index: 100; overflow-x: auto; }
+        .btn-menu { 
+            background: #252525; 
+            border: 1px solid #333; 
+            color: #888; 
+            padding: 12px 15px; 
+            border-radius: 10px; 
+            flex: 1; 
+            font-weight: bold; 
+            font-size: 0.7rem; 
+            white-space: nowrap; 
             transition: 0.3s;
         }
+        .btn-menu.active { background: var(--ouro); color: #000; border-color: var(--ouro); }
 
-        .nav-btn.active {
-            background: var(--ouro);
-            color: #000;
-        }
-
-        /* Seção Principal */
-        .content { padding: 25px; }
+        /* SEÇÕES E FORMULÁRIOS */
         .secao { display: none; }
-        .secao.active { display: block; }
+        .secao.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Estilo dos Cards de Peças (Igual à imagem) */
-        .grid-pecas {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+        .form-box { 
+            background: var(--card-bg); 
+            padding: 20px; 
+            border-radius: 15px; 
+            margin-bottom: 20px; 
+            border: 1px solid #333;
         }
 
-        .card {
-            background: var(--branco);
-            border-radius: 15px;
-            border: 1px solid #eee;
-            overflow: hidden;
-            transition: transform 0.2s;
-            position: relative;
+        label { display: block; font-size: 10px; color: var(--ouro); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        input, select { 
+            background: #000; 
+            border: 1px solid #333; 
+            color: white; 
+            padding: 15px; 
+            border-radius: 10px; 
+            width: 100%; 
+            box-sizing: border-box; 
+            font-size: 16px; 
+            margin-bottom: 15px; 
         }
 
-        .card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
-
-        .card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            background: #f5f5f5;
+        .btn-add { 
+            background: var(--verde); 
+            color: white; 
+            border: none; 
+            padding: 18px; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            width: 100%; 
+            font-size: 1rem; 
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.2);
         }
 
-        .card-body { padding: 15px; }
-        .card-id { font-size: 10px; color: #999; font-weight: bold; }
-        .card-nome { font-size: 16px; font-weight: bold; margin: 5px 0; display: block; }
-        .card-preco { font-size: 18px; color: var(--ouro); font-weight: bold; }
-        .card-tag {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--verde);
-            color: white;
-            font-size: 10px;
-            padding: 4px 8px;
-            border-radius: 20px;
-        }
+        /* TABELAS E LISTAS */
+        table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 15px; overflow: hidden; }
+        th { text-align: left; color: var(--ouro); padding: 15px; border-bottom: 1px solid #333; font-size: 10px; text-transform: uppercase; }
+        td { padding: 15px; border-bottom: 1px solid #252525; font-size: 13px; }
 
-        /* Formulários */
-        .form-group {
-            background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid #eee;
-            margin-bottom: 25px;
-        }
+        .thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid #333; }
+        .nome-label { font-weight: bold; color: #fff; display: block; }
+        .id-label { font-size: 10px; color: #666; }
+        .perc-verde { color: var(--verde) !important; font-weight: bold; }
 
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
+        /* CATÁLOGO EM GRID IGUAL À FOTO */
+        .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card-peca { 
+            background: var(--card-bg); 
+            border-radius: 15px; 
+            overflow: hidden; 
+            border: 1px solid #333;
+            text-align: center;
         }
+        .card-peca img { width: 100%; height: 160px; object-fit: cover; }
+        .card-info { padding: 12px; }
+        .card-venda { color: var(--ouro); font-size: 1.2rem; font-weight: bold; display: block; margin: 5px 0; }
+        .card-comissao { font-size: 0.7rem; color: var(--verde); background: rgba(46,204,113,0.1); padding: 5px; border-radius: 5px; }
 
-        .btn-main {
-            background: var(--verde);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        /* Tabela */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th { text-align: left; padding: 12px; border-bottom: 2px solid #eee; color: #888; font-size: 12px; }
-        td { padding: 15px 12px; border-bottom: 1px solid #eee; }
-
-        .btn-acao {
-            background: none;
-            border: 1px solid #ddd;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 5px;
-        }
+        /* BOTÕES DE AÇÃO */
+        .btn-mini { background: #333; color: white; border: none; border-radius: 5px; padding: 8px; font-size: 12px; cursor: pointer; }
+        .backup-area { display: flex; gap: 10px; margin-bottom: 15px; }
+        .btn-backup { background: #222; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 8px; flex: 1; font-size: 10px; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <header>
-        <h1>Quintella Diamond 💎</h1>
-    </header>
-
-    <div class="resumo-container">
-        <div class="resumo-card">ESTOQUE TOTAL <span id="totalEst">0</span></div>
-        <div class="resumo-card">EMBALAGEM/UN <span id="fixo">R$ 0,00</span></div>
+<div class="container">
+    <h1>Quintella Diamond 💎</h1>
+    
+    <div class="backup-area">
+        <button class="btn-backup" onclick="exportar()">📥 BACKUP</button>
+        <button class="btn-backup" onclick="document.getElementById('imp').click()">📤 ABRIR</button>
+        <input type="file" id="imp" style="display:none" onchange="importar(this)">
     </div>
 
-    <nav class="nav-menu">
-        <button class="nav-btn active" onclick="trocar(1, this)">CUSTOS</button>
-        <button class="nav-btn" onclick="trocar(2, this)">ESTOQUE</button>
-        <button class="nav-btn" onclick="trocar(4, this)">CATÁLOGO</button>
-        <button class="nav-btn" onclick="trocar(3, this)">SALÕES</button>
-    </nav>
+    <input type="file" id="edit_foto_input" style="display:none" accept="image/*" capture="environment">
 
-    <div class="content">
-        <div id="aba2" class="secao">
-            <div class="form-group">
-                <input type="file" id="p_foto" accept="image/*" capture="environment">
-                <input type="text" id="p_nome" placeholder="Nome da Peça">
-                <input type="number" id="p_qtd" placeholder="Quantidade">
-                <input type="number" id="p_custo" placeholder="Custo Compra (R$)" oninput="sugerir()">
-                <input type="number" id="p_margem" value="75" placeholder="% Margem" oninput="sugerir()">
-                <input type="number" id="p_venda" placeholder="Preço de Venda Final">
-                <button class="btn-main" onclick="addE()">+ CADASTRAR PEÇA</button>
-            </div>
-            
-            <div class="grid-pecas" id="listaE_cards">
-                </div>
-        </div>
+    <div class="resumo-topo">
+        <div>EMBALAGEM/UN<span id="fixo">R$ 0,00</span></div>
+        <div>ESTOQUE TOTAL<span id="totalEst">0</span></div>
+    </div>
 
-        <div id="aba4" class="secao">
-            <div class="grid-pecas" id="listaCat"></div>
-        </div>
-        
-        <div id="aba1" class="secao active">
-            <div class="form-group">
-                <input type="text" id="c_nome" placeholder="Ex: Saquinhos Cetim">
-                <input type="number" id="c_valor" placeholder="Valor Total">
-                <input type="number" id="c_qtd" placeholder="Qtd de Itens">
-                <button class="btn-main" onclick="addC()">ADICIONAR CUSTO</button>
-            </div>
-            <table id="listaC"></table>
-        </div>
+    <div class="menu">
+        <button class="btn-menu active" onclick="trocar(1, this)">CUSTOS</button>
+        <button class="btn-menu" onclick="trocar(2, this)">ESTOQUE</button>
+        <button class="btn-menu" onclick="trocar(4, this)">CATÁLOGO</button>
+        <button class="btn-menu" onclick="trocar(3, this)">SALÕES</button>
+    </div>
 
-        <div id="aba3" class="secao">
-            <div class="form-group">
-                <input type="text" id="s_nome" placeholder="Nome do Salão">
-                <select id="s_sel"></select>
-                <input type="number" id="s_qtd" placeholder="Qtd a Enviar">
-                <button class="btn-main" style="background:var(--ouro)" onclick="addS()">ENVIAR CONSIGNADO</button>
-            </div>
-            <div id="listaS"></div>
+    <div id="aba1" class="secao active">
+        <div class="form-box">
+            <label>Descrição</label><input type="text" id="c_nome">
+            <label>Valor Total (R$)</label><input type="number" id="c_valor">
+            <label>Qtd de Peças</label><input type="number" id="c_qtd" value="1">
+            <button class="btn-add" onclick="addC()">+ ADICIONAR CUSTO</button>
         </div>
+        <table><thead><tr><th>NOME</th><th>TOTAL</th><th>QTD</th><th></th></tr></thead><tbody id="listaC"></tbody></table>
+    </div>
+
+    <div id="aba2" class="secao">
+        <div class="form-box">
+            <label>Foto</label><input type="file" id="p_foto" accept="image/*" capture="environment">
+            <label>Modelo (ou ID Existente)</label><input type="text" id="p_nome">
+            <label>Qtd</label><input type="number" id="p_qtd" value="1">
+            <label>Custo Compra (R$)</label><input type="number" id="p_custo" oninput="sugerir()">
+            <label>% Margem</label><input type="number" id="p_margem" value="75" oninput="sugerir()">
+            <label>Preço Venda</label><input type="number" id="p_venda">
+            <button class="btn-add" onclick="addE()">📦 SALVAR NO ESTOQUE</button>
+        </div>
+        <table><thead><tr><th>FOTO</th><th>NOME</th><th>QTD</th><th>VENDA</th><th>%</th><th></th></tr></thead><tbody id="listaE"></tbody></table>
+    </div>
+
+    <div id="aba4" class="secao">
+        <div class="form-box">
+            <label>Simular Comissão Cliente (%)</label>
+            <input type="number" id="cat_com" value="30" oninput="render()">
+        </div>
+        <div class="grid-catalogo" id="listaCat"></div>
+    </div>
+
+    <div id="aba3" class="secao">
+        <div class="form-box">
+            <label>Salão</label><input type="text" id="s_nome">
+            <label>Peça (ID)</label><select id="s_sel"></select>
+            <label>Qtd Enviar</label><input type="number" id="s_qtd" value="1">
+            <label>% Comissão</label><input type="number" id="s_com" value="30">
+            <button class="btn-add" style="background: var(--azul);" onclick="addS()">🚀 ENVIAR PARA SALÃO</button>
+        </div>
+        <div id="listaS"></div>
     </div>
 </div>
 
-<input type="file" id="edit_foto_input" style="display:none" accept="image/*">
-
 <script>
-    // Toda a lógica anterior foi mantida e adaptada para este novo visual
-    let dC = JSON.parse(localStorage.getItem('QD_PREMIUM_C')) || [];
-    let dE = JSON.parse(localStorage.getItem('QD_PREMIUM_E')) || [];
-    let dS = JSON.parse(localStorage.getItem('QD_PREMIUM_S')) || {};
+    // LÓGICA ORIGINAL RESTAURADA
+    let dC = JSON.parse(localStorage.getItem('QD_FINAL_C')) || [];
+    let dE = JSON.parse(localStorage.getItem('QD_FINAL_E')) || [];
+    let dS = JSON.parse(localStorage.getItem('QD_FINAL_S')) || {};
     let itemParaEditarFoto = null;
 
     const m = v => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
 
     function salvarTudo() {
-        localStorage.setItem('QD_PREMIUM_C', JSON.stringify(dC));
-        localStorage.setItem('QD_PREMIUM_E', JSON.stringify(dE));
-        localStorage.setItem('QD_PREMIUM_S', JSON.stringify(dS));
+        localStorage.setItem('QD_FINAL_C', JSON.stringify(dC));
+        localStorage.setItem('QD_FINAL_E', JSON.stringify(dE));
+        localStorage.setItem('QD_FINAL_S', JSON.stringify(dS));
     }
 
     function trocar(n, btn) {
         document.querySelectorAll('.secao').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('active'));
         document.getElementById('aba'+n).classList.add('active');
         btn.classList.add('active'); render();
     }
@@ -286,49 +240,111 @@
         return total;
     }
 
+    function addC() {
+        let n = document.getElementById('c_nome').value, v = parseFloat(document.getElementById('c_valor').value), q = parseInt(document.getElementById('c_qtd').value);
+        if(n && v > 0) { dC.push({n, v, q}); salvarTudo(); render(); }
+    }
+
     async function addE() {
         let n = document.getElementById('p_nome').value, q = parseInt(document.getElementById('p_qtd').value), c = parseFloat(document.getElementById('p_custo').value), v = parseFloat(document.getElementById('p_venda').value), f = document.getElementById('p_foto').files[0];
-        let id = Math.floor(1000 + Math.random() * 9000);
-        let b64 = f ? await comprimirFoto(f) : "";
-        dE.push({id, n, q, c, v, f: b64, ma: document.getElementById('p_margem').value});
+        let ex = dE.find(item => item.id == n || item.n == n);
+        if(ex) { ex.q += q; } else {
+            let id = Math.floor(1000 + Math.random() * 9000);
+            let b64 = f ? await comprimirFoto(f) : "";
+            dE.push({id, n, q, c, v, f: b64, ma: document.getElementById('p_margem').value});
+        }
         salvarTudo(); render();
     }
 
-    function render() {
-        document.getElementById('fixo').innerText = m(getEmbalagemUn());
-        
-        // Render Estoque em CARDS
-        let htmlCards = '';
-        let total = 0;
-        dE.forEach((p, i) => {
-            total += p.q;
-            htmlCards += `
-                <div class="card">
-                    <div class="card-tag">${p.ma}% Lucro</div>
-                    <img src="${p.f || 'https://via.placeholder.com/200'}" onclick="abrirTrocarFoto(${p.id})">
-                    <div class="card-body">
-                        <span class="card-id">ID #${p.id}</span>
-                        <span class="card-nome">${p.n}</span>
-                        <span class="card-preco">${m(p.v)}</span>
-                        <div style="margin-top:10px">
-                            <small>Estoque: ${p.q}</small>
-                            <button class="btn-acao" onclick="dE.splice(${i},1);salvarTudo();render()">🗑️</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-        document.getElementById('listaE_cards').innerHTML = htmlCards;
-        document.getElementById('listaCat').innerHTML = htmlCards; // Catálogo usa o mesmo visual
-        document.getElementById('totalEst').innerText = total;
-
-        // Renderização simplificada de custos e salões para brevidade
-        let htmlSel = '<option>Selecione uma peça...</option>';
-        dE.forEach((p, i) => htmlSel += `<option value="${i}">${p.n} (${p.q})</option>`);
-        document.getElementById('s_sel').innerHTML = htmlSel;
+    function addS() {
+        let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
+        if(!s || idx === "") return;
+        if(dS[s] && dS[s].com !== com) { alert("Comissão original mantida."); com = dS[s].com; }
+        let peca = dE[idx];
+        if(peca.q < q) { alert("Estoque insuficiente!"); return; }
+        if(!dS[s]) dS[s] = { itens: [], com: com };
+        let it = dS[s].itens.find(i => i.id === peca.id);
+        if(it) it.q += q; else dS[s].itens.push({ ...peca, q: q });
+        peca.q -= q; salvarTudo(); render();
     }
 
-    // Funções de foto e utilitários mantidas do código anterior...
+    function abrirTrocarFoto(id) {
+        itemParaEditarFoto = id;
+        document.getElementById('edit_foto_input').click();
+    }
+
+    document.getElementById('edit_foto_input').onchange = async function(e) {
+        if(e.target.files[0] && itemParaEditarFoto) {
+            let novaB64 = await comprimirFoto(e.target.files[0]);
+            let p = dE.find(x => x.id === itemParaEditarFoto);
+            if(p) p.f = novaB64;
+            for(let s in dS) {
+                let it = dS[s].itens.find(x => x.id === itemParaEditarFoto);
+                if(it) it.f = novaB64;
+            }
+            salvarTudo(); render();
+        }
+    };
+
+    function render() {
+        let embUn = getEmbalagemUn();
+        document.getElementById('fixo').innerText = m(embUn);
+        let htmlC = ''; dC.forEach((c, i) => { htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td><button class="btn-mini" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
+        document.getElementById('listaC').innerHTML = htmlC;
+
+        let totalEst = 0, htmlE = '', htmlCat = '', htmlSel = '<option value="">Selecione...</option>', comSim = (parseFloat(document.getElementById('cat_com').value) || 0) / 100;
+        
+        dE.forEach((p, i) => {
+            totalEst += p.q;
+            htmlE += `<tr>
+                <td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td>
+                <td><span class="nome-label">${p.n}</span><span class="id-label">ID: ${p.id}</span></td>
+                <td>${p.q}</td><td>${m(p.v)}</td>
+                <td class="perc-verde">${p.ma}%</td>
+                <td><button class="btn-mini" onclick="dE.splice(${i},1);salvarTudo();render()">X</button></td>
+            </tr>`;
+            htmlCat += `<div class="card-peca"><img src="${p.f || ''}"><div class="card-info"><span class="id-label">ID: ${p.id}</span><span class="nome-label">${p.n}</span><span class="card-venda">${m(p.v)}</span><span class="card-comissao">Sua Comissão: ${m(p.v * comSim)}</span></div></div>`;
+            if(p.q > 0) htmlSel += `<option value="${i}">${p.n} | ID: ${p.id}</option>`;
+        });
+        
+        document.getElementById('listaE').innerHTML = htmlE;
+        document.getElementById('listaCat').innerHTML = htmlCat;
+        document.getElementById('totalEst').innerText = totalEst;
+        document.getElementById('s_sel').innerHTML = htmlSel;
+
+        let htmlS = '';
+        for(let s in dS) {
+            let rws = '';
+            dS[s].itens.forEach((it, i) => {
+                rws += `<div class="item-salao"><img src="${it.f}" class="thumb"><div class="item-info"><span class="nome-label">${it.n}</span><span class="id-label">Enviado: ${it.q}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:50px; background:#000; color:#fff; border:1px solid var(--verde); padding:5px;"></div>`;
+            });
+            htmlS += `<div class="form-box">📍 ${s} | ${dS[s].com}%<div class="salao-corpo">${rws}<div style="display:flex; justify-content:space-around; margin-top:10px;"><div><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-add" style="background:var(--ouro); color:black; margin-top:10px; font-size:12px;" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
+        }
+        document.getElementById('listaS').innerHTML = htmlS;
+    }
+
+    function recalc(s) {
+        let b = 0; dS[s].itens.forEach((it, i) => { b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; });
+        let com = b * (dS[s].com / 100);
+        document.getElementById(`c-${s}`).innerText = m(com);
+        document.getElementById(`r-${s}`).innerText = m(b - com);
+    }
+
+    function fechar(s) {
+        let erro = false;
+        dS[s].itens.forEach((it, i) => {
+            let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
+            if(v > it.q || v < 0) { alert(`Erro na peça ${it.n}!`); erro = true; }
+        });
+        if(erro) return;
+        if(!confirm("Fechar acerto?")) return;
+        dS[s].itens.forEach((it, i) => {
+            let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
+            let p = dE.find(e => e.id === it.id); if(p) p.q += (it.q - v);
+        });
+        delete dS[s]; salvarTudo(); render();
+    }
+
     async function comprimirFoto(f) {
         return new Promise(res => {
             const r = new FileReader(); r.readAsDataURL(f);
@@ -344,20 +360,15 @@
         });
     }
 
-    function abrirTrocarFoto(id) {
-        itemParaEditarFoto = id;
-        document.getElementById('edit_foto_input').click();
+    function exportar() {
+        const b = new Blob([JSON.stringify({dC, dE, dS})], {type: 'application/json'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'Backup_Quintella.json'; a.click();
     }
-
-    document.getElementById('edit_foto_input').onchange = async function(e) {
-        if(e.target.files[0] && itemParaEditarFoto) {
-            let novaB64 = await comprimirFoto(e.target.files[0]);
-            let p = dE.find(x => x.id === itemParaEditarFoto);
-            if(p) p.f = novaB64;
-            salvarTudo(); render();
-        }
-    };
-
+    function importar(i) {
+        const r = new FileReader();
+        r.onload = (e) => { const d = JSON.parse(e.target.result); dC=d.dC; dE=d.dE; dS=d.dS; salvarTudo(); render(); alert("Importado!"); };
+        r.readAsText(i.files[0]);
+    }
     render();
 </script>
 </body>
