@@ -29,7 +29,6 @@
         .nome-label { color: #fff; font-weight: bold; display: block; font-size: 14px; }
         .enviado-label { color: var(--ouro); font-size: 13px; font-weight: bold; display: block; margin: 3px 0; }
         .venda-label { color: #aaa; font-size: 11px; font-weight: normal; }
-        .perc-verde { color: var(--verde); font-weight: bold; }
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
         .card-peca { background: #111; border: 1px solid #333; border-radius: 12px; overflow: hidden; text-align: center; padding-bottom: 10px; }
         .card-peca img { width: 100%; height: 150px; object-fit: cover; }
@@ -109,16 +108,16 @@
 </div>
 
 <script>
-    let dC = JSON.parse(localStorage.getItem('QD_V11_C')) || [];
-    let dE = JSON.parse(localStorage.getItem('QD_V11_E')) || [];
-    let dS = JSON.parse(localStorage.getItem('QD_V11_S')) || {};
+    let dC = JSON.parse(localStorage.getItem('QD_V12_C')) || [];
+    let dE = JSON.parse(localStorage.getItem('QD_V12_E')) || [];
+    let dS = JSON.parse(localStorage.getItem('QD_V12_S')) || {};
 
     const m = v => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
 
     function salvarTudo() {
-        localStorage.setItem('QD_V11_C', JSON.stringify(dC));
-        localStorage.setItem('QD_V11_E', JSON.stringify(dE));
-        localStorage.setItem('QD_V11_S', JSON.stringify(dS));
+        localStorage.setItem('QD_V12_C', JSON.stringify(dC));
+        localStorage.setItem('QD_V12_E', JSON.stringify(dE));
+        localStorage.setItem('QD_V12_S', JSON.stringify(dS));
     }
 
     function getEmbalagemUn() {
@@ -147,8 +146,8 @@
     async function addE() {
         let n = document.getElementById('p_nome').value, q = parseInt(document.getElementById('p_qtd').value), c = parseFloat(document.getElementById('p_custo').value), v = parseFloat(document.getElementById('p_venda').value), f = document.getElementById('p_foto').files[0];
         let margem = document.getElementById('p_margem').value;
-        let existente = dE.find(item => item.id == n || item.n == n);
-        if(existente) { existente.q += q; } else {
+        let ex = dE.find(item => item.id == n || item.n == n);
+        if(ex) { ex.q += q; } else {
             let id = Math.floor(1000 + Math.random() * 9000);
             let b64 = f ? await comprimirFoto(f) : "";
             dE.push({id, n, q, c, v, f: b64, ma: margem});
@@ -170,7 +169,6 @@
     function render() {
         let embUn = getEmbalagemUn();
         document.getElementById('fixo').innerText = m(embUn);
-        
         let htmlC = ''; dC.forEach((c, i) => { htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(c.v/c.q)}</td><td><button class="btn-mini-del" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
         document.getElementById('listaC').innerHTML = htmlC;
 
@@ -205,33 +203,30 @@
     }
 
     function fechar(s) {
-    let erro = false;
-    
-    // Validar se as quantidades digitadas são permitidas
-    dS[s].itens.forEach((it, i) => {
-        let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
-        if (v > it.q) {
-            alert(`Erro na peça ${it.n}: O salão possui apenas ${it.q} unidades, você tentou dar baixa em ${v}.`);
-            erro = true;
-        }
-    });
+        let erro = false;
+        // Validação de segurança
+        dS[s].itens.forEach((it, i) => {
+            let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
+            if(v > it.q) {
+                alert(`Erro! O salão só tem ${it.q} unidades da peça ${it.n}. Você não pode vender ${v}.`);
+                erro = true;
+            }
+            if(v < 0) { alert("Valor inválido."); erro = true; }
+        });
 
-    if (erro) return; // Interrompe o fechamento se houver erro
+        if(erro) return;
 
-    if (!confirm("Confirmar fechamento de acerto para " + s + "?")) return;
-
-    dS[s].itens.forEach((it, i) => {
-        let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
-        // O que não foi vendido (it.q - v) volta para o estoque principal
-        let p = dE.find(e => e.id === it.id); 
-        if (p) p.q += (it.q - v);
-    });
-
-    delete dS[s]; 
-    salvarTudo(); 
-    render();
-    alert("Acerto concluído com sucesso!");
-}
+        if(!confirm("Fechar acerto de " + s + "?")) return;
+        
+        dS[s].itens.forEach((it, i) => {
+            let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
+            let p = dE.find(e => e.id === it.id); 
+            // Devolve o que não foi vendido para o estoque principal
+            if(p) p.q += (it.q - v);
+        });
+        delete dS[s]; salvarTudo(); render();
+        alert("Acerto finalizado!");
+    }
 
     async function comprimirFoto(f) {
         return new Promise(res => {
@@ -261,4 +256,3 @@
 </script>
 </body>
 </html>
-
