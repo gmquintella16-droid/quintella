@@ -29,6 +29,7 @@
         .nome-label { color: #fff; font-weight: bold; display: block; font-size: 14px; }
         .enviado-label { color: var(--ouro); font-size: 13px; font-weight: bold; display: block; margin: 3px 0; }
         .venda-label { color: #aaa; font-size: 11px; font-weight: normal; }
+        .perc-verde { color: var(--verde); font-weight: bold; }
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
         .card-peca { background: #111; border: 1px solid #333; border-radius: 12px; overflow: hidden; text-align: center; padding-bottom: 10px; }
         .card-peca img { width: 100%; height: 150px; object-fit: cover; }
@@ -84,7 +85,7 @@
             <label>Preço Venda</label><input type="number" id="p_venda">
             <button class="btn-add" onclick="addE()">📦 SALVAR NO ESTOQUE</button>
         </div>
-        <table><thead><tr><th>FOTO</th><th>NOME/ID</th><th>QTD</th><th>CUSTO+E</th><th>VENDA</th><th></th></tr></thead><tbody id="listaE"></tbody></table>
+        <table><thead><tr><th>FOTO</th><th>NOME/ID</th><th>QTD</th><th>CUSTO+E</th><th>VENDA</th><th>%</th><th></th></tr></thead><tbody id="listaE"></tbody></table>
     </div>
 
     <div id="aba4" class="secao">
@@ -98,7 +99,7 @@
     <div id="aba3" class="secao">
         <div class="form-box">
             <label>Salão</label><input type="text" id="s_nome">
-            <label>Peça (Mostra o Estoque)</label><select id="s_sel"></select>
+            <label>Peça (ID)</label><select id="s_sel"></select>
             <label>Qtd Enviar</label><input type="number" id="s_qtd" value="1">
             <label>% Comissão</label><input type="number" id="s_com" value="30">
             <button class="btn-add" style="background: var(--azul);" onclick="addS()">🚀 ENVIAR PARA SALÃO</button>
@@ -108,20 +109,21 @@
 </div>
 
 <script>
-    let dC = JSON.parse(localStorage.getItem('QD_V10_C')) || [];
-    let dE = JSON.parse(localStorage.getItem('QD_V10_E')) || [];
-    let dS = JSON.parse(localStorage.getItem('QD_V10_S')) || {};
+    let dC = JSON.parse(localStorage.getItem('QD_V11_C')) || [];
+    let dE = JSON.parse(localStorage.getItem('QD_V11_E')) || [];
+    let dS = JSON.parse(localStorage.getItem('QD_V11_S')) || {};
 
     const m = v => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
 
     function salvarTudo() {
-        localStorage.setItem('QD_V10_C', JSON.stringify(dC));
-        localStorage.setItem('QD_V10_E', JSON.stringify(dE));
-        localStorage.setItem('QD_V10_S', JSON.stringify(dS));
+        localStorage.setItem('QD_V11_C', JSON.stringify(dC));
+        localStorage.setItem('QD_V11_E', JSON.stringify(dE));
+        localStorage.setItem('QD_V11_S', JSON.stringify(dS));
     }
 
     function getEmbalagemUn() {
-        let t = 0; dC.forEach(c => t += (c.v/c.q)); return t;
+        let total = 0; dC.forEach(c => { total += (c.v / c.q); });
+        return total;
     }
 
     function trocar(n, btn) {
@@ -144,11 +146,12 @@
 
     async function addE() {
         let n = document.getElementById('p_nome').value, q = parseInt(document.getElementById('p_qtd').value), c = parseFloat(document.getElementById('p_custo').value), v = parseFloat(document.getElementById('p_venda').value), f = document.getElementById('p_foto').files[0];
-        let ex = dE.find(i => i.id == n || i.n == n);
-        if(ex) { ex.q += q; } else {
+        let margem = document.getElementById('p_margem').value;
+        let existente = dE.find(item => item.id == n || item.n == n);
+        if(existente) { existente.q += q; } else {
             let id = Math.floor(1000 + Math.random() * 9000);
             let b64 = f ? await comprimirFoto(f) : "";
-            dE.push({id, n, q, c, v, f: b64, ma: document.getElementById('p_margem').value});
+            dE.push({id, n, q, c, v, f: b64, ma: margem});
         }
         salvarTudo(); render();
     }
@@ -156,24 +159,25 @@
     function addS() {
         let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
         if(!s || idx === "") return;
-        let p = dE[idx];
-        if(p.q < q) { alert("Estoque insuficiente!"); return; }
+        let peca = dE[idx];
+        if(peca.q < q) { alert("Estoque insuficiente!"); return; }
         if(!dS[s]) dS[s] = { itens: [], com: com };
-        let it = dS[s].itens.find(i => i.id === p.id);
-        if(it) { it.q += q; } else { dS[s].itens.push({ ...p, q: q }); }
-        p.q -= q; salvarTudo(); render();
+        let it = dS[s].itens.find(i => i.id === peca.id);
+        if(it) { it.q += q; } else { dS[s].itens.push({ ...peca, q: q }); }
+        peca.q -= q; salvarTudo(); render();
     }
 
     function render() {
         let embUn = getEmbalagemUn();
         document.getElementById('fixo').innerText = m(embUn);
-        let htmlC = ''; dC.forEach((c, i) => htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(c.v/c.q)}</td><td><button onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`);
+        
+        let htmlC = ''; dC.forEach((c, i) => { htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(c.v/c.q)}</td><td><button class="btn-mini-del" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
         document.getElementById('listaC').innerHTML = htmlC;
 
         let totalEst = 0, htmlE = '', htmlCat = '', htmlSel = '<option value="">Selecione...</option>', comSim = (parseFloat(document.getElementById('cat_com').value) || 0) / 100;
         dE.forEach((p, i) => {
             totalEst += p.q;
-            htmlE += `<tr><td><img src="${p.f}" class="thumb"></td><td><span class="nome-label">${p.n}</span><span class="id-label">ID: ${p.id}</span></td><td>${p.q}</td><td>${m(p.c + embUn)}</td><td>${m(p.v)}</td><td><button onclick="dE.splice(${i},1);salvarTudo();render()">X</button></td></tr>`;
+            htmlE += `<tr><td><img src="${p.f}" class="thumb"></td><td><span class="nome-label">${p.n}</span><span class="id-label">ID: ${p.id}</span></td><td>${p.q}</td><td>${m(p.c + embUn)}</td><td>${m(p.v)}</td><td class="perc-verde">${p.ma}%</td><td><button class="btn-mini-del" onclick="dE.splice(${i},1);salvarTudo();render()">X</button></td></tr>`;
             htmlCat += `<div class="card-peca"><img src="${p.f || ''}"><div class="card-info"><span class="id-label">ID: ${p.id}</span><span class="nome-label">${p.n}</span><span class="card-venda">${m(p.v)}</span><span class="card-comissao">Sua Comissão: ${m(p.v * comSim)}</span></div></div>`;
             if(p.q > 0) htmlSel += `<option value="${i}">${p.n} | ID: ${p.id} (Estoque: ${p.q})</option>`;
         });
@@ -186,7 +190,7 @@
         for(let s in dS) {
             let rws = '';
             dS[s].itens.forEach((it, i) => {
-                rws += `<div class="item-salao"><img src="${it.f}" class="thumb"><div class="item-info"><span class="nome-label">${it.n}</span><span class="enviado-label">Enviado: ${it.q} und</span><span class="id-label">ID: ${it.id}</span><span class="venda-label">Unitário: ${m(it.v)}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:60px; background:#000; color:#fff; border:1px solid var(--verde); padding:8px; border-radius:5px;"></div>`;
+                rws += `<div class="item-salao"><img src="${it.f}" class="thumb"><div class="item-info"><span class="nome-label">${it.n}</span><span class="enviado-label">Enviado: ${it.q} und</span><span class="id-label">ID: ${it.id}</span><span class="venda-label">Unitário: ${m(it.v)}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:55px; background:#000; color:#fff; border:1px solid var(--verde); padding:8px; border-radius:5px;"></div>`;
             });
             htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s}</span><span>Ver ▾</span></div><div class="salao-corpo">${rws}<div style="display:flex; justify-content:space-around; margin-top:15px;"><div><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-add" style="background:var(--ouro); color:black; margin-top:15px; font-size:12px;" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
         }
@@ -194,7 +198,7 @@
     }
 
     function recalc(s) {
-        let b = 0; dS[s].itens.forEach((it, i) => b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v);
+        let b = 0; dS[s].itens.forEach((it, i) => { b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; });
         let com = b * (dS[s].com / 100);
         document.getElementById(`c-${s}`).innerText = m(com);
         document.getElementById(`r-${s}`).innerText = m(b - com);
