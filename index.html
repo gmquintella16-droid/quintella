@@ -81,11 +81,11 @@
             <label>Modelo (ou ID Existente)</label><input type="text" id="p_nome">
             <label>Qtd</label><input type="number" id="p_qtd" value="1">
             <label>Custo Compra (R$)</label><input type="number" id="p_custo" oninput="sugerir()">
-            <label>% Margem</label><input type="number" id="p_margem" value="70" oninput="sugerir()">
-            <label>Preço Venda</label><input type="number" id="p_venda">
+            <label>% Margem Desejada</label><input type="number" id="p_margem" value="70" oninput="sugerir()">
+            <label>Preço Venda Final</label><input type="number" id="p_venda">
             <button class="btn-add" onclick="addE()">📦 SALVAR NO ESTOQUE</button>
         </div>
-        <table><thead><tr><th>FOTO</th><th>NOME/ID</th><th>QTD</th><th>CUSTO+E</th><th>VENDA</th><th>%</th><th></th></tr></thead><tbody id="listaE"></tbody></table>
+        <table><thead><tr><th>FOTO</th><th>NOME/ID</th><th>QTD</th><th>CUSTO+E</th><th>VENDA</th><th>LUCRO REAL</th><th></th></tr></thead><tbody id="listaE"></tbody></table>
     </div>
 
     <div id="aba4" class="secao">
@@ -151,7 +151,7 @@
         if(ex) { ex.q += q; } else {
             let id = Math.floor(1000 + Math.random() * 9000);
             let b64 = f ? await comprimirFoto(f) : "";
-            dE.push({id, n, q, c, v, f: b64, ma: document.getElementById('p_margem').value});
+            dE.push({id, n, q, c, v, f: b64});
         }
         salvarTudo(); render();
     }
@@ -159,13 +159,10 @@
     function addS() {
         let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
         if(!s || idx === "") return;
-        
-        // RESTAURAÇÃO DA TRAVA DE COMISSÃO:
         if(dS[s] && dS[s].com !== com) { 
-            alert("Este salão já possui uma comissão de " + dS[s].com + "%. A comissão original será mantida."); 
+            alert("Este salão já possui uma comissão de " + dS[s].com + "%. Mantendo a original."); 
             com = dS[s].com; 
         }
-
         let peca = dE[idx];
         if(peca.q < q) { alert("Estoque baixo!"); return; }
         if(!dS[s]) dS[s] = { itens: [], com: com };
@@ -189,7 +186,6 @@
                 if(it) it.f = novaB64;
             }
             salvarTudo(); render();
-            alert("Foto atualizada em todos os lugares!");
         }
     };
 
@@ -203,15 +199,20 @@
         
         dE.forEach((p, i) => {
             totalEst += p.q;
+            
+            // CÁLCULO DA MARGEM REAL (VENDA vs CUSTO TOTAL)
+            let custoTotal = p.c + embUn;
+            let margemReal = p.v > 0 ? (((p.v - custoTotal) / p.v) * 100).toFixed(0) : 0;
+
             htmlE += `<tr>
                 <td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td>
                 <td><span class="nome-label">${p.n}</span><span class="id-label">ID: ${p.id}</span></td>
-                <td>${p.q}</td><td>${m(p.c + embUn)}</td><td>${m(p.v)}</td>
-                <td class="perc-verde">${p.ma}%</td>
+                <td>${p.q}</td><td>${m(custoTotal)}</td><td>${m(p.v)}</td>
+                <td class="perc-verde">${margemReal}%</td>
                 <td><button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button><button class="btn-mini" style="color:red" onclick="dE.splice(${i},1);salvarTudo();render()">X</button></td>
             </tr>`;
             htmlCat += `<div class="card-peca"><img src="${p.f || ''}"><div class="card-info"><span class="id-label">ID: ${p.id}</span><span class="nome-label">${p.n}</span><span class="card-venda">${m(p.v)}</span><span class="card-comissao">Sua Comissão: ${m(p.v * comSim)}</span></div></div>`;
-            if(p.q > 0) htmlSel += `<option value="${i}">${p.n} | ID: ${p.id} (Estoque: ${p.q})</option>`;
+            if(p.q > 0) htmlSel += `<option value="${i}">${p.n} | ID: ${p.id}</option>`;
         });
         
         document.getElementById('listaE').innerHTML = htmlE;
@@ -223,7 +224,7 @@
         for(let s in dS) {
             let rws = '';
             dS[s].itens.forEach((it, i) => {
-                rws += `<div class="item-salao"><img src="${it.f}" class="thumb"><div class="item-info"><span class="nome-label">${it.n}</span><span class="enviado-label">Enviado: ${it.q}</span><span class="id-label">ID: ${it.id}</span><span class="venda-label">${m(it.v)}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:50px; background:#000; color:#fff; border:1px solid var(--verde); padding:5px;"></div>`;
+                rws += `<div class="item-salao"><img src="${it.f}" class="thumb"><div class="item-info"><span class="nome-label">${it.n}</span><span class="enviado-label">Enviado: ${it.q}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:50px; background:#000; color:#fff; border:1px solid var(--verde); padding:5px;"></div>`;
             });
             htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div><div class="salao-corpo">${rws}<div style="display:flex; justify-content:space-around; margin-top:10px;"><div><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-add" style="background:var(--ouro); color:black; margin-top:10px; font-size:12px;" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
         }
