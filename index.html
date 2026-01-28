@@ -15,40 +15,34 @@
         .btn-backup { background: #333; color: #fff; border: 1px solid #555; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.7rem; font-weight: bold; }
         .resumo-topo { background: var(--card); border: 1px solid var(--ouro); padding: 15px; border-radius: 12px; display: flex; justify-content: space-around; margin-bottom: 20px; font-size: 0.8rem; text-align: center; }
         .resumo-topo span { display: block; color: var(--ouro); font-size: 1rem; font-weight: bold; }
-        
-        /* Menu com 4 itens */
         .menu { display: flex; gap: 5px; margin-bottom: 20px; position: sticky; top: 0; background: var(--preto); padding: 10px 0; z-index: 100; overflow-x: auto; }
         .btn-menu { background: var(--card); border: 1px solid var(--ouro); color: var(--ouro); padding: 10px; cursor: pointer; border-radius: 8px; flex: 1; font-weight: bold; font-size: 0.65rem; white-space: nowrap; }
         .btn-menu.active { background: var(--ouro); color: black; }
-        
         .secao { background: var(--card); padding: 15px; border-radius: 15px; display: none; border: 1px solid #333; }
         .active { display: block; }
         .form-box { background: #222; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid var(--ouro); }
         label { display: block; font-size: 10px; color: var(--ouro); margin-bottom: 5px; text-transform: uppercase; font-weight: bold; }
         input, select { background: #111; border: 1px solid #444; color: white; padding: 14px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
-        
-        /* Tabela e Lista */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px; }
-        th { text-align: left; color: var(--ouro); padding: 8px 2px; border-bottom: 1px solid var(--ouro); font-size: 9px; }
-        td { padding: 10px 2px; border-bottom: 1px solid #333; vertical-align: middle; }
+        .btn-add { background: var(--verde); color: white; border: none; padding: 16px; border-radius: 10px; font-weight: bold; width: 100%; font-size: 1rem; text-transform: uppercase; }
         .thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid #444; }
-        .id-label { color: var(--ouro); font-size: 10px; font-weight: bold; display: block; }
+        .id-label { color: var(--ouro); font-size: 10px; font-weight: bold; display: block; margin-top: 2px; }
         .nome-label { color: #fff; font-weight: bold; display: block; font-size: 14px; }
-        
-        /* Estilo Catálogo */
+        .enviado-label { color: var(--ouro); font-size: 13px; font-weight: bold; display: block; margin: 3px 0; }
+        .venda-label { color: #aaa; font-size: 11px; font-weight: normal; }
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
         .card-peca { background: #111; border: 1px solid #333; border-radius: 12px; overflow: hidden; text-align: center; padding-bottom: 10px; }
         .card-peca img { width: 100%; height: 150px; object-fit: cover; }
         .card-info { padding: 10px; }
         .card-venda { color: #fff; font-size: 1.1rem; font-weight: bold; display: block; margin-top: 5px; }
         .card-comissao { color: var(--verde); font-size: 0.8rem; font-weight: bold; background: rgba(46, 204, 113, 0.1); padding: 4px; border-radius: 4px; display: inline-block; margin-top: 5px; }
-
-        .btn-add { background: var(--verde); color: white; border: none; padding: 16px; border-radius: 10px; font-weight: bold; width: 100%; font-size: 1rem; text-transform: uppercase; }
-        .btn-mini-del { background: var(--vermelho); color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 10px; }
         .salao-container { margin-top: 15px; border-radius: 12px; background: #222; overflow: hidden; border: 1px solid #444; }
         .salao-header { padding: 15px; cursor: pointer; display: flex; justify-content: space-between; background: #333; font-weight: bold; }
         .salao-corpo { padding: 15px; display: none; }
         .item-salao { padding: 12px 0; border-bottom: 1px solid #444; display: flex; align-items: center; gap: 10px; }
+        .item-info { flex: 1; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px; }
+        th { text-align: left; color: var(--ouro); padding: 8px 2px; border-bottom: 1px solid var(--ouro); font-size: 9px; }
+        td { padding: 10px 2px; border-bottom: 1px solid #333; vertical-align: middle; }
     </style>
 </head>
 <body>
@@ -59,12 +53,10 @@
         <button class="btn-backup" onclick="document.getElementById('imp').click()">📤 ABRIR</button>
         <input type="file" id="imp" style="display:none" onchange="importar(this)">
     </div>
-
     <div class="resumo-topo">
         <div>EMBALAGEM/UN<span id="fixo">R$ 0,00</span></div>
         <div>ESTOQUE TOTAL<span id="totalEst">0</span></div>
     </div>
-
     <div class="menu">
         <button class="btn-menu active" onclick="trocar(1, this)">CUSTOS</button>
         <button class="btn-menu" onclick="trocar(2, this)">ESTOQUE</button>
@@ -106,7 +98,7 @@
     <div id="aba3" class="secao">
         <div class="form-box">
             <label>Salão</label><input type="text" id="s_nome">
-            <label>Peça (ID)</label><select id="s_sel"></select>
+            <label>Peça (Mostra o Estoque)</label><select id="s_sel"></select>
             <label>Qtd Enviar</label><input type="number" id="s_qtd" value="1">
             <label>% Comissão</label><input type="number" id="s_com" value="30">
             <button class="btn-add" style="background: var(--azul);" onclick="addS()">🚀 ENVIAR PARA SALÃO</button>
@@ -116,29 +108,27 @@
 </div>
 
 <script>
-    let dC = JSON.parse(localStorage.getItem('QD_V8_C')) || [];
-    let dE = JSON.parse(localStorage.getItem('QD_V8_E')) || [];
-    let dS = JSON.parse(localStorage.getItem('QD_V8_S')) || {};
+    let dC = JSON.parse(localStorage.getItem('QD_V10_C')) || [];
+    let dE = JSON.parse(localStorage.getItem('QD_V10_E')) || [];
+    let dS = JSON.parse(localStorage.getItem('QD_V10_S')) || {};
 
     const m = v => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
 
     function salvarTudo() {
-        localStorage.setItem('QD_V8_C', JSON.stringify(dC));
-        localStorage.setItem('QD_V8_E', JSON.stringify(dE));
-        localStorage.setItem('QD_V8_S', JSON.stringify(dS));
+        localStorage.setItem('QD_V10_C', JSON.stringify(dC));
+        localStorage.setItem('QD_V10_E', JSON.stringify(dE));
+        localStorage.setItem('QD_V10_S', JSON.stringify(dS));
     }
 
     function getEmbalagemUn() {
-        let total = 0; dC.forEach(c => { total += (c.v / c.q); });
-        return total;
+        let t = 0; dC.forEach(c => t += (c.v/c.q)); return t;
     }
 
     function trocar(n, btn) {
         document.querySelectorAll('.secao').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('active'));
         document.getElementById('aba'+n).classList.add('active');
-        btn.classList.add('active');
-        render();
+        btn.classList.add('active'); render();
     }
 
     function sugerir() {
@@ -154,8 +144,8 @@
 
     async function addE() {
         let n = document.getElementById('p_nome').value, q = parseInt(document.getElementById('p_qtd').value), c = parseFloat(document.getElementById('p_custo').value), v = parseFloat(document.getElementById('p_venda').value), f = document.getElementById('p_foto').files[0];
-        let existente = dE.find(item => item.id == n || item.n == n);
-        if(existente) { existente.q += q; } else {
+        let ex = dE.find(i => i.id == n || i.n == n);
+        if(ex) { ex.q += q; } else {
             let id = Math.floor(1000 + Math.random() * 9000);
             let b64 = f ? await comprimirFoto(f) : "";
             dE.push({id, n, q, c, v, f: b64, ma: document.getElementById('p_margem').value});
@@ -166,54 +156,37 @@
     function addS() {
         let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
         if(!s || idx === "") return;
-        if(dS[s] && dS[s].com !== com) { alert(`Use ${dS[s].com}% para este salão.`); return; }
-        let peca = dE[idx];
-        if(peca.q < q) { alert("Estoque baixo!"); return; }
+        let p = dE[idx];
+        if(p.q < q) { alert("Estoque insuficiente!"); return; }
         if(!dS[s]) dS[s] = { itens: [], com: com };
-        let item = dS[s].itens.find(it => it.id === peca.id);
-        if(item) { item.q += q; } else { dS[s].itens.push({ ...peca, q: q }); }
-        peca.q -= q; salvarTudo(); render();
+        let it = dS[s].itens.find(i => i.id === p.id);
+        if(it) { it.q += q; } else { dS[s].itens.push({ ...p, q: q }); }
+        p.q -= q; salvarTudo(); render();
     }
 
     function render() {
         let embUn = getEmbalagemUn();
         document.getElementById('fixo').innerText = m(embUn);
-        
-        // Render Custo
-        let htmlC = ''; dC.forEach((c, i) => { htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(c.v/c.q)}</td><td><button class="btn-mini-del" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
+        let htmlC = ''; dC.forEach((c, i) => htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(c.v/c.q)}</td><td><button onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`);
         document.getElementById('listaC').innerHTML = htmlC;
 
-        // Render Estoque e Catálogo
-        let totalEst = 0, htmlE = '', htmlCat = '', htmlSel = '<option value="">Escolha...</option>', comSim = (parseFloat(document.getElementById('cat_com').value) || 0) / 100;
-        
+        let totalEst = 0, htmlE = '', htmlCat = '', htmlSel = '<option value="">Selecione...</option>', comSim = (parseFloat(document.getElementById('cat_com').value) || 0) / 100;
         dE.forEach((p, i) => {
             totalEst += p.q;
-            htmlE += `<tr><td><img src="${p.f}" class="thumb"></td><td><span class="nome-label">${p.n}</span><span class="id-label">ID: ${p.id}</span></td><td>${p.q}</td><td>${m(p.c + embUn)}</td><td>${m(p.v)}</td><td><button class="btn-mini-del" onclick="dE.splice(${i},1);salvarTudo();render()">X</button></td></tr>`;
-            
-            // Render Card Catálogo
-            htmlCat += `<div class="card-peca">
-                <img src="${p.f || 'https://via.placeholder.com/150'}">
-                <div class="card-info">
-                    <span class="id-label">ID: ${p.id}</span>
-                    <span class="nome-label">${p.n}</span>
-                    <span class="card-venda">${m(p.v)}</span>
-                    <span class="card-comissao">Sua Comissão: ${m(p.v * comSim)}</span>
-                </div>
-            </div>`;
-
-            if(p.q > 0) htmlSel += `<option value="${i}">${p.n} (ID: ${p.id})</option>`;
+            htmlE += `<tr><td><img src="${p.f}" class="thumb"></td><td><span class="nome-label">${p.n}</span><span class="id-label">ID: ${p.id}</span></td><td>${p.q}</td><td>${m(p.c + embUn)}</td><td>${m(p.v)}</td><td><button onclick="dE.splice(${i},1);salvarTudo();render()">X</button></td></tr>`;
+            htmlCat += `<div class="card-peca"><img src="${p.f || ''}"><div class="card-info"><span class="id-label">ID: ${p.id}</span><span class="nome-label">${p.n}</span><span class="card-venda">${m(p.v)}</span><span class="card-comissao">Sua Comissão: ${m(p.v * comSim)}</span></div></div>`;
+            if(p.q > 0) htmlSel += `<option value="${i}">${p.n} | ID: ${p.id} (Estoque: ${p.q})</option>`;
         });
         document.getElementById('listaE').innerHTML = htmlE;
         document.getElementById('listaCat').innerHTML = htmlCat;
         document.getElementById('totalEst').innerText = totalEst;
         document.getElementById('s_sel').innerHTML = htmlSel;
 
-        // Render Salões
         let htmlS = '';
         for(let s in dS) {
             let rws = '';
             dS[s].itens.forEach((it, i) => {
-                rws += `<div class="item-salao"><img src="${it.f}" class="thumb"><div class="item-info"><span class="nome-label">${it.n}</span><span class="id-label">ID: ${it.id} | ${it.q} und</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:55px; background:#000; color:#fff; border:1px solid var(--verde); padding:8px; border-radius:5px;"></div>`;
+                rws += `<div class="item-salao"><img src="${it.f}" class="thumb"><div class="item-info"><span class="nome-label">${it.n}</span><span class="enviado-label">Enviado: ${it.q} und</span><span class="id-label">ID: ${it.id}</span><span class="venda-label">Unitário: ${m(it.v)}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:60px; background:#000; color:#fff; border:1px solid var(--verde); padding:8px; border-radius:5px;"></div>`;
             });
             htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s}</span><span>Ver ▾</span></div><div class="salao-corpo">${rws}<div style="display:flex; justify-content:space-around; margin-top:15px;"><div><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-add" style="background:var(--ouro); color:black; margin-top:15px; font-size:12px;" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
         }
@@ -221,7 +194,7 @@
     }
 
     function recalc(s) {
-        let b = 0; dS[s].itens.forEach((it, i) => { b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; });
+        let b = 0; dS[s].itens.forEach((it, i) => b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v);
         let com = b * (dS[s].com / 100);
         document.getElementById(`c-${s}`).innerText = m(com);
         document.getElementById(`r-${s}`).innerText = m(b - com);
