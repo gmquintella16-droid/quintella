@@ -4,78 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <title>Quintella Diamond</title>
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Quintella">
-    
     <style>
         :root { --preto: #0f0f0f; --ouro: #d4af37; --card: #1a1a1a; --texto: #f0f0f0; --verde: #2ecc71; --azul: #3498db; --vermelho: #e74c3c; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--preto); color: var(--texto); padding: 15px; margin: 0; padding-top: env(safe-area-inset-top); }
         .container { max-width: 600px; margin: 0 auto; padding-bottom: 80px; }
         h1 { color: var(--ouro); text-align: center; text-transform: uppercase; font-size: 1.3rem; margin: 15px 0; letter-spacing: 1px; }
-        
         .backup-area { display: flex; justify-content: space-between; margin-bottom: 15px; gap: 10px; }
         .btn-backup { background: #333; color: #fff; border: 1px solid #555; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.7rem; font-weight: bold; }
-        
-        .resumo-topo { background: var(--card); border: 1px solid var(--ouro); padding: 15px; border-radius: 12px; display: flex; justify-content: space-around; margin-bottom: 20px; font-weight: bold; font-size: 0.8rem; text-align: center; }
-        .resumo-topo span { display: block; color: var(--ouro); font-size: 1rem; }
-
+        .resumo-topo { background: var(--card); border: 1px solid var(--ouro); padding: 15px; border-radius: 12px; display: flex; justify-content: space-around; margin-bottom: 20px; font-size: 0.8rem; text-align: center; }
+        .resumo-topo span { display: block; color: var(--ouro); font-size: 1rem; font-weight: bold; }
         .menu { display: flex; gap: 8px; margin-bottom: 20px; position: sticky; top: 0; background: var(--preto); padding: 10px 0; z-index: 100; }
         .btn-menu { background: var(--card); border: 1px solid var(--ouro); color: var(--ouro); padding: 12px; cursor: pointer; border-radius: 8px; flex: 1; font-weight: bold; font-size: 0.75rem; }
         .btn-menu.active { background: var(--ouro); color: black; }
-
         .secao { background: var(--card); padding: 15px; border-radius: 15px; display: none; border: 1px solid #333; }
         .active { display: block; }
-
         .form-box { background: #222; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid var(--ouro); }
         label { display: block; font-size: 10px; color: var(--ouro); margin-bottom: 5px; text-transform: uppercase; font-weight: bold; }
         input, select { background: #111; border: 1px solid #444; color: white; padding: 14px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
-        
         .btn-add { background: var(--verde); color: white; border: none; padding: 16px; border-radius: 10px; font-weight: bold; width: 100%; font-size: 1rem; text-transform: uppercase; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        td { padding: 12px 5px; border-bottom: 1px solid #333; font-size: 13px; }
-        
-        .thumb { width: 55px; height: 55px; object-fit: cover; border-radius: 8px; border: 1px solid #444; }
-        .thumb-large { width: 75px; height: 75px; object-fit: cover; border-radius: 10px; border: 1px solid var(--ouro); }
-        .id-badge { background: rgba(212, 175, 55, 0.2); color: var(--ouro); padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; display: inline-block; }
-
-        .salao-container { margin-top: 15px; border: 1px solid #444; border-radius: 12px; background: #222; overflow: hidden; }
-        .salao-header { padding: 15px; cursor: pointer; display: flex; justify-content: space-between; font-weight: bold; background: #333; }
-        .salao-corpo { background: var(--card); padding: 15px; display: none; }
-        
-        .item-acerto { padding: 15px 0; border-bottom: 1px solid #444; position: relative; }
-        .item-topo { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-        .item-controles { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 10px; border-radius: 8px; }
-        
-        input.vendido-input { border: 2px solid var(--verde); width: 70px; text-align: center; font-size: 22px; padding: 5px; border-radius: 8px; background: #000; color: white; margin-bottom: 0; }
-        
-        .btn-del { background: var(--vermelho); color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; }
-        .btn-mini-del { position: absolute; top: 0; right: 0; background: var(--vermelho); color: white; border: none; border-radius: 5px; padding: 5px 8px; font-size: 10px; }
-
-        .rodape-valores { display: flex; justify-content: space-around; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #555; }
-        .v-box { text-align: center; }
-        .v-box small { font-size: 10px; color: #aaa; display: block; }
-        .v-box strong { font-size: 1.1rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+        th { text-align: left; color: var(--ouro); padding: 8px 5px; border-bottom: 1px solid var(--ouro); font-size: 10px; }
+        td { padding: 10px 5px; border-bottom: 1px solid #333; }
+        .thumb { width: 45px; height: 45px; object-fit: cover; border-radius: 5px; }
+        .salao-container { margin-top: 15px; border-radius: 12px; background: #222; overflow: hidden; border: 1px solid #444; }
+        .salao-header { padding: 15px; cursor: pointer; display: flex; justify-content: space-between; background: #333; font-weight: bold; }
+        .salao-corpo { padding: 15px; display: none; }
+        .v-box strong.receber { color: var(--verde); }
+        .v-box strong.comissao { color: var(--vermelho); }
+        .btn-mini-del { background: var(--vermelho); color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 10px; }
     </style>
 </head>
 <body>
-
 <div class="container">
     <h1>Quintella Diamond 💎</h1>
-    
     <div class="backup-area">
         <button class="btn-backup" onclick="exportar()">📥 BACKUP</button>
         <button class="btn-backup" onclick="document.getElementById('imp').click()">📤 ABRIR</button>
         <input type="file" id="imp" style="display:none" onchange="importar(this)">
     </div>
-
     <div class="resumo-topo">
         <div>EMBALAGEM/UN<span id="fixo">R$ 0,00</span></div>
         <div>ESTOQUE TOTAL<span id="totalEst">0</span></div>
     </div>
-
     <div class="menu">
         <button class="btn-menu active" onclick="trocar(1, this)">CUSTOS</button>
         <button class="btn-menu" onclick="trocar(2, this)">ESTOQUE</button>
@@ -84,30 +56,30 @@
 
     <div id="aba1" class="secao active">
         <div class="form-box">
-            <label>Descrição</label><input type="text" id="c_nome" placeholder="Ex: Saquinho">
+            <label>Descrição</label><input type="text" id="c_nome">
             <label>Valor Total (R$)</label><input type="number" id="c_valor">
             <label>Qtd de Peças</label><input type="number" id="c_qtd" value="1">
             <button class="btn-add" onclick="addC()">+ ADICIONAR CUSTO</button>
         </div>
-        <table><tbody id="listaC"></tbody></table>
+        <table><thead><tr><th>NOME</th><th>TOTAL</th><th>QTD</th><th>UN.</th><th></th></tr></thead><tbody id="listaC"></tbody></table>
     </div>
 
     <div id="aba2" class="secao">
         <div class="form-box">
             <label>Foto</label><input type="file" id="p_foto" accept="image/*" capture="environment">
-            <label>Modelo</label><input type="text" id="p_nome">
+            <label>Modelo (ou ID Existente)</label><input type="text" id="p_nome">
             <label>Qtd</label><input type="number" id="p_qtd" value="1">
             <label>Custo Compra (R$)</label><input type="number" id="p_custo" oninput="sugerir()">
             <label>% Margem</label><input type="number" id="p_margem" value="70" oninput="sugerir()">
             <label>Preço Venda</label><input type="number" id="p_venda">
             <button class="btn-add" onclick="addE()">📦 SALVAR NO ESTOQUE</button>
         </div>
-        <table><tbody id="listaE"></tbody></table>
+        <table><thead><tr><th>FOTO</th><th>ID/NOME</th><th>QTD</th><th>CUSTO+E</th><th>VENDA</th><th>%</th><th></th></tr></thead><tbody id="listaE"></tbody></table>
     </div>
 
     <div id="aba3" class="secao">
-        <div class="form-box" style="border-left-color: var(--azul);">
-            <label>Salão</label><input type="text" id="s_nome" placeholder="Nome do Salão">
+        <div class="form-box">
+            <label>Salão</label><input type="text" id="s_nome">
             <label>Peça (ID)</label><select id="s_sel"></select>
             <label>Qtd Enviar</label><input type="number" id="s_qtd" value="1">
             <label>% Comissão</label><input type="number" id="s_com" value="30">
@@ -118,37 +90,34 @@
 </div>
 
 <script>
-    let dC = JSON.parse(localStorage.getItem('QD_MOB_C')) || [];
-    let dE = JSON.parse(localStorage.getItem('QD_MOB_E')) || [];
-    let dS = JSON.parse(localStorage.getItem('QD_MOB_S')) || {};
+    let dC = JSON.parse(localStorage.getItem('QD_V2_C')) || [];
+    let dE = JSON.parse(localStorage.getItem('QD_V2_E')) || [];
+    let dS = JSON.parse(localStorage.getItem('QD_V2_S')) || {};
 
     const m = v => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
 
     function salvarTudo() {
-        localStorage.setItem('QD_MOB_C', JSON.stringify(dC));
-        localStorage.setItem('QD_MOB_E', JSON.stringify(dE));
-        localStorage.setItem('QD_MOB_S', JSON.stringify(dS));
+        localStorage.setItem('QD_V2_C', JSON.stringify(dC));
+        localStorage.setItem('QD_V2_E', JSON.stringify(dE));
+        localStorage.setItem('QD_V2_S', JSON.stringify(dS));
     }
 
-    // COMPRESSOR DE FOTO PARA IPHONE NÃO TRAVAR
     function comprimirFoto(file) {
         return new Promise((resolve) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = (event) => {
+            reader.onload = (e) => {
                 const img = new Image();
-                img.src = event.target.result;
+                img.src = e.target.result;
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
-                    const max_size = 500; 
-                    let width = img.width;
-                    let height = img.height;
-                    if (width > height) { if (width > max_size) { height *= max_size / width; width = max_size; }
-                    } else { if (height > max_size) { width *= max_size / height; height = max_size; } }
-                    canvas.width = width; canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    resolve(canvas.toDataURL('image/jpeg', 0.6)); 
+                    const max = 400;
+                    let w = img.width, h = img.height;
+                    if (w > h) { if (w > max) { h *= max / w; w = max; } }
+                    else { if (h > max) { w *= max / h; h = max; } }
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    resolve(canvas.toDataURL('image/jpeg', 0.7));
                 };
             };
         });
@@ -163,7 +132,7 @@
     }
 
     function sugerir() {
-        let f = parseFloat(document.getElementById('fixo').innerText.replace('R$ ','').replace('.','').replace(',','.')) || 0;
+        let f = parseFloat(document.getElementById('fixo').innerText.replace('R$ ','').replace(',','.')) || 0;
         let c = parseFloat(document.getElementById('p_custo').value) || 0;
         let ma = (parseFloat(document.getElementById('p_margem').value) || 0) / 100;
         if(c > 0) document.getElementById('p_venda').value = ((c + f) / (1 - (ma >= 1 ? 0.9 : ma))).toFixed(2);
@@ -176,9 +145,19 @@
 
     async function addE() {
         let n = document.getElementById('p_nome').value, q = parseInt(document.getElementById('p_qtd').value), c = parseFloat(document.getElementById('p_custo').value), v = parseFloat(document.getElementById('p_venda').value), f = document.getElementById('p_foto').files[0];
-        let id = Math.floor(1000 + Math.random() * 9000);
-        let b64 = f ? await comprimirFoto(f) : "";
-        if(n && v > 0) { dE.push({id, n, q, c, v, f: b64}); salvarTudo(); render(); }
+        let emb = parseFloat(document.getElementById('fixo').innerText.replace('R$ ','').replace(',','.')) || 0;
+        let margem = document.getElementById('p_margem').value;
+        
+        // Se o nome for um ID que já existe, soma a quantidade
+        let existente = dE.find(item => item.id == n || item.n == n);
+        if(existente) {
+            existente.q += q;
+        } else {
+            let id = Math.floor(1000 + Math.random() * 9000);
+            let b64 = f ? await comprimirFoto(f) : "";
+            dE.push({id, n, q, c, v, f: b64, emb: emb, ma: margem});
+        }
+        salvarTudo(); render();
     }
 
     function addS() {
@@ -191,46 +170,46 @@
         }
     }
 
-    function removerItemSalao(salao, itemIdx) {
-        let item = dS[salao].itens[itemIdx];
-        let p = dE.find(e => e.id === item.id);
-        if(p) p.q += item.q;
-        dS[salao].itens.splice(itemIdx, 1);
-        if(dS[salao].itens.length === 0) delete dS[salao];
-        salvarTudo(); render();
-    }
-
-    function fechar(s) {
-        if(!confirm("Concluir acerto?")) return;
-        dS[s].itens.forEach((it, i) => {
-            let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
-            let sob = it.q - v;
-            if(sob > 0) { let p = dE.find(e => e.id === it.id); if(p) p.q += sob; }
-        });
-        delete dS[s]; salvarTudo(); render();
-    }
-
     function render() {
         let fixo = 0, htmlC = '';
-        dC.forEach((c, i) => { let u = c.v/c.q; fixo += u; htmlC += `<tr><td><strong>${c.n}</strong></td><td style="text-align:right">${m(u)}</td><td><button class="btn-mini-del" style="position:relative" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
+        dC.forEach((c, i) => { 
+            let u = c.v/c.q; fixo += u; 
+            htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(u)}</td><td><button class="btn-mini-del" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; 
+        });
         document.getElementById('fixo').innerText = m(fixo);
         document.getElementById('listaC').innerHTML = htmlC;
+
         let totalEst = 0, htmlE = '', htmlSel = '<option value="">Selecione...</option>';
         dE.forEach((p, i) => {
             totalEst += p.q;
-            htmlE += `<tr><td><img src="${p.f}" class="thumb"></td><td><strong>${p.n}</strong><br>Qtd: ${p.q}</td><td style="text-align:right">${m(p.v)}</td><td><button class="btn-mini-del" style="position:relative" onclick="dE.splice(${i},1);salvarTudo();render()">X</button></td></tr>`;
-            if(p.q > 0) htmlSel += `<option value="${i}">${p.n} (Qtd: ${p.q})</option>`;
+            htmlE += `<tr><td><img src="${p.f}" class="thumb"></td><td>[${p.id}]<br>${p.n}</td><td>${p.q}</td><td>${m(p.c + (p.emb||0))}</td><td>${m(p.v)}</td><td>${p.ma}%</td><td><button class="btn-mini-del" onclick="dE.splice(${i},1);salvarTudo();render()">X</button></td></tr>`;
+            if(p.q > 0) htmlSel += `<option value="${i}">${p.n} (ID: ${p.id})</option>`;
         });
         document.getElementById('listaE').innerHTML = htmlE;
         document.getElementById('totalEst').innerText = totalEst;
         document.getElementById('s_sel').innerHTML = htmlSel;
+
         let htmlS = '';
         for(let s in dS) {
             let rws = '';
             dS[s].itens.forEach((it, i) => {
-                rws += `<div class="item-acerto"><button class="btn-mini-del" onclick="removerItemSalao('${s}', ${i})">X</button><div class="item-topo"><img src="${it.f}" class="thumb-large"><div><strong>${it.n}</strong></div></div><div class="item-controles"><div>Enviado: ${it.q}</div><input type="number" id="v-${s}-${i}" class="vendido-input" value="0" oninput="recalc('${s}')"></div></div>`;
+                rws += `<div style="padding:10px 0; border-bottom:1px solid #444; display:flex; justify-content:space-between; align-items:center;">
+                    <span>${it.n} (${it.q}un)</span>
+                    <input type="number" id="v-${s}-${i}" class="vendido-input" value="0" oninput="recalc('${s}')" style="width:60px; margin:0; padding:5px;">
+                </div>`;
             });
-            htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s}</span><span>Ver ▾</span></div><div class="salao-corpo">${rws}<div class="rodape-valores"><div class="v-box"><small>Comissão</small><strong id="c-${s}">R$ 0,00</strong></div><div class="v-box"><small>Receber</small><strong id="r-${s}">R$ 0,00</strong></div></div><button class="btn-add" style="background:var(--ouro); color:black; margin-top:20px" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
+            htmlS += `<div class="salao-container">
+                <div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'">
+                    <span>📍 ${s} (${dS[s].com}%)</span><span>Ver ▾</span>
+                </div>
+                <div class="salao-corpo">${rws}
+                    <div class="rodape-valores" style="display:flex; justify-content:space-around; margin-top:15px;">
+                        <div class="v-box"><small>Comissão</small><strong class="comissao" id="c-${s}">R$ 0,00</strong></div>
+                        <div class="v-box"><small>Receber</small><strong class="receber" id="r-${s}">R$ 0,00</strong></div>
+                    </div>
+                    <button class="btn-add" style="background:var(--ouro); color:black; margin-top:15px; font-size:12px;" onclick="fechar('${s}')">FECHAR ACERTO</button>
+                </div>
+            </div>`;
         }
         document.getElementById('listaS').innerHTML = htmlS;
         for(let s in dS) recalc(s);
@@ -239,19 +218,28 @@
     function recalc(s) {
         let b = 0; if(!dS[s]) return;
         dS[s].itens.forEach((it, i) => { b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; });
-        let c = b * (dS[s].com / 100);
-        document.getElementById(`c-${s}`).innerText = m(c);
-        document.getElementById(`r-${s}`).innerText = m(b - c);
+        let com = b * (dS[s].com / 100);
+        document.getElementById(`c-${s}`).innerText = m(com);
+        document.getElementById(`r-${s}`).innerText = m(b - com);
+    }
+
+    function fechar(s) {
+        if(!confirm("Fechar acerto de " + s + "?")) return;
+        dS[s].itens.forEach((it, i) => {
+            let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
+            let sob = it.q - v;
+            if(sob > 0) { let p = dE.find(e => e.id === it.id); if(p) p.q += sob; }
+        });
+        delete dS[s]; salvarTudo(); render();
     }
 
     function exportar() {
         const b = new Blob([JSON.stringify({dC, dE, dS})], {type: 'application/json'});
         const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'Backup_Quintella.json'; a.click();
     }
-
     function importar(i) {
         const r = new FileReader();
-        r.onload = (e) => { const d = JSON.parse(e.target.result); dC=d.dC; dE=d.dE; dS=d.dS; salvarTudo(); render(); alert("OK!"); };
+        r.onload = (e) => { const d = JSON.parse(e.target.result); dC=d.dC; dE=d.dE; dS=d.dS; salvarTudo(); render(); alert("Importado!"); };
         r.readAsText(i.files[0]);
     }
     render();
