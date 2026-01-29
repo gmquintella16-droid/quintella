@@ -5,53 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
     <title>Quintella Diamond</title>
     <style>
-        :root { 
-            --ouro: #d4af37; 
-            --fundo-app: #f4f4f4; 
-            --verde: #2ecc71; 
-            --azul: #3498db; 
-            --vermelho: #e74c3c; 
-        }
-        
+        :root { --ouro: #d4af37; --fundo-app: #f4f4f4; --verde: #2ecc71; --azul: #3498db; --vermelho: #e74c3c; }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--fundo-app); margin: 0; padding: 10px; padding-top: env(safe-area-inset-top); }
         .container { max-width: 100%; margin: 0 auto; padding-bottom: 80px; box-sizing: border-box; }
         h1 { color: #000; text-align: center; text-transform: uppercase; font-size: 1.3rem; margin: 15px 0; letter-spacing: 1px; font-weight: 800; }
-        
         .backup-area { display: flex; gap: 8px; margin-bottom: 15px; }
         .btn-backup { background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.7rem; font-weight: bold; }
-
         .resumo-topo { background: #fff; padding: 12px; border-radius: 12px; display: flex; justify-content: space-around; margin-bottom: 20px; font-size: 0.75rem; text-align: center; border: 1px solid #eee; }
         .resumo-topo span { display: block; color: var(--ouro); font-size: 0.9rem; font-weight: bold; }
-
         .menu { display: flex; gap: 4px; margin-bottom: 15px; position: sticky; top: 0; background: var(--fundo-app); padding: 10px 0; z-index: 100; }
         .btn-menu { background: #fff; border: 1px solid #ddd; color: #888; padding: 10px 5px; border-radius: 8px; flex: 1; font-weight: bold; font-size: 0.6rem; text-transform: uppercase; }
         .btn-menu.active { background: var(--ouro); color: white; border-color: var(--ouro); }
-
         .secao { background: #1a1a1a; padding: 12px; border-radius: 15px; display: none; color: #fff; overflow: hidden; }
         .active { display: block; }
-
         .form-box { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 15px; }
         label { display: block; font-size: 9px; color: var(--ouro); margin-bottom: 4px; font-weight: bold; text-transform: uppercase; }
         input, select { background: #fff; border: 1px solid #ddd; color: #333; padding: 12px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 15px; margin-bottom: 10px; }
         .btn-add { background: var(--verde); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; font-size: 0.9rem; }
-
         .scroll-table { width: 100%; overflow-x: hidden; }
         table { width: 100%; border-collapse: collapse; color: #fff; font-size: 10px; table-layout: fixed; }
         th { text-align: left; color: var(--ouro); padding: 5px 2px; border-bottom: 1px solid #333; font-size: 8px; }
         td { padding: 8px 2px; border-bottom: 1px solid #222; vertical-align: middle; }
-
         .thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; border: 1px solid #333; display: block; }
         .nome-produto { font-weight: bold; color: #fff; font-size: 11px; display: block; line-height: 1.1; word-wrap: break-word; white-space: normal; }
         .id-label { color: var(--ouro); font-size: 9px; font-weight: bold; display: block; margin-top: 2px; }
-
         .acao-box { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
         .btn-mini { background: #333; color: #fff; border: 1px solid #444; width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; }
         .btn-del { background: transparent; color: var(--vermelho); border: 1px solid var(--vermelho); width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; cursor: pointer; }
-
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .card-cat { background: #fff; color: #000; border-radius: 10px; overflow: hidden; text-align: center; padding-bottom: 8px; }
         .card-cat img { width: 100%; height: 120px; object-fit: cover; }
-
         .salao-container { background: #222; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; overflow: hidden; }
         .salao-header { padding: 12px; background: #2a2a2a; color: #fff; display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; }
         .item-salao { display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #333; padding: 10px 5px; }
@@ -61,38 +44,30 @@
         .valor-label { color: #fff; font-size: 11px; display: block; margin-bottom: 3px; font-weight: 500; opacity: 0.9; }
         .enviado-label { color: var(--ouro); font-size: 10px; font-weight: bold; display: block; }
         .input-venda { width: 45px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 6px !important; text-align: center; border-radius: 4px; font-size: 14px; margin: 0 !important; }
-
         .resumo-acerto { display: flex; width: 100%; margin-top: 15px; padding: 10px 0; border-top: 1px solid #444; }
         .resumo-item { flex: 1; text-align: center; }
-        .resumo-item strong { font-size: 0.9rem; }
         .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
     </style>
 </head>
 <body>
-
 <div class="container">
     <h1>Quintella Diamond 💎</h1>
-    
     <div class="backup-area">
         <button class="btn-backup" onclick="exportar()">📥 BACKUP</button>
         <button class="btn-backup" onclick="document.getElementById('imp').click()">📤 ABRIR</button>
         <input type="file" id="imp" style="display:none" onchange="importar(this)">
     </div>
-    
     <input type="file" id="edit_foto_input" style="display:none" accept="image/*" capture="environment">
-
     <div class="resumo-topo">
         <div>EMBALAGEM/UN<span id="fixo">R$ 0,00</span></div>
         <div>ESTOQUE TOTAL<span id="totalEst">0</span></div>
     </div>
-    
     <div class="menu">
         <button class="btn-menu active" onclick="trocar(1, this)">CUSTOS</button>
         <button class="btn-menu" onclick="trocar(2, this)">ESTOQUE</button>
         <button class="btn-menu" onclick="trocar(4, this)">CATÁLOGO</button>
         <button class="btn-menu" onclick="trocar(3, this)">SALÕES</button>
     </div>
-
     <div id="aba1" class="secao active">
         <div class="form-box">
             <label>Descrição</label><input type="text" id="c_nome">
@@ -102,33 +77,22 @@
         </div>
         <table><thead><tr><th>NOME</th><th>TOTAL</th><th>QTD</th><th>UN.</th><th></th></tr></thead><tbody id="listaC"></tbody></table>
     </div>
-
     <div id="aba2" class="secao">
         <div class="form-box">
             <label>Foto</label><input type="file" id="p_foto" accept="image/*" capture="environment">
-            <label>Modelo (ou ID Existente)</label><input type="text" id="p_nome">
+            <label>Modelo</label><input type="text" id="p_nome">
             <label>Qtd</label><input type="number" id="p_qtd" value="1">
             <label>Custo Compra (R$)</label><input type="number" id="p_custo" oninput="sugerir()">
             <label>% Margem</label><input type="number" id="p_margem" value="70" oninput="sugerir()">
             <label>Preço Venda</label><input type="number" id="p_venda">
             <button class="btn-add" onclick="addE()">📦 SALVAR NO ESTOQUE</button>
         </div>
-        <div class="scroll-table">
-            <table>
-                <thead><tr><th style="width:45px">FOTO</th><th style="width:32%">NOME</th><th style="width:25px">QTD</th><th style="width:48px">CUSTO</th><th style="width:48px">VENDA</th><th style="width:32px">%</th><th style="width:32px"></th></tr></thead>
-                <tbody id="listaE"></tbody>
-            </table>
-        </div>
+        <div class="scroll-table"><table><thead><tr><th style="width:45px">FOTO</th><th style="width:32%">NOME</th><th style="width:25px">QTD</th><th style="width:48px">CUSTO</th><th style="width:48px">VENDA</th><th style="width:32px">%</th><th style="width:32px"></th></tr></thead><tbody id="listaE"></tbody></table></div>
     </div>
-
     <div id="aba4" class="secao">
-        <div class="form-box">
-            <label style="color:white">Simular Comissão Cliente (%)</label>
-            <input type="number" id="cat_com" value="30" oninput="render()">
-        </div>
+        <div class="form-box"><label style="color:white">Simular Comissão Cliente (%)</label><input type="number" id="cat_com" value="30" oninput="render()"></div>
         <div class="grid-catalogo" id="listaCat"></div>
     </div>
-
     <div id="aba3" class="secao">
         <div class="form-box">
             <label>Salão</label><input type="text" id="s_nome">
@@ -140,61 +104,31 @@
         <div id="listaS"></div>
     </div>
 </div>
-
 <script>
     let dC = JSON.parse(localStorage.getItem('QD_V15_C')) || [];
     let dE = JSON.parse(localStorage.getItem('QD_V15_E')) || [];
     let dS = JSON.parse(localStorage.getItem('QD_V15_S')) || {};
     let itemParaEditarFoto = null;
-
     const m = v => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
-
-    function salvarTudo() {
-        localStorage.setItem('QD_V15_C', JSON.stringify(dC));
-        localStorage.setItem('QD_V15_E', JSON.stringify(dE));
-        localStorage.setItem('QD_V15_S', JSON.stringify(dS));
-    }
-
-    function trocar(n, btn) {
-        document.querySelectorAll('.secao').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('active'));
-        document.getElementById('aba'+n).classList.add('active');
-        btn.classList.add('active'); render();
-    }
-
-    function sugerir() {
-        let f = getEmbalagemUn(), c = parseFloat(document.getElementById('p_custo').value) || 0;
-        let ma = (parseFloat(document.getElementById('p_margem').value) || 0) / 100;
-        if(c > 0) document.getElementById('p_venda').value = ((c + f) / (1 - (ma >= 1 ? 0.9 : ma))).toFixed(2);
-    }
-
-    function getEmbalagemUn() {
-        let total = 0; dC.forEach(c => { total += (c.v / c.q); });
-        return total || 0;
-    }
-
-    function addC() {
-        let n = document.getElementById('c_nome').value, v = parseFloat(document.getElementById('c_valor').value), q = parseInt(document.getElementById('c_qtd').value);
-        if(n && v > 0) { dC.push({n, v, q}); salvarTudo(); render(); }
-    }
-
-    async function addE() {
-        let n = document.getElementById('p_nome').value, q = parseInt(document.getElementById('p_qtd').value), c = parseFloat(document.getElementById('p_custo').value), v = parseFloat(document.getElementById('p_venda').value), f = document.getElementById('p_foto').files[0];
-        let ex = dE.find(item => item.id == n || item.n == n);
-        if(ex) { ex.q += q; } else {
-            let id = Math.floor(1000 + Math.random() * 9000);
-            let b64 = f ? await comprimirFoto(f) : "";
-            dE.push({id, n, q, c, v, f: b64});
-        }
-        salvarTudo(); render();
-    }
-
+    function salvarTudo() { localStorage.setItem('QD_V15_C', JSON.stringify(dC)); localStorage.setItem('QD_V15_E', JSON.stringify(dE)); localStorage.setItem('QD_V15_S', JSON.stringify(dS)); }
+    function trocar(n, btn) { document.querySelectorAll('.secao').forEach(s => s.classList.remove('active')); document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('active')); document.getElementById('aba'+n).classList.add('active'); btn.classList.add('active'); render(); }
+    function sugerir() { let f = getEmbalagemUn(), c = parseFloat(document.getElementById('p_custo').value) || 0; let ma = (parseFloat(document.getElementById('p_margem').value) || 0) / 100; if(c > 0) document.getElementById('p_venda').value = ((c + f) / (1 - (ma >= 1 ? 0.9 : ma))).toFixed(2); }
+    function getEmbalagemUn() { let total = 0; dC.forEach(c => { total += (c.v / c.q); }); return total || 0; }
+    function addC() { let n = document.getElementById('c_nome').value, v = parseFloat(document.getElementById('c_valor').value), q = parseInt(document.getElementById('c_qtd').value); if(n && v > 0) { dC.push({n, v, q}); salvarTudo(); render(); } }
+    async function addE() { let n = document.getElementById('p_nome').value, q = parseInt(document.getElementById('p_qtd').value), c = parseFloat(document.getElementById('p_custo').value), v = parseFloat(document.getElementById('p_venda').value), f = document.getElementById('p_foto').files[0]; let ex = dE.find(item => item.id == n || item.n == n); if(ex) { ex.q += q; } else { let id = Math.floor(1000 + Math.random() * 9000); let b64 = f ? await comprimirFoto(f) : ""; dE.push({id, n, q, c, v, f: b64}); } salvarTudo(); render(); }
+    
     function addS() {
         let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
         if(!s || idx === "") return;
-        if(dS[s] && dS[s].com !== com) { com = dS[s].com; }
+        if(dS[s]) {
+            if(dS[s].com !== com) {
+                alert(`SEGURANÇA: Salão "${s}" já cadastrado com ${dS[s].com}%. Corrigimos o campo para você. Tente enviar novamente.`);
+                document.getElementById('s_com').value = dS[s].com;
+                return; // Bloqueio real
+            }
+        }
         let peca = dE[idx];
-        if(peca.q < q) { alert("Estoque insuficiente!"); return; }
+        if(peca.q < q) { alert("Estoque baixo!"); return; }
         if(!dS[s]) dS[s] = { itens: [], com: com };
         let it = dS[s].itens.find(i => i.id === peca.id);
         if(it) it.q += q; else dS[s].itens.push({ ...peca, q: q });
@@ -203,126 +137,35 @@
 
     function removerPecaSalao(nomeSalao, idItem) {
         if(!confirm("Remover do salão?")) return;
-        let salao = dS[nomeSalao];
-        let index = salao.itens.findIndex(i => i.id === idItem);
-        if(index > -1) {
-            let pecaS = salao.itens[index];
-            let pecaE = dE.find(e => e.id === idItem);
-            if(pecaE) pecaE.q += pecaS.q;
-            salao.itens.splice(index, 1);
-            if(salao.itens.length === 0) delete dS[nomeSalao];
-            salvarTudo(); render();
-        }
+        let salao = dS[nomeSalao], index = salao.itens.findIndex(i => i.id === idItem);
+        if(index > -1) { let pecaS = salao.itens[index], pecaE = dE.find(e => e.id === idItem); if(pecaE) pecaE.q += pecaS.q; salao.itens.splice(index, 1); if(salao.itens.length === 0) delete dS[nomeSalao]; salvarTudo(); render(); }
     }
-
-    function abrirTrocarFoto(id) {
-        itemParaEditarFoto = id;
-        document.getElementById('edit_foto_input').click();
-    }
-
-    document.getElementById('edit_foto_input').onchange = async function(e) {
-        if(e.target.files[0] && itemParaEditarFoto) {
-            let novaB64 = await comprimirFoto(e.target.files[0]);
-            let p = dE.find(x => x.id === itemParaEditarFoto);
-            if(p) p.f = novaB64;
-            for(let s in dS) {
-                let it = dS[s].itens.find(x => x.id === itemParaEditarFoto);
-                if(it) it.f = novaB64;
-            }
-            salvarTudo(); render();
-        }
-    };
-
+    function abrirTrocarFoto(id) { itemParaEditarFoto = id; document.getElementById('edit_foto_input').click(); }
+    document.getElementById('edit_foto_input').onchange = async function(e) { if(e.target.files[0] && itemParaEditarFoto) { let novaB64 = await comprimirFoto(e.target.files[0]); let p = dE.find(x => x.id === itemParaEditarFoto); if(p) p.f = novaB64; for(let s in dS) { let it = dS[s].itens.find(x => x.id === itemParaEditarFoto); if(it) it.f = novaB64; } salvarTudo(); render(); } };
     function render() {
-        let embUn = getEmbalagemUn();
-        document.getElementById('fixo').innerText = m(embUn);
+        let embUn = getEmbalagemUn(); document.getElementById('fixo').innerText = m(embUn);
         let htmlC = ''; dC.forEach((c, i) => { htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(c.v/c.q)}</td><td><button class="btn-del" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
         document.getElementById('listaC').innerHTML = htmlC;
-
         let totalEst = 0, htmlE = '', htmlCat = '', htmlSel = '<option value="">Selecione...</option>', comSim = (parseFloat(document.getElementById('cat_com').value) || 0) / 100;
-        
         dE.forEach((p, i) => {
-            totalEst += p.q;
-            let custoT = p.c + embUn;
-            let mrg = p.v > 0 ? (((p.v - custoT) / p.v) * 100).toFixed(0) : 0;
+            totalEst += p.q; let custoT = p.c + embUn; let mrg = p.v > 0 ? (((p.v - custoT) / p.v) * 100).toFixed(0) : 0;
             htmlE += `<tr><td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td><td><span class="nome-produto">${p.n}</span><span class="id-label">ID: ${p.id}</span></td><td>${p.q}</td><td>${custoT.toFixed(2)}</td><td>${p.v.toFixed(2)}</td><td style="color:var(--verde); font-weight:bold">${mrg}%</td><td><div class="acao-box"><button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button><button class="btn-del" onclick="if(confirm('Apagar?')){dE.splice(${i},1);salvarTudo();render();}">X</button></div></td></tr>`;
             htmlCat += `<div class="card-cat"><img src="${p.f}"><div style="padding:5px"><strong>${p.n}</strong><br><span style="color:var(--ouro); font-size:10px; font-weight:bold">ID: ${p.id}</span><br>${m(p.v)}<br><small style="color:var(--verde)">Comissão: ${m(p.v * comSim)}</small></div></div>`;
             if(p.q > 0) htmlSel += `<option value="${i}">ID: ${p.id} - ${p.n} (Est: ${p.q})</option>`;
         });
-        
-        document.getElementById('listaE').innerHTML = htmlE;
-        document.getElementById('listaCat').innerHTML = htmlCat;
-        document.getElementById('totalEst').innerText = totalEst;
-        document.getElementById('s_sel').innerHTML = htmlSel;
-
+        document.getElementById('listaE').innerHTML = htmlE; document.getElementById('listaCat').innerHTML = htmlCat; document.getElementById('totalEst').innerText = totalEst; document.getElementById('s_sel').innerHTML = htmlSel;
         let htmlS = '';
         for(let s in dS) {
-            let rws = '';
-            dS[s].itens.forEach((it, i) => {
-                rws += `<div class="item-salao">
-                    <img src="${it.f}">
-                    <div class="item-info">
-                        <span class="nome-label">${it.n}</span>
-                        <span class="valor-label">Preço: ${m(it.v)}</span>
-                        <span class="enviado-label">Enviado: &nbsp;&nbsp;${it.q}</span>
-                        <span class="id-label">ID: ${it.id}</span>
-                    </div>
-                    <input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda">
-                    <button class="btn-del" style="margin-left:5px" onclick="removerPecaSalao('${s}', ${it.id})">X</button>
-                </div>`;
-            });
+            let rws = ''; dS[s].itens.forEach((it, i) => { rws += `<div class="item-salao"><img src="${it.f}"><div class="item-info"><span class="nome-label">${it.n}</span><span class="valor-label">Preço: ${m(it.v)}</span><span class="enviado-label">Enviado: &nbsp;&nbsp;${it.q}</span><span class="id-label">ID: ${it.id}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda"><button class="btn-del" style="margin-left:5px" onclick="removerPecaSalao('${s}', ${it.id})">X</button></div>`; });
             htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div><div class="salao-corpo" style="display:none">${rws}<div class="resumo-acerto"><div class="resumo-item"><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div class="resumo-item"><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
         }
         document.getElementById('listaS').innerHTML = htmlS;
     }
-
-    function recalc(s) {
-        let b = 0; dS[s].itens.forEach((it, i) => { b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; });
-        let com = b * (dS[s].com / 100);
-        document.getElementById(`c-${s}`).innerText = m(com);
-        document.getElementById(`r-${s}`).innerText = m(b - com);
-    }
-
-    function fechar(s) {
-        let erro = false;
-        dS[s].itens.forEach((it, i) => {
-            let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
-            if(v > it.q) { alert(`Venda maior que o enviado!`); erro = true; }
-        });
-        if(erro) return;
-        if(!confirm("Fechar acerto?")) return;
-        dS[s].itens.forEach((it, i) => {
-            let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
-            let p = dE.find(e => e.id === it.id); 
-            if(p) p.q += (it.q - v);
-        });
-        delete dS[s]; salvarTudo(); render();
-    }
-
-    async function comprimirFoto(f) {
-        return new Promise(res => {
-            const r = new FileReader(); r.readAsDataURL(f);
-            r.onload = e => {
-                const i = new Image(); i.src = e.target.result;
-                i.onload = () => {
-                    const c = document.createElement('canvas'); const m = 400; let w = i.width, h = i.height;
-                    if(w > h) { if(w > m) { h *= m/w; w = m; } } else { if(h > m) { w *= m/h; h = m; } }
-                    c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h);
-                    res(c.toDataURL('image/jpeg', 0.7));
-                };
-            };
-        });
-    }
-
-    function exportar() {
-        const b = new Blob([JSON.stringify({dC, dE, dS})], {type: 'application/json'});
-        const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'Backup_Quintella.json'; a.click();
-    }
-    function importar(i) {
-        const r = new FileReader();
-        r.onload = (e) => { const d = JSON.parse(e.target.result); dC=d.dC; dE=d.dE; dS=d.dS; salvarTudo(); render(); };
-        r.readAsText(i.files[0]);
-    }
+    function recalc(s) { let b = 0; dS[s].itens.forEach((it, i) => { b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; }); let com = b * (dS[s].com / 100); document.getElementById(`c-${s}`).innerText = m(com); document.getElementById(`r-${s}`).innerText = m(b - com); }
+    function fechar(s) { let erro = false; dS[s].itens.forEach((it, i) => { let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0; if(v > it.q) { alert(`Venda maior que o enviado!`); erro = true; } }); if(erro) return; if(!confirm("Fechar acerto?")) return; dS[s].itens.forEach((it, i) => { let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0; let p = dE.find(e => e.id === it.id); if(p) p.q += (it.q - v); }); delete dS[s]; salvarTudo(); render(); }
+    async function comprimirFoto(f) { return new Promise(res => { const r = new FileReader(); r.readAsDataURL(f); r.onload = e => { const i = new Image(); i.src = e.target.result; i.onload = () => { const c = document.createElement('canvas'); const m = 400; let w = i.width, h = i.height; if(w > h) { if(w > m) { h *= m/w; w = m; } } else { if(h > m) { w *= m/h; h = m; } } c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); res(c.toDataURL('image/jpeg', 0.7)); }; }; }); }
+    function exportar() { const b = new Blob([JSON.stringify({dC, dE, dS})], {type: 'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'Backup_Quintella.json'; a.click(); }
+    function importar(i) { const r = new FileReader(); r.onload = (e) => { const d = JSON.parse(e.target.result); dC=d.dC; dE=d.dE; dS=d.dS; salvarTudo(); render(); }; r.readAsText(i.files[0]); }
     render();
 </script>
 </body>
