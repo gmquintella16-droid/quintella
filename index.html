@@ -6,10 +6,8 @@
     <title>Quintella Diamond</title>
     <style>
         :root { 
-            --preto: #0f0f0f; 
             --ouro: #d4af37; 
             --fundo-app: #f4f4f4; 
-            --branco: #ffffff;
             --verde: #2ecc71; 
             --azul: #3498db; 
             --vermelho: #e74c3c; 
@@ -19,7 +17,6 @@
         .container { max-width: 600px; margin: 0 auto; padding-bottom: 80px; }
         h1 { color: #000; text-align: center; text-transform: uppercase; font-size: 1.3rem; margin: 15px 0; letter-spacing: 1px; font-weight: 800; }
         
-        /* BOTÕES TOPO */
         .backup-area { display: flex; gap: 10px; margin-bottom: 15px; }
         .btn-backup { background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.7rem; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
@@ -38,9 +35,9 @@
         input, select { background: #fff; border: 1px solid #ddd; color: #333; padding: 14px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; margin-bottom: 12px; }
         .btn-add { background: var(--verde); color: white; border: none; padding: 16px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; }
 
-        /* TABELAS ESTOQUE */
+        /* TABELAS */
         table { width: 100%; border-collapse: collapse; color: #fff; font-size: 11px; }
-        th { text-align: left; color: var(--ouro); padding: 8px; border-bottom: 1px solid #333; }
+        th { text-align: left; color: var(--ouro); padding: 8px; border-bottom: 1px solid #333; font-size: 9px; }
         td { padding: 10px 8px; border-bottom: 1px solid #222; }
 
         /* CATÁLOGO */
@@ -50,27 +47,26 @@
         .card-venda { font-size: 1.1rem; font-weight: bold; color: #000; display: block; margin: 5px 0; }
         .card-comissao { background: #e8f8f0; color: var(--verde); padding: 5px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
 
-        /* SALÕES - LAYOUT HORIZONTAL */
+        /* SALÕES */
         .salao-container { background: #222; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; overflow: hidden; }
         .salao-header { padding: 15px; background: #2a2a2a; color: #fff; display: flex; justify-content: space-between; font-weight: bold; cursor: pointer; }
         .salao-corpo { padding: 15px; }
         
         .item-salao { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #333; padding: 12px 0; }
-        .item-salao img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; border: 1px solid #444; }
+        .item-salao img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; }
         
-        .item-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+        .item-info { flex: 1; display: flex; flex-direction: column; }
         .nome-label { font-weight: bold; color: #fff; font-size: 14px; }
         .enviado-label { color: var(--ouro); font-size: 12px; font-weight: bold; }
         .id-label { color: #888; font-size: 10px; }
-        .preco-label { color: #fff; font-size: 13px; font-weight: 500; margin-top: 2px; }
+        .preco-label { color: #fff; font-size: 12px; margin-top: 2px; }
         
-        .input-venda { width: 65px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 8px !important; margin: 0 !important; text-align: center; border-radius: 6px; }
+        .input-venda { width: 60px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 8px !important; margin: 0 !important; text-align: center; }
 
-        .resumo-acerto { display: flex; justify-content: space-around; margin-top: 20px; padding-top: 15px; border-top: 1px solid #444; text-align: center; }
-        .resumo-acerto small { color: #888; text-transform: uppercase; font-size: 10px; }
-        .resumo-acerto strong { display: block; font-size: 1.1rem; margin-top: 5px; }
+        .resumo-acerto { display: flex; justify-content: space-around; margin-top: 15px; padding-top: 10px; border-top: 1px solid #444; text-align: center; }
+        .resumo-acerto strong { display: block; font-size: 1rem; }
 
-        .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 20px; cursor: pointer; text-transform: uppercase; }
+        .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 15px; cursor: pointer; }
 
         .thumb { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; }
         .btn-mini { background: #333; color: #fff; border: 1px solid #444; padding: 5px; border-radius: 4px; cursor: pointer; }
@@ -121,7 +117,20 @@
             <label>Preço Venda</label><input type="number" id="p_venda">
             <button class="btn-add" onclick="addE()">📦 SALVAR NO ESTOQUE</button>
         </div>
-        <table><thead><tr><th>FOTO</th><th>NOME/ID</th><th>QTD</th><th>VENDA</th><th>%</th><th></th></tr></thead><tbody id="listaE"></tbody></table>
+        <table>
+            <thead>
+                <tr>
+                    <th>FOTO</th>
+                    <th>NOME/ID</th>
+                    <th>QTD</th>
+                    <th>CUSTO+E</th>
+                    <th>VENDA</th>
+                    <th>%</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="listaE"></tbody>
+        </table>
     </div>
 
     <div id="aba4" class="secao">
@@ -234,9 +243,22 @@
             totalEst += p.q;
             let custoTotal = p.c + embUn;
             let margemReal = p.v > 0 ? (((p.v - custoTotal) / p.v) * 100).toFixed(0) : 0;
-            htmlE += `<tr><td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td><td><span class="nome-label" style="color:#fff">${p.n}</span><span class="id-label">ID: ${p.id}</span></td><td>${p.q}</td><td>${m(p.v)}</td><td class="perc-verde">${margemReal}%</td><td><button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button></td></tr>`;
+
+            // VOLTEI COM AS COLUNAS CUSTO+E E VENDA NO ESTOQUE
+            htmlE += `<tr>
+                <td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td>
+                <td><span class="nome-label" style="color:#fff">${p.n}</span><span class="id-label">ID: ${p.id}</span></td>
+                <td>${p.q}</td>
+                <td>${m(custoTotal)}</td>
+                <td>${m(p.v)}</td>
+                <td class="perc-verde">${margemReal}%</td>
+                <td><button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button></td>
+            </tr>`;
+            
             htmlCat += `<div class="card-peca"><img src="${p.f || ''}"><div class="card-info"><span class="id-label" style="color:#888">ID: ${p.id}</span><strong style="display:block">${p.n}</strong><span class="card-venda">${m(p.v)}</span><span class="card-comissao">Comissão: ${m(p.v * comSim)}</span></div></div>`;
-            if(p.q > 0) htmlSel += `<option value="${i}">${p.n} | ID: ${p.id}</option>`;
+            
+            // VOLTEI COM ID E QTD NA SELEÇÃO DO SALÃO
+            if(p.q > 0) htmlSel += `<option value="${i}">${p.n} | ID: ${p.id} (Est: ${p.q})</option>`;
         });
         
         document.getElementById('listaE').innerHTML = htmlE;
