@@ -17,7 +17,7 @@
         .btn-menu { background: #fff; border: 1px solid #ddd; color: #777; padding: 10px; cursor: pointer; border-radius: 8px; flex: 1; font-weight: bold; font-size: 0.65rem; white-space: nowrap; }
         .btn-menu.active { background: var(--ouro); color: black; border-color: var(--ouro); }
 
-        /* MOLDURA CINZA CONFORME PEDIDO */
+        /* MUDANÇA SOLICITADA: MOLDURA ATRÁS CINZA */
         .secao { background: #1a1a1a; padding: 15px; border-radius: 15px; display: none; border: 1px solid #333; color: #fff; }
         .active { display: block; }
 
@@ -162,10 +162,7 @@
     function addS() {
         let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
         if(!s || idx === "") return;
-        if(dS[s] && dS[s].com !== com) { 
-            alert("Comissão original mantida."); 
-            com = dS[s].com; 
-        }
+        if(dS[s] && dS[s].com !== com) { alert("Comissão original mantida."); com = dS[s].com; }
         let peca = dE[idx];
         if(peca.q < q) { alert("Estoque baixo!"); return; }
         if(!dS[s]) dS[s] = { itens: [], com: com };
