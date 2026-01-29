@@ -6,21 +6,18 @@
     <title>Quintella Diamond</title>
     <style>
         :root { --preto: #0f0f0f; --ouro: #d4af37; --card: #1a1a1a; --texto: #f0f0f0; --verde: #2ecc71; --azul: #3498db; --vermelho: #e74c3c; }
-        body { font-family: -apple-system, system-ui, sans-serif; background: #f5f5f5; color: #333; padding: 15px; margin: 0; padding-top: env(safe-area-inset-top); }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--preto); color: var(--texto); padding: 15px; margin: 0; padding-top: env(safe-area-inset-top); }
         .container { max-width: 600px; margin: 0 auto; padding-bottom: 80px; }
-        h1 { color: #000; text-align: center; text-transform: uppercase; font-size: 1.3rem; margin: 15px 0; letter-spacing: 1px; }
+        h1 { color: var(--ouro); text-align: center; text-transform: uppercase; font-size: 1.3rem; margin: 15px 0; letter-spacing: 1px; }
         .backup-area { display: flex; justify-content: space-between; margin-bottom: 15px; gap: 10px; }
-        .btn-backup { background: #fff; color: #333; border: 1px solid #ddd; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.7rem; font-weight: bold; }
-        .resumo-topo { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 12px; display: flex; justify-content: space-around; margin-bottom: 20px; font-size: 0.8rem; text-align: center; }
+        .btn-backup { background: #333; color: #fff; border: 1px solid #555; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.7rem; font-weight: bold; }
+        .resumo-topo { background: var(--card); border: 1px solid var(--ouro); padding: 15px; border-radius: 12px; display: flex; justify-content: space-around; margin-bottom: 20px; font-size: 0.8rem; text-align: center; }
         .resumo-topo span { display: block; color: var(--ouro); font-size: 1rem; font-weight: bold; }
-        .menu { display: flex; gap: 5px; margin-bottom: 20px; position: sticky; top: 0; background: #f5f5f5; padding: 10px 0; z-index: 100; overflow-x: auto; }
-        .btn-menu { background: #fff; border: 1px solid #ddd; color: #777; padding: 10px; cursor: pointer; border-radius: 8px; flex: 1; font-weight: bold; font-size: 0.65rem; white-space: nowrap; }
-        .btn-menu.active { background: var(--ouro); color: black; border-color: var(--ouro); }
-
-        /* MUDANÇA SOLICITADA: MOLDURA ATRÁS CINZA */
-        .secao { background: #1a1a1a; padding: 15px; border-radius: 15px; display: none; border: 1px solid #333; color: #fff; }
+        .menu { display: flex; gap: 5px; margin-bottom: 20px; position: sticky; top: 0; background: var(--preto); padding: 10px 0; z-index: 100; overflow-x: auto; }
+        .btn-menu { background: var(--card); border: 1px solid var(--ouro); color: var(--ouro); padding: 10px; cursor: pointer; border-radius: 8px; flex: 1; font-weight: bold; font-size: 0.65rem; white-space: nowrap; }
+        .btn-menu.active { background: var(--ouro); color: black; }
+        .secao { background: var(--card); padding: 15px; border-radius: 15px; display: none; border: 1px solid #333; }
         .active { display: block; }
-
         .form-box { background: #222; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid var(--ouro); }
         label { display: block; font-size: 10px; color: var(--ouro); margin-bottom: 5px; text-transform: uppercase; font-weight: bold; }
         input, select { background: #111; border: 1px solid #444; color: white; padding: 14px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
@@ -38,11 +35,11 @@
         .card-venda { color: #fff; font-size: 1.1rem; font-weight: bold; display: block; margin-top: 5px; }
         .card-comissao { color: var(--verde); font-size: 0.8rem; font-weight: bold; background: rgba(46, 204, 113, 0.1); padding: 4px; border-radius: 4px; display: inline-block; margin-top: 5px; }
         .salao-container { margin-top: 15px; border-radius: 12px; background: #222; overflow: hidden; border: 1px solid #444; }
-        .salao-header { padding: 15px; cursor: pointer; display: flex; justify-content: space-between; background: #333; font-weight: bold; color: #fff; }
+        .salao-header { padding: 15px; cursor: pointer; display: flex; justify-content: space-between; background: #333; font-weight: bold; }
         .salao-corpo { padding: 15px; display: none; }
         .item-salao { padding: 12px 0; border-bottom: 1px solid #444; display: flex; align-items: center; gap: 10px; }
         .item-info { flex: 1; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px; color: #fff; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px; }
         th { text-align: left; color: var(--ouro); padding: 8px 2px; border-bottom: 1px solid var(--ouro); font-size: 9px; }
         td { padding: 10px 2px; border-bottom: 1px solid #333; vertical-align: middle; }
         .btn-mini { background: #333; color: white; border: 1px solid #555; border-radius: 4px; padding: 5px; font-size: 10px; margin-left: 2px; }
@@ -56,11 +53,14 @@
         <button class="btn-backup" onclick="document.getElementById('imp').click()">📤 ABRIR</button>
         <input type="file" id="imp" style="display:none" onchange="importar(this)">
     </div>
+    
     <input type="file" id="edit_foto_input" style="display:none" accept="image/*" capture="environment">
+
     <div class="resumo-topo">
         <div>EMBALAGEM/UN<span id="fixo">R$ 0,00</span></div>
         <div>ESTOQUE TOTAL<span id="totalEst">0</span></div>
     </div>
+    
     <div class="menu">
         <button class="btn-menu active" onclick="trocar(1, this)">CUSTOS</button>
         <button class="btn-menu" onclick="trocar(2, this)">ESTOQUE</button>
@@ -171,21 +171,29 @@
         peca.q -= q; salvarTudo(); render();
     }
 
+    // NOVA FUNÇÃO: INICIAR TROCA DE FOTO
     function abrirTrocarFoto(id) {
         itemParaEditarFoto = id;
         document.getElementById('edit_foto_input').click();
     }
 
+    // LISTENER PARA O INPUT DE EDIÇÃO
     document.getElementById('edit_foto_input').onchange = async function(e) {
         if(e.target.files[0] && itemParaEditarFoto) {
             let novaB64 = await comprimirFoto(e.target.files[0]);
+            
+            // Atualiza no Estoque
             let p = dE.find(x => x.id === itemParaEditarFoto);
             if(p) p.f = novaB64;
+
+            // Atualiza nos Salões (Sincronização total)
             for(let s in dS) {
                 let it = dS[s].itens.find(x => x.id === itemParaEditarFoto);
                 if(it) it.f = novaB64;
             }
+
             salvarTudo(); render();
+            alert("Foto atualizada em todos os lugares!");
         }
     };
 
@@ -194,7 +202,9 @@
         document.getElementById('fixo').innerText = m(embUn);
         let htmlC = ''; dC.forEach((c, i) => { htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(c.v/c.q)}</td><td><button class="btn-mini" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
         document.getElementById('listaC').innerHTML = htmlC;
+
         let totalEst = 0, htmlE = '', htmlCat = '', htmlSel = '<option value="">Selecione...</option>', comSim = (parseFloat(document.getElementById('cat_com').value) || 0) / 100;
+        
         dE.forEach((p, i) => {
             totalEst += p.q;
             htmlE += `<tr>
@@ -202,20 +212,25 @@
                 <td><span class="nome-label">${p.n}</span><span class="id-label">ID: ${p.id}</span></td>
                 <td>${p.q}</td><td>${m(p.c + embUn)}</td><td>${m(p.v)}</td>
                 <td class="perc-verde">${p.ma}%</td>
-                <td><button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button><button class="btn-mini" style="color:red" onclick="dE.splice(${i},1);salvarTudo();render()">X</button></td>
+                <td>
+                    <button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button>
+                    <button class="btn-mini" style="color:red" onclick="dE.splice(${i},1);salvarTudo();render()">X</button>
+                </td>
             </tr>`;
             htmlCat += `<div class="card-peca"><img src="${p.f || ''}"><div class="card-info"><span class="id-label">ID: ${p.id}</span><span class="nome-label">${p.n}</span><span class="card-venda">${m(p.v)}</span><span class="card-comissao">Sua Comissão: ${m(p.v * comSim)}</span></div></div>`;
-            if(p.q > 0) htmlSel += `<option value="${i}">${p.n} | ID: ${p.id}</option>`;
+            if(p.q > 0) htmlSel += `<option value="${i}">${p.n} | ID: ${p.id} (Estoque: ${p.q})</option>`;
         });
+        
         document.getElementById('listaE').innerHTML = htmlE;
         document.getElementById('listaCat').innerHTML = htmlCat;
         document.getElementById('totalEst').innerText = totalEst;
         document.getElementById('s_sel').innerHTML = htmlSel;
+
         let htmlS = '';
         for(let s in dS) {
             let rws = '';
             dS[s].itens.forEach((it, i) => {
-                rws += `<div class="item-salao"><img src="${it.f}" class="thumb"><div class="item-info"><span class="nome-label">${it.n}</span><span class="enviado-label">Enviado: ${it.q}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:50px; background:#000; color:#fff; border:1px solid var(--verde); padding:5px;"></div>`;
+                rws += `<div class="item-salao"><img src="${it.f}" class="thumb"><div class="item-info"><span class="nome-label">${it.n}</span><span class="enviado-label">Enviado: ${it.q}</span><span class="id-label">ID: ${it.id}</span><span class="venda-label">${m(it.v)}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" style="width:50px; background:#000; color:#fff; border:1px solid var(--verde); padding:5px;"></div>`;
             });
             htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div><div class="salao-corpo">${rws}<div style="display:flex; justify-content:space-around; margin-top:10px;"><div><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-add" style="background:var(--ouro); color:black; margin-top:10px; font-size:12px;" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
         }
@@ -272,3 +287,4 @@
 </script>
 </body>
 </html>
+
