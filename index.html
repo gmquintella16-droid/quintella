@@ -44,6 +44,8 @@
         .nome-produto { font-weight: bold; color: #fff; font-size: 11px; display: block; line-height: 1.1; word-wrap: break-word; white-space: normal; }
         .id-label { color: var(--ouro); font-size: 9px; font-weight: bold; display: block; margin-top: 2px; }
 
+        .acao-box { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+        .btn-mini { background: #333; color: #fff; border: 1px solid #444; width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; }
         .btn-del { background: transparent; color: var(--vermelho); border: 1px solid var(--vermelho); width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; cursor: pointer; }
 
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
@@ -188,18 +190,12 @@
     function addS() {
         let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
         if(!s || idx === "") return;
-        
-        // --- TRAVA DE PORCENTAGEM RESTAURADA ---
-        if(dS[s]) {
-            if(dS[s].com !== com) {
-                alert(`AVISO: Este salão já está cadastrado com ${dS[s].com}%. O sistema corrigiu para manter o padrão.`);
-                document.getElementById('s_com').value = dS[s].com;
-                com = dS[s].com;
-            }
+        if(dS[s] && dS[s].com !== com) { 
+            alert(`Comissão automática: ${dS[s].com}%`);
+            com = dS[s].com; 
         }
-        
         let peca = dE[idx];
-        if(peca.q < q) { alert("Estoque insuficiente!"); return; }
+        if(peca.q < q) { alert("Estoque baixo!"); return; }
         if(!dS[s]) dS[s] = { itens: [], com: com };
         let it = dS[s].itens.find(i => i.id === peca.id);
         if(it) it.q += q; else dS[s].itens.push({ ...peca, q: q });
@@ -207,7 +203,7 @@
     }
 
     function removerPecaSalao(nomeSalao, idItem) {
-        if(!confirm("Remover esta peça do salão e devolver ao estoque?")) return;
+        if(!confirm("Remover do salão?")) return;
         let salao = dS[nomeSalao];
         let index = salao.itens.findIndex(i => i.id === idItem);
         if(index > -1) {
@@ -219,6 +215,27 @@
             salvarTudo(); render();
         }
     }
+
+    // --- FUNÇÕES DE TROCAR FOTO RESTAURADAS ---
+    function abrirTrocarFoto(id) {
+        itemParaEditarFoto = id;
+        document.getElementById('edit_foto_input').click();
+    }
+
+    document.getElementById('edit_foto_input').onchange = async function(e) {
+        if(e.target.files[0] && itemParaEditarFoto) {
+            let novaB64 = await comprimirFoto(e.target.files[0]);
+            // Atualiza no estoque
+            let p = dE.find(x => x.id === itemParaEditarFoto);
+            if(p) p.f = novaB64;
+            // Atualiza em todos os salões que possuem essa peça
+            for(let s in dS) {
+                let it = dS[s].itens.find(x => x.id === itemParaEditarFoto);
+                if(it) it.f = novaB64;
+            }
+            salvarTudo(); render();
+        }
+    };
 
     function render() {
         let embUn = getEmbalagemUn();
@@ -232,7 +249,18 @@
             totalEst += p.q;
             let custoT = p.c + embUn;
             let mrg = p.v > 0 ? (((p.v - custoT) / p.v) * 100).toFixed(0) : 0;
-            htmlE += `<tr><td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td><td><span class="nome-produto">${p.n}</span><span class="id-label">ID: ${p.id}</span></td><td>${p.q}</td><td>${custoT.toFixed(2)}</td><td>${p.v.toFixed(2)}</td><td style="color:var(--verde); font-weight:bold">${mrg}%</td><td><button class="btn-del" onclick="if(confirm('Apagar?')){dE.splice(${i},1);salvarTudo();render();}">X</button></td></tr>`;
+            htmlE += `<tr>
+                <td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td>
+                <td><span class="nome-produto">${p.n}</span><span class="id-label">ID: ${p.id}</span></td>
+                <td>${p.q}</td><td>${custoT.toFixed(2)}</td><td>${p.v.toFixed(2)}</td>
+                <td style="color:var(--verde); font-weight:bold">${mrg}%</td>
+                <td>
+                    <div class="acao-box">
+                        <button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button>
+                        <button class="btn-del" onclick="if(confirm('Apagar?')){dE.splice(${i},1);salvarTudo();render();}">X</button>
+                    </div>
+                </td>
+            </tr>`;
             htmlCat += `<div class="card-cat"><img src="${p.f}"><div style="padding:5px"><strong>${p.n}</strong><br><span style="color:var(--ouro); font-size:10px; font-weight:bold">ID: ${p.id}</span><br>${m(p.v)}<br><small style="color:var(--verde)">Comissão: ${m(p.v * comSim)}</small></div></div>`;
             if(p.q > 0) htmlSel += `<option value="${i}">ID: ${p.id} - ${p.n} (Est: ${p.q})</option>`;
         });
@@ -273,7 +301,7 @@
         let erro = false;
         dS[s].itens.forEach((it, i) => {
             let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
-            if(v > it.q) { alert(`Venda de "${it.n}" maior que o enviado!`); erro = true; }
+            if(v > it.q) { alert(`Venda maior que o enviado!`); erro = true; }
         });
         if(erro) return;
         if(!confirm("Fechar acerto?")) return;
