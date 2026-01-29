@@ -40,13 +40,6 @@
         th { text-align: left; color: var(--ouro); padding: 5px 2px; border-bottom: 1px solid #333; font-size: 8px; }
         td { padding: 8px 2px; border-bottom: 1px solid #222; vertical-align: middle; }
 
-        .col-foto { width: 45px; }
-        .col-nome { width: 32%; }
-        .col-qtd { width: 25px; text-align: center; }
-        .col-valor { width: 48px; text-align: center; }
-        .col-perc { width: 32px; text-align: right; }
-        .col-acao { width: 32px; text-align: right; }
-
         .thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; border: 1px solid #333; display: block; }
         .nome-produto { font-weight: bold; color: #fff; font-size: 11px; display: block; line-height: 1.1; word-wrap: break-word; white-space: normal; }
         .id-label { color: var(--ouro); font-size: 9px; font-weight: bold; display: block; margin-top: 2px; }
@@ -54,7 +47,7 @@
 
         .acao-box { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
         .btn-mini { background: #333; color: #fff; border: 1px solid #444; width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; }
-        .btn-del { background: transparent; color: var(--vermelho); border: 1px solid var(--vermelho); width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .btn-del { background: transparent; color: var(--vermelho); border: 1px solid var(--vermelho); width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; cursor: pointer; }
 
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .card-cat { background: #fff; color: #000; border-radius: 10px; overflow: hidden; text-align: center; padding-bottom: 8px; }
@@ -62,16 +55,15 @@
 
         .salao-container { background: #222; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; overflow: hidden; }
         .salao-header { padding: 12px; background: #2a2a2a; color: #fff; display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; }
-        .item-salao { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #333; padding: 10px 5px; }
-        .item-salao img { width: 55px; height: 55px; border-radius: 6px; object-fit: cover; }
+        .item-salao { display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #333; padding: 10px 5px; }
+        .item-salao img { width: 50px; height: 50px; border-radius: 6px; object-fit: cover; }
         .item-info { flex: 1; }
-        .nome-label { font-weight: bold; color: #fff; font-size: 13px; display: block; margin-bottom: 3px; }
-        .enviado-label { color: var(--ouro); font-size: 11px; font-weight: bold; display: block; }
-        .input-venda { width: 50px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 6px !important; text-align: center; border-radius: 4px; font-size: 14px; margin: 0 !important; }
+        .nome-label { font-weight: bold; color: #fff; font-size: 12px; display: block; margin-bottom: 2px; }
+        .enviado-label { color: var(--ouro); font-size: 10px; font-weight: bold; display: block; }
+        .input-venda { width: 45px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 6px !important; text-align: center; border-radius: 4px; font-size: 14px; margin: 0 !important; }
 
         .resumo-acerto { display: flex; width: 100%; margin-top: 15px; padding: 10px 0; border-top: 1px solid #444; }
         .resumo-item { flex: 1; text-align: center; }
-        .resumo-item small { color: #888; text-transform: uppercase; font-size: 8px; display: block; }
         .resumo-item strong { font-size: 0.9rem; }
 
         .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
@@ -124,9 +116,7 @@
         </div>
         <div class="scroll-table">
             <table>
-                <thead>
-                    <tr><th class="col-foto">FOTO</th><th class="col-nome">NOME</th><th class="col-qtd">QTD</th><th class="col-valor">CUSTO+E</th><th class="col-valor">VENDA</th><th class="col-perc">%</th><th class="col-acao"></th></tr>
-                </thead>
+                <thead><tr><th style="width:45px">FOTO</th><th style="width:32%">NOME</th><th style="width:25px">QTD</th><th style="width:48px">CUSTO</th><th style="width:48px">VENDA</th><th style="width:32px">%</th><th style="width:32px"></th></tr></thead>
                 <tbody id="listaE"></tbody>
             </table>
         </div>
@@ -203,37 +193,29 @@
     function addS() {
         let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
         if(!s || idx === "") return;
-        
-        if(dS[s] && dS[s].com !== com) { 
-            alert(`Comissão corrigida para ${dS[s].com}% conforme cadastro do salão.`);
-            com = dS[s].com; 
-        }
-        
+        if(dS[s] && dS[s].com !== com) { com = dS[s].com; }
         let peca = dE[idx];
-        if(peca.q < q) { alert("Estoque insuficiente!"); return; }
+        if(peca.q < q) { alert("Estoque baixo!"); return; }
         if(!dS[s]) dS[s] = { itens: [], com: com };
         let it = dS[s].itens.find(i => i.id === peca.id);
         if(it) it.q += q; else dS[s].itens.push({ ...peca, q: q });
         peca.q -= q; salvarTudo(); render();
     }
 
-    function abrirTrocarFoto(id) {
-        itemParaEditarFoto = id;
-        document.getElementById('edit_foto_input').click();
-    }
-
-    document.getElementById('edit_foto_input').onchange = async function(e) {
-        if(e.target.files[0] && itemParaEditarFoto) {
-            let novaB64 = await comprimirFoto(e.target.files[0]);
-            let p = dE.find(x => x.id === itemParaEditarFoto);
-            if(p) p.f = novaB64;
-            for(let s in dS) {
-                let it = dS[s].itens.find(x => x.id === itemParaEditarFoto);
-                if(it) it.f = novaB64;
-            }
+    // NOVA FUNÇÃO: REMOVER PEÇA INDIVIDUAL DO SALÃO
+    function removerPecaSalao(nomeSalao, idItem) {
+        if(!confirm("Deseja remover esta peça e devolver ao estoque principal?")) return;
+        let salao = dS[nomeSalao];
+        let index = salao.itens.findIndex(i => i.id === idItem);
+        if(index > -1) {
+            let pecaS = salao.itens[index];
+            let pecaE = dE.find(e => e.id === idItem);
+            if(pecaE) pecaE.q += pecaS.q; // Devolve tudo
+            salao.itens.splice(index, 1); // Remove da lista do salão
+            if(salao.itens.length === 0) delete dS[nomeSalao]; // Se ficou vazio, apaga o salão
             salvarTudo(); render();
         }
-    };
+    }
 
     function render() {
         let embUn = getEmbalagemUn();
@@ -245,9 +227,9 @@
         
         dE.forEach((p, i) => {
             totalEst += p.q;
-            let custoTotal = p.c + embUn;
-            let margemReal = p.v > 0 ? (((p.v - custoTotal) / p.v) * 100).toFixed(0) : 0;
-            htmlE += `<tr><td class="col-foto"><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td><td class="col-nome"><span class="nome-produto">${p.n}</span><span class="id-label">ID: ${p.id}</span></td><td class="col-qtd">${p.q}</td><td class="col-valor">${custoTotal.toFixed(2)}</td><td class="col-valor">${p.v.toFixed(2)}</td><td class="col-perc perc-verde">${margemReal}%</td><td class="col-acao"><div class="acao-box"><button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button><button class="btn-del" onclick="if(confirm('Apagar?')){dE.splice(${i},1);salvarTudo();render();}">X</button></div></td></tr>`;
+            let custoT = p.c + embUn;
+            let mrg = p.v > 0 ? (((p.v - custoT) / p.v) * 100).toFixed(0) : 0;
+            htmlE += `<tr><td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td><td><span class="nome-produto">${p.n}</span><span class="id-label">ID: ${p.id}</span></td><td>${p.q}</td><td>${custoT.toFixed(2)}</td><td>${p.v.toFixed(2)}</td><td class="perc-verde">${mrg}%</td><td><div class="acao-box"><button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button><button class="btn-del" onclick="if(confirm('Apagar?')){dE.splice(${i},1);salvarTudo();render();}">X</button></div></td></tr>`;
             htmlCat += `<div class="card-cat"><img src="${p.f}"><div style="padding:5px"><strong>${p.n}</strong><br><span style="color:var(--ouro); font-size:10px; font-weight:bold">ID: ${p.id}</span><br>${m(p.v)}<br><small style="color:var(--verde)">Comissão: ${m(p.v * comSim)}</small></div></div>`;
             if(p.q > 0) htmlSel += `<option value="${i}">ID: ${p.id} - ${p.n} (Est: ${p.q})</option>`;
         });
@@ -269,6 +251,7 @@
                         <span class="id-label">ID: ${it.id}</span>
                     </div>
                     <input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda">
+                    <button class="btn-del" style="margin-left:5px" onclick="removerPecaSalao('${s}', ${it.id})">X</button>
                 </div>`;
             });
             htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div><div class="salao-corpo" style="display:none">${rws}<div class="resumo-acerto"><div class="resumo-item"><small>Comissão</small><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div class="resumo-item"><small>Receber</small><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
@@ -287,10 +270,9 @@
         let erro = false;
         dS[s].itens.forEach((it, i) => {
             let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
-            if(v > it.q) { alert(`Erro: Venda de "${it.n}" maior que o enviado!`); erro = true; }
+            if(v > it.q) { alert(`Venda de "${it.n}" maior que o enviado!`); erro = true; }
         });
         if(erro) return;
-
         if(!confirm("Fechar acerto?")) return;
         dS[s].itens.forEach((it, i) => {
             let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
