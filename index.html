@@ -65,7 +65,6 @@
         .item-salao { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #333; padding: 10px 5px; }
         .item-salao img { width: 55px; height: 55px; border-radius: 6px; object-fit: cover; }
         .item-info { flex: 1; }
-        .nome-label { font-weight: bold; color: #fff; font-size: 13px; display: block; }
         .enviado-label { color: var(--ouro); font-size: 11px; font-weight: bold; }
         .input-venda { width: 50px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 6px !important; text-align: center; border-radius: 4px; font-size: 14px; margin: 0 !important; }
 
@@ -124,17 +123,7 @@
         </div>
         <div class="scroll-table">
             <table>
-                <thead>
-                    <tr>
-                        <th class="col-foto">FOTO</th>
-                        <th class="col-nome">NOME</th>
-                        <th class="col-qtd">QTD</th>
-                        <th class="col-valor">CUSTO+E</th>
-                        <th class="col-valor">VENDA</th>
-                        <th class="col-perc">%</th>
-                        <th class="col-acao"></th>
-                    </tr>
-                </thead>
+                <thead><tr><th class="col-foto">FOTO</th><th class="col-nome">NOME</th><th class="col-qtd">QTD</th><th class="col-valor">CUSTO+E</th><th class="col-valor">VENDA</th><th class="col-perc">%</th><th class="col-acao"></th></tr></thead>
                 <tbody id="listaE"></tbody>
             </table>
         </div>
@@ -212,11 +201,17 @@
         let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
         if(!s || idx === "") return;
         
-        // TRAVA: Se salão já existe, mantém a comissão original
-        if(dS[s] && dS[s].com !== com) { com = dS[s].com; }
+        // TRAVA DE COMISSÃO DIFERENTE
+        if(dS[s]) {
+            if(dS[s].com !== com) {
+                alert(`Este salão já possui comissão de ${dS[s].com}%. O valor foi corrigido.`);
+                document.getElementById('s_com').value = dS[s].com;
+                com = dS[s].com;
+            }
+        }
         
         let peca = dE[idx];
-        if(peca.q < q) { alert("Estoque baixo!"); return; }
+        if(peca.q < q) { alert("Estoque insuficiente!"); return; }
         if(!dS[s]) dS[s] = { itens: [], com: com };
         let it = dS[s].itens.find(i => i.id === peca.id);
         if(it) it.q += q; else dS[s].itens.push({ ...peca, q: q });
@@ -269,25 +264,26 @@
             dS[s].itens.forEach((it, i) => {
                 rws += `<div class="item-salao"><img src="${it.f}"><div class="item-info"><span class="nome-label">${it.n}</span><span class="enviado-label">Enviado: ${it.q}</span><span class="id-label">ID: ${it.id}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda"></div>`;
             });
-            // Porcentagem restaurada no cabeçalho 📍
             htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div><div class="salao-corpo" style="display:none">${rws}<div class="resumo-acerto"><div class="resumo-item"><small>Comissão</small><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div class="resumo-item"><small>Receber</small><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
         }
         document.getElementById('listaS').innerHTML = htmlS;
     }
 
     function recalc(s) {
-        let b = 0; dS[s].itens.forEach((it, i) => { b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; });
-        let com = b * (dS[s].com / 100);
+        let b = 0; 
+        dS[s].itens.forEach((it, i) => { 
+            b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; 
+        });
+        let com = b * (dS[s].com / 100); // USA SEMPRE A COMISSÃO MESTRE DO SALÃO
         document.getElementById(`c-${s}`).innerText = m(com);
         document.getElementById(`r-${s}`).innerText = m(b - com);
     }
 
     function fechar(s) {
-        // TRAVA: Verifica se a venda é maior que o estoque enviado
         let erro = false;
         dS[s].itens.forEach((it, i) => {
             let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
-            if(v > it.q) { alert(`Erro: Venda de "${it.n}" maior que o enviado!`); erro = true; }
+            if(v > it.q) { alert(`Venda de "${it.n}" maior que o enviado!`); erro = true; }
         });
         if(erro) return;
 
@@ -295,7 +291,7 @@
         dS[s].itens.forEach((it, i) => {
             let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
             let p = dE.find(e => e.id === it.id); 
-            if(p) p.q += (it.q - v); // Devolve a sobra ao estoque
+            if(p) p.q += (it.q - v);
         });
         delete dS[s]; salvarTudo(); render();
     }
