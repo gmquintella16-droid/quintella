@@ -37,7 +37,7 @@
 
         table { width: 100%; border-collapse: collapse; color: #fff; font-size: 11px; }
         th { text-align: left; color: var(--ouro); padding: 8px; border-bottom: 1px solid #333; font-size: 9px; }
-        td { padding: 10px 8px; border-bottom: 1px solid #222; }
+        td { padding: 8px; border-bottom: 1px solid #222; }
 
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .card-peca { background: #fff; border-radius: 15px; overflow: hidden; color: #333; text-align: center; padding-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
@@ -48,19 +48,27 @@
         .salao-corpo { padding: 15px; }
         
         .item-salao { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #333; padding: 12px 0; }
-        .item-salao img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; }
+        .item-salao img { width: 65px; height: 65px; border-radius: 8px; object-fit: cover; }
         
         .item-info { flex: 1; display: flex; flex-direction: column; }
         .nome-label { font-weight: bold; color: #fff; font-size: 14px; }
         .enviado-label { color: var(--ouro); font-size: 12px; font-weight: bold; }
-        
-        /* AJUSTE ID DOURADO */
         .id-label { color: var(--ouro); font-size: 10px; font-weight: bold; margin-top: 1px; }
         .perc-verde { color: var(--verde); font-weight: bold; }
 
-        .input-venda { width: 60px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 8px !important; text-align: center; border-radius: 5px; }
+        .input-venda { width: 55px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 8px !important; text-align: center; border-radius: 5px; }
 
-        .btn-mini { background: #333; color: #fff; border: 1px solid #444; padding: 5px 8px; border-radius: 4px; cursor: pointer; }
+        /* RESUMO ACERTO LADO A LADO */
+        .resumo-acerto { display: flex; width: 100%; margin-top: 15px; padding-top: 10px; border-top: 1px solid #444; }
+        .resumo-item { flex: 1; text-align: center; }
+        .resumo-item small { color: #888; text-transform: uppercase; font-size: 9px; }
+        .resumo-item strong { display: block; font-size: 1rem; margin-top: 3px; }
+
+        .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 15px; cursor: pointer; }
+
+        /* FOTO ESTOQUE TAMANHO AJUSTADO */
+        .thumb { width: 50px; height: 50px; border-radius: 6px; object-fit: cover; border: 1px solid #444; }
+        .btn-mini { background: #333; color: #fff; border: 1px solid #444; padding: 5px; border-radius: 4px; cursor: pointer; margin-bottom: 2px; display: inline-block; }
         .btn-del { background: transparent; color: var(--vermelho); border: 1px solid var(--vermelho); padding: 4px 8px; border-radius: 4px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
@@ -111,15 +119,7 @@
         </div>
         <table>
             <thead>
-                <tr>
-                    <th>FOTO</th>
-                    <th>NOME/ID</th>
-                    <th>QTD</th>
-                    <th>CUSTO+E</th>
-                    <th>VENDA</th>
-                    <th>%</th>
-                    <th></th>
-                </tr>
+                <tr><th>FOTO</th><th>NOME/ID</th><th>QTD</th><th>CUSTO+E</th><th>VENDA</th><th>%</th><th></th></tr>
             </thead>
             <tbody id="listaE"></tbody>
         </table>
@@ -235,21 +235,8 @@
             totalEst += p.q;
             let custoTotal = p.c + embUn;
             let margemReal = p.v > 0 ? (((p.v - custoTotal) / p.v) * 100).toFixed(0) : 0;
-
-            htmlE += `<tr>
-                <td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td>
-                <td><span class="nome-label">${p.n}</span><br><span class="id-label">ID: ${p.id}</span></td>
-                <td>${p.q}</td>
-                <td>${m(custoTotal)}</td>
-                <td>${m(p.v)}</td>
-                <td class="perc-verde">${margemReal}%</td>
-                <td>
-                    <button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button>
-                    <button class="btn-del" onclick="if(confirm('Apagar item?')){dE.splice(${i},1);salvarTudo();render();}">X</button>
-                </td>
-            </tr>`;
-            
-            htmlCat += `<div class="card-peca"><img src="${p.f || ''}"><div class="card-info"><span class="id-label" style="color:#888">ID: ${p.id}</span><strong style="display:block">${p.n}</strong><span style="font-weight:bold; font-size:1.1rem">${m(p.v)}</span><br><span style="color:var(--verde); font-size:0.7rem; font-weight:bold">Comissão: ${m(p.v * comSim)}</span></div></div>`;
+            htmlE += `<tr><td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td><td><span class="nome-label">${p.n}</span><br><span class="id-label">ID: ${p.id}</span></td><td>${p.q}</td><td>${m(custoTotal)}</td><td>${m(p.v)}</td><td class="perc-verde">${margemReal}%</td><td><button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button><br><button class="btn-del" onclick="if(confirm('Apagar item?')){dE.splice(${i},1);salvarTudo();render();}">X</button></td></tr>`;
+            htmlCat += `<div class="card-peca"><img src="${p.f || ''}"><div class="card-info"><span class="id-label" style="color:#888">ID: ${p.id}</span><strong style="display:block">${p.n}</strong><span style="font-weight:bold">${m(p.v)}</span><br><span style="color:var(--verde); font-size:0.7rem; font-weight:bold">Comissão: ${m(p.v * comSim)}</span></div></div>`;
             if(p.q > 0) htmlSel += `<option value="${i}">${p.n} | ID: ${p.id} (Est: ${p.q})</option>`;
         });
         
@@ -262,33 +249,9 @@
         for(let s in dS) {
             let rws = '';
             dS[s].itens.forEach((it, i) => {
-                rws += `
-                <div class="item-salao">
-                    <img src="${it.f}">
-                    <div class="item-info">
-                        <span class="nome-label">${it.n}</span>
-                        <span class="enviado-label">Enviado: ${it.q}</span>
-                        <span class="id-label">ID: ${it.id}</span>
-                        <span style="font-size:12px">${m(it.v)}</span>
-                    </div>
-                    <input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda">
-                </div>`;
+                rws += `<div class="item-salao"><img src="${it.f}"><div class="item-info"><span class="nome-label">${it.n}</span><span class="enviado-label">Enviado: ${it.q}</span><span class="id-label">ID: ${it.id}</span><span style="font-size:12px">${m(it.v)}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda"></div>`;
             });
-            htmlS += `
-            <div class="salao-container">
-                <div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'">
-                    <span>📍 ${s} | ${dS[s].com}%</span>
-                    <span>▾</span>
-                </div>
-                <div class="salao-corpo">
-                    ${rws}
-                    <div class="resumo-acerto">
-                        <div><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div>
-                        <div><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div>
-                    </div>
-                    <button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button>
-                </div>
-            </div>`;
+            htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div><div class="salao-corpo">${rws}<div class="resumo-acerto"><div class="resumo-item"><small>Comissão</small><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div class="resumo-item"><small>Receber</small><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
         }
         document.getElementById('listaS').innerHTML = htmlS;
     }
