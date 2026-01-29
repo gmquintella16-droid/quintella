@@ -15,9 +15,12 @@
         .resumo-topo span { display: block; color: var(--ouro); font-size: 1rem; font-weight: bold; }
         .menu { display: flex; gap: 5px; margin-bottom: 20px; position: sticky; top: 0; background: #f5f5f5; padding: 10px 0; z-index: 100; overflow-x: auto; }
         .btn-menu { background: #fff; border: 1px solid #ddd; color: #777; padding: 10px; cursor: pointer; border-radius: 8px; flex: 1; font-weight: bold; font-size: 0.65rem; white-space: nowrap; }
-        .btn-menu.active { background: var(--ouro); color: black; }
+        .btn-menu.active { background: var(--ouro); color: black; border-color: var(--ouro); }
+
+        /* MOLDURA CINZA CONFORME PEDIDO */
         .secao { background: #1a1a1a; padding: 15px; border-radius: 15px; display: none; border: 1px solid #333; color: #fff; }
         .active { display: block; }
+
         .form-box { background: #222; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid var(--ouro); }
         label { display: block; font-size: 10px; color: var(--ouro); margin-bottom: 5px; text-transform: uppercase; font-weight: bold; }
         input, select { background: #111; border: 1px solid #444; color: white; padding: 14px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; margin-bottom: 10px; }
@@ -81,11 +84,11 @@
             <label>Modelo (ou ID Existente)</label><input type="text" id="p_nome">
             <label>Qtd</label><input type="number" id="p_qtd" value="1">
             <label>Custo Compra (R$)</label><input type="number" id="p_custo" oninput="sugerir()">
-            <label>% Margem Desejada</label><input type="number" id="p_margem" value="70" oninput="sugerir()">
-            <label>Preço Venda Final</label><input type="number" id="p_venda">
+            <label>% Margem</label><input type="number" id="p_margem" value="70" oninput="sugerir()">
+            <label>Preço Venda</label><input type="number" id="p_venda">
             <button class="btn-add" onclick="addE()">📦 SALVAR NO ESTOQUE</button>
         </div>
-        <table><thead><tr><th>FOTO</th><th>NOME/ID</th><th>QTD</th><th>CUSTO+E</th><th>VENDA</th><th>LUCRO REAL</th><th></th></tr></thead><tbody id="listaE"></tbody></table>
+        <table><thead><tr><th>FOTO</th><th>NOME/ID</th><th>QTD</th><th>CUSTO+E</th><th>VENDA</th><th>%</th><th></th></tr></thead><tbody id="listaE"></tbody></table>
     </div>
 
     <div id="aba4" class="secao">
@@ -151,7 +154,7 @@
         if(ex) { ex.q += q; } else {
             let id = Math.floor(1000 + Math.random() * 9000);
             let b64 = f ? await comprimirFoto(f) : "";
-            dE.push({id, n, q, c, v, f: b64});
+            dE.push({id, n, q, c, v, f: b64, ma: document.getElementById('p_margem').value});
         }
         salvarTudo(); render();
     }
@@ -160,7 +163,7 @@
         let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
         if(!s || idx === "") return;
         if(dS[s] && dS[s].com !== com) { 
-            alert("Este salão já possui uma comissão de " + dS[s].com + "%. Mantendo a original."); 
+            alert("Comissão original mantida."); 
             com = dS[s].com; 
         }
         let peca = dE[idx];
@@ -194,32 +197,23 @@
         document.getElementById('fixo').innerText = m(embUn);
         let htmlC = ''; dC.forEach((c, i) => { htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(c.v/c.q)}</td><td><button class="btn-mini" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
         document.getElementById('listaC').innerHTML = htmlC;
-
         let totalEst = 0, htmlE = '', htmlCat = '', htmlSel = '<option value="">Selecione...</option>', comSim = (parseFloat(document.getElementById('cat_com').value) || 0) / 100;
-        
         dE.forEach((p, i) => {
             totalEst += p.q;
-            
-            // CÁLCULO DA MARGEM REAL (VENDA vs CUSTO TOTAL)
-            let custoTotal = p.c + embUn;
-            let margemReal = p.v > 0 ? (((p.v - custoTotal) / p.v) * 100).toFixed(0) : 0;
-
             htmlE += `<tr>
                 <td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td>
                 <td><span class="nome-label">${p.n}</span><span class="id-label">ID: ${p.id}</span></td>
-                <td>${p.q}</td><td>${m(custoTotal)}</td><td>${m(p.v)}</td>
-                <td class="perc-verde">${margemReal}%</td>
+                <td>${p.q}</td><td>${m(p.c + embUn)}</td><td>${m(p.v)}</td>
+                <td class="perc-verde">${p.ma}%</td>
                 <td><button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button><button class="btn-mini" style="color:red" onclick="dE.splice(${i},1);salvarTudo();render()">X</button></td>
             </tr>`;
             htmlCat += `<div class="card-peca"><img src="${p.f || ''}"><div class="card-info"><span class="id-label">ID: ${p.id}</span><span class="nome-label">${p.n}</span><span class="card-venda">${m(p.v)}</span><span class="card-comissao">Sua Comissão: ${m(p.v * comSim)}</span></div></div>`;
             if(p.q > 0) htmlSel += `<option value="${i}">${p.n} | ID: ${p.id}</option>`;
         });
-        
         document.getElementById('listaE').innerHTML = htmlE;
         document.getElementById('listaCat').innerHTML = htmlCat;
         document.getElementById('totalEst').innerText = totalEst;
         document.getElementById('s_sel').innerHTML = htmlSel;
-
         let htmlS = '';
         for(let s in dS) {
             let rws = '';
