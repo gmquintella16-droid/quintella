@@ -18,16 +18,16 @@
         h1 { color: #000; text-align: center; text-transform: uppercase; font-size: 1.3rem; margin: 15px 0; letter-spacing: 1px; font-weight: 800; }
         
         .backup-area { display: flex; gap: 10px; margin-bottom: 15px; }
-        .btn-backup { background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.7rem; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn-backup { background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.7rem; font-weight: bold; }
 
-        .resumo-topo { background: #fff; padding: 15px; border-radius: 12px; display: flex; justify-content: space-around; margin-bottom: 20px; font-size: 0.8rem; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .resumo-topo { background: #fff; padding: 15px; border-radius: 12px; display: flex; justify-content: space-around; margin-bottom: 20px; font-size: 0.8rem; text-align: center; border: 1px solid #eee; }
         .resumo-topo span { display: block; color: var(--ouro); font-size: 1rem; font-weight: bold; }
 
         .menu { display: flex; gap: 5px; margin-bottom: 20px; position: sticky; top: 0; background: var(--fundo-app); padding: 10px 0; z-index: 100; }
         .btn-menu { background: #fff; border: 1px solid #ddd; color: #888; padding: 12px; border-radius: 8px; flex: 1; font-weight: bold; font-size: 0.65rem; }
         .btn-menu.active { background: var(--ouro); color: white; border-color: var(--ouro); }
 
-        .secao { background: #1a1a1a; padding: 15px; border-radius: 20px; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2); color: #fff; }
+        .secao { background: #1a1a1a; padding: 15px; border-radius: 20px; display: none; color: #fff; }
         .active { display: block; }
 
         .form-box { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 15px; }
@@ -35,21 +35,16 @@
         input, select { background: #fff; border: 1px solid #ddd; color: #333; padding: 14px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 16px; margin-bottom: 12px; }
         .btn-add { background: var(--verde); color: white; border: none; padding: 16px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; }
 
-        /* TABELAS */
         table { width: 100%; border-collapse: collapse; color: #fff; font-size: 11px; }
         th { text-align: left; color: var(--ouro); padding: 8px; border-bottom: 1px solid #333; font-size: 9px; }
         td { padding: 10px 8px; border-bottom: 1px solid #222; }
 
-        /* CATÁLOGO */
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .card-peca { background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); color: #333; text-align: center; padding-bottom: 15px; }
-        .card-peca img { width: 100%; height: 160px; object-fit: cover; background: #fff; }
-        .card-venda { font-size: 1.1rem; font-weight: bold; color: #000; display: block; margin: 5px 0; }
-        .card-comissao { background: #e8f8f0; color: var(--verde); padding: 5px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
+        .card-peca { background: #fff; border-radius: 15px; overflow: hidden; color: #333; text-align: center; padding-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .card-peca img { width: 100%; height: 160px; object-fit: cover; }
 
-        /* SALÕES */
         .salao-container { background: #222; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; overflow: hidden; }
-        .salao-header { padding: 15px; background: #2a2a2a; color: #fff; display: flex; justify-content: space-between; font-weight: bold; cursor: pointer; }
+        .salao-header { padding: 15px; background: #2a2a2a; color: #fff; display: flex; justify-content: space-between; font-weight: bold; }
         .salao-corpo { padding: 15px; }
         
         .item-salao { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #333; padding: 12px 0; }
@@ -58,18 +53,15 @@
         .item-info { flex: 1; display: flex; flex-direction: column; }
         .nome-label { font-weight: bold; color: #fff; font-size: 14px; }
         .enviado-label { color: var(--ouro); font-size: 12px; font-weight: bold; }
-        .id-label { color: #888; font-size: 10px; }
-        .preco-label { color: #fff; font-size: 12px; margin-top: 2px; }
         
-        .input-venda { width: 60px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 8px !important; margin: 0 !important; text-align: center; }
+        /* AJUSTE ID DOURADO */
+        .id-label { color: var(--ouro); font-size: 10px; font-weight: bold; margin-top: 1px; }
+        .perc-verde { color: var(--verde); font-weight: bold; }
 
-        .resumo-acerto { display: flex; justify-content: space-around; margin-top: 15px; padding-top: 10px; border-top: 1px solid #444; text-align: center; }
-        .resumo-acerto strong { display: block; font-size: 1rem; }
+        .input-venda { width: 60px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 8px !important; text-align: center; border-radius: 5px; }
 
-        .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 15px; cursor: pointer; }
-
-        .thumb { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; }
-        .btn-mini { background: #333; color: #fff; border: 1px solid #444; padding: 5px; border-radius: 4px; cursor: pointer; }
+        .btn-mini { background: #333; color: #fff; border: 1px solid #444; padding: 5px 8px; border-radius: 4px; cursor: pointer; }
+        .btn-del { background: transparent; color: var(--vermelho); border: 1px solid var(--vermelho); padding: 4px 8px; border-radius: 4px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -234,7 +226,7 @@
     function render() {
         let embUn = getEmbalagemUn();
         document.getElementById('fixo').innerText = m(embUn);
-        let htmlC = ''; dC.forEach((c, i) => { htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(c.v/c.q)}</td><td><button class="btn-mini" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
+        let htmlC = ''; dC.forEach((c, i) => { htmlC += `<tr><td>${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(c.v/c.q)}</td><td><button class="btn-del" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
         document.getElementById('listaC').innerHTML = htmlC;
 
         let totalEst = 0, htmlE = '', htmlCat = '', htmlSel = '<option value="">Selecione...</option>', comSim = (parseFloat(document.getElementById('cat_com').value) || 0) / 100;
@@ -244,20 +236,20 @@
             let custoTotal = p.c + embUn;
             let margemReal = p.v > 0 ? (((p.v - custoTotal) / p.v) * 100).toFixed(0) : 0;
 
-            // VOLTEI COM AS COLUNAS CUSTO+E E VENDA NO ESTOQUE
             htmlE += `<tr>
                 <td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td>
-                <td><span class="nome-label" style="color:#fff">${p.n}</span><span class="id-label">ID: ${p.id}</span></td>
+                <td><span class="nome-label">${p.n}</span><br><span class="id-label">ID: ${p.id}</span></td>
                 <td>${p.q}</td>
                 <td>${m(custoTotal)}</td>
                 <td>${m(p.v)}</td>
                 <td class="perc-verde">${margemReal}%</td>
-                <td><button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button></td>
+                <td>
+                    <button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button>
+                    <button class="btn-del" onclick="if(confirm('Apagar item?')){dE.splice(${i},1);salvarTudo();render();}">X</button>
+                </td>
             </tr>`;
             
-            htmlCat += `<div class="card-peca"><img src="${p.f || ''}"><div class="card-info"><span class="id-label" style="color:#888">ID: ${p.id}</span><strong style="display:block">${p.n}</strong><span class="card-venda">${m(p.v)}</span><span class="card-comissao">Comissão: ${m(p.v * comSim)}</span></div></div>`;
-            
-            // VOLTEI COM ID E QTD NA SELEÇÃO DO SALÃO
+            htmlCat += `<div class="card-peca"><img src="${p.f || ''}"><div class="card-info"><span class="id-label" style="color:#888">ID: ${p.id}</span><strong style="display:block">${p.n}</strong><span style="font-weight:bold; font-size:1.1rem">${m(p.v)}</span><br><span style="color:var(--verde); font-size:0.7rem; font-weight:bold">Comissão: ${m(p.v * comSim)}</span></div></div>`;
             if(p.q > 0) htmlSel += `<option value="${i}">${p.n} | ID: ${p.id} (Est: ${p.q})</option>`;
         });
         
@@ -277,7 +269,7 @@
                         <span class="nome-label">${it.n}</span>
                         <span class="enviado-label">Enviado: ${it.q}</span>
                         <span class="id-label">ID: ${it.id}</span>
-                        <span class="preco-label">${m(it.v)}</span>
+                        <span style="font-size:12px">${m(it.v)}</span>
                     </div>
                     <input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda">
                 </div>`;
@@ -291,8 +283,8 @@
                 <div class="salao-corpo">
                     ${rws}
                     <div class="resumo-acerto">
-                        <div><small>Comissão</small><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div>
-                        <div><small>Receber</small><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div>
+                        <div><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div>
+                        <div><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div>
                     </div>
                     <button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button>
                 </div>
