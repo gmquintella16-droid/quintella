@@ -41,9 +41,8 @@
         th { text-align: left; color: var(--ouro); padding: 5px 2px; border-bottom: 1px solid #333; font-size: 8px; }
         td { padding: 8px 2px; border-bottom: 1px solid #222; vertical-align: middle; }
 
-        /* NOVAS LARGURAS PARA NÃO CORTAR O NOME */
         .col-foto { width: 45px; }
-        .col-nome { width: 32%; } /* Aumentado */
+        .col-nome { width: 32%; }
         .col-qtd { width: 25px; text-align: center; }
         .col-valor { width: 48px; text-align: center; }
         .col-perc { width: 32px; text-align: right; }
@@ -268,8 +267,11 @@
                 </td>
             </tr>`;
             
-            htmlCat += `<div class="card-cat"><img src="${p.f}"><div style="padding:5px"><strong>${p.n}</strong><br>${m(p.v)}<br><small style="color:var(--verde)">Comissão: ${m(p.v * comSim)}</small></div></div>`;
-            if(p.q > 0) htmlSel += `<option value="${i}">${p.n} (Est: ${p.q})</option>`;
+            // ID ADICIONADO NO CATÁLOGO AQUI
+            htmlCat += `<div class="card-cat"><img src="${p.f}"><div style="padding:5px"><strong>${p.n}</strong><br><span style="color:var(--ouro); font-size:10px; font-weight:bold">ID: ${p.id}</span><br>${m(p.v)}<br><small style="color:var(--verde)">Comissão: ${m(p.v * comSim)}</small></div></div>`;
+            
+            // ID ADICIONADO NA SELEÇÃO DO SALÃO AQUI
+            if(p.q > 0) htmlSel += `<option value="${i}">ID: ${p.id} - ${p.n} (Est: ${p.q})</option>`;
         });
         
         document.getElementById('listaE').innerHTML = htmlE;
