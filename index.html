@@ -171,29 +171,21 @@
         peca.q -= q; salvarTudo(); render();
     }
 
-    // NOVA FUNÇÃO: INICIAR TROCA DE FOTO
     function abrirTrocarFoto(id) {
         itemParaEditarFoto = id;
         document.getElementById('edit_foto_input').click();
     }
 
-    // LISTENER PARA O INPUT DE EDIÇÃO
     document.getElementById('edit_foto_input').onchange = async function(e) {
         if(e.target.files[0] && itemParaEditarFoto) {
             let novaB64 = await comprimirFoto(e.target.files[0]);
-            
-            // Atualiza no Estoque
             let p = dE.find(x => x.id === itemParaEditarFoto);
             if(p) p.f = novaB64;
-
-            // Atualiza nos Salões (Sincronização total)
             for(let s in dS) {
                 let it = dS[s].itens.find(x => x.id === itemParaEditarFoto);
                 if(it) it.f = novaB64;
             }
-
             salvarTudo(); render();
-            alert("Foto atualizada em todos os lugares!");
         }
     };
 
@@ -207,11 +199,16 @@
         
         dE.forEach((p, i) => {
             totalEst += p.q;
+            
+            // CÁLCULO DA PORCENTAGEM REAL
+            let custoTotal = p.c + embUn;
+            let margemReal = p.v > 0 ? (((p.v - custoTotal) / p.v) * 100).toFixed(0) : 0;
+
             htmlE += `<tr>
                 <td><img src="${p.f}" class="thumb" onclick="abrirTrocarFoto(${p.id})"></td>
                 <td><span class="nome-label">${p.n}</span><span class="id-label">ID: ${p.id}</span></td>
-                <td>${p.q}</td><td>${m(p.c + embUn)}</td><td>${m(p.v)}</td>
-                <td class="perc-verde">${p.ma}%</td>
+                <td>${p.q}</td><td>${m(custoTotal)}</td><td>${m(p.v)}</td>
+                <td class="perc-verde">${margemReal}%</td>
                 <td>
                     <button class="btn-mini" onclick="abrirTrocarFoto(${p.id})">📸</button>
                     <button class="btn-mini" style="color:red" onclick="dE.splice(${i},1);salvarTudo();render()">X</button>
@@ -287,4 +284,3 @@
 </script>
 </body>
 </html>
-
