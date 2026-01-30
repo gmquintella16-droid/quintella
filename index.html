@@ -231,7 +231,7 @@
         for(let s in dS) {
             let rws = ''; 
             dS[s].itens.forEach((it, i) => { 
-                rws += `<div class="item-salao"><img src="${it.f}" style="width:45px;height:45px;border-radius:4px;object-fit:cover"><div class="item-info"><span class="nome-label">${it.n}</span><span class="valor-label">ID: ${it.id} </span><span class="unitario-label">| Unit: ${m(it.v)}</span><span class="enviado-label">Quantidade Enviada: ${it.q}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda"><button class="btn-del" style="margin-left:5px" onclick="removerPecaSalao('${s}', ${it.id})">X</button></div>`; 
+                rws += `<div class="item-salao"><img src="${it.f}" style="width:45px;height:45px;border-radius:4px;object-fit:cover"><div class="item-info"><span class="nome-label">${it.n}</span><span class="valor-label">ID: ${it.id} </span><span class="unitario-label"> Unit: ${m(it.v)}</span><span class="enviado-label">Quantidade Enviada: ${it.q}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda"><button class="btn-del" style="margin-left:5px" onclick="removerPecaSalao('${s}', ${it.id})">X</button></div>`; 
             });
             htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div><div style="display:none">${rws}<div style="display:flex;padding:10px;text-align:center;border-top:1px solid #444"><div style="flex:1"><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div style="flex:1"><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
         }
@@ -247,6 +247,7 @@
 </script>
 </body>
 </html>
+
 
 
 
