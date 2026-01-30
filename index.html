@@ -36,7 +36,7 @@
         .item-salao { display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #333; padding: 10px 5px; }
         .item-info { flex: 1; }
         .nome-label { font-weight: bold; color: #fff; font-size: 12px; display: block; }
-        .valor-label { color: #aaa; font-size: 10px; display: block; margin: 2px 0; }
+        .valor-label { color: var(--ouro); font-size: 10px; display: block; margin: 2px 0; }
         .enviado-label { color: var(--ouro); font-size: 10px; font-weight: bold; }
         .input-venda { width: 45px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 6px !important; text-align: center; border-radius: 4px; margin: 0 !important; }
         .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
@@ -220,7 +220,7 @@
         dE.forEach((p, i) => {
             totalEst += p.q; let custoT = p.c + embUn; let mrg = p.v > 0 ? (((p.v - custoT) / p.v) * 100).toFixed(0) : 0;
             htmlE += `<tr><td><img src="${p.f}" class="thumb"></td><td><b>${p.n}</b><br><small>ID: ${p.id}</small></td><td>${p.q}</td><td>${custoT.toFixed(2)}</td><td>${p.v.toFixed(2)}</td><td style="color:var(--verde)">${mrg}%</td><td><button class="btn-del" onclick="if(confirm('Apagar?')){dE.splice(${i},1);salvarTudo();render();}">X</button></td></tr>`;
-            htmlCat += `<div class="card-cat"><img src="${p.f}"><div style="padding:5px"><strong>${p.n}</strong><br><small>ID: ${p.id}</small><br>${m(p.v)}<br><small style="color:var(--verde)">Comissão: ${m(p.v * comSim)}</small></div></div>`;
+            htmlCat += `<div class="card-cat"><img src="${p.f}"><div style="padding:5px"><strong>${p.n}</strong><br><small>ID: ${p.id}</small><br><strong>${m(p.v)}</strong><br><small style="color:var(--verde)">Comissão: ${m(p.v * comSim)}</small></div></div>`;
             if(p.q > 0) htmlSel += `<option value="${i}">${p.id} - ${p.n} (Estoque: ${p.q})</option>`;
         });
         document.getElementById('listaE').innerHTML = htmlE; document.getElementById('listaCat').innerHTML = htmlCat; document.getElementById('totalEst').innerText = totalEst; 
@@ -246,3 +246,4 @@
 </script>
 </body>
 </html>
+
