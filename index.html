@@ -27,7 +27,12 @@
         td { padding: 8px 2px; border-bottom: 1px solid #222; vertical-align: middle; }
         .input-edit { width: 100%; background: #000; color: #fff; border: 1px solid #444; padding: 4px; border-radius: 4px; font-size: 10px; text-align: center; }
         .footer-custos { background: #000; color: var(--verde); font-weight: bold; text-align: left; padding: 12px 15px; border-radius: 0 0 10px 10px; margin-top: -1px; font-size: 12px; border: 1px solid #333; }
-        .thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; border: 1px solid #333; display: block; }
+        
+        /* Ajuste na foto do estoque */
+        .thumb-edit-btn { background: none; border: none; padding: 0; position: relative; width: 40px; height: 40px; cursor: pointer; }
+        .thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; border: 1px solid #444; }
+        .edit-badge { position: absolute; bottom: -2px; right: -2px; background: var(--ouro); color: black; font-size: 8px; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #000; }
+        
         .carrinho-item { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--roxo); }
         .cart-info { flex: 1; font-size: 11px; }
         .cart-total-box { background: #000; border: 2px solid var(--verde); border-radius: 12px; padding: 15px; text-align: center; margin: 15px 0; }
@@ -41,7 +46,6 @@
         .enviado-label { color: var(--ouro); font-size: 10px; font-weight: bold; }
         .input-venda { width: 45px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 6px !important; text-align: center; border-radius: 4px; margin: 0 !important; }
         .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
-        .btn-mini { background: #333; color: #fff; border: 1px solid #444; width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; }
         .btn-del { background: transparent; color: var(--vermelho); border: 1px solid var(--vermelho); width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .card-cat { background: #fff; color: #000; border-radius: 10px; overflow: hidden; text-align: center; padding-bottom: 8px; }
@@ -56,7 +60,8 @@
         <button class="btn-backup" onclick="document.getElementById('imp').click()">📤 ABRIR</button>
         <input type="file" id="imp" style="display:none" onchange="importar(this)">
     </div>
-    <input type="file" id="edit_foto_input" style="display:none" accept="image/*" capture="environment">
+    
+    <input type="file" id="edit_foto_input" style="display:none" accept="image/*">
     
     <div class="resumo-topo">
         <div>EMBALAGEM/UN<span id="fixo">R$ 0,00</span></div>
@@ -89,7 +94,8 @@
 
     <div id="aba2" class="secao">
         <div class="form-box">
-            <label>Foto</label><input type="file" id="p_foto" accept="image/*" capture="environment">
+            <label>Foto (Galeria ou Câmera)</label>
+            <input type="file" id="p_foto" accept="image/*">
             <label>Modelo</label><input type="text" id="p_nome">
             <label>Qtd</label><input type="number" id="p_qtd" value="1">
             <label>Custo Compra (R$)</label><input type="number" id="p_custo" oninput="sugerir()">
@@ -97,7 +103,12 @@
             <label>Preço Venda</label><input type="number" id="p_venda">
             <button class="btn-add" onclick="addE()">📦 SALVAR NO ESTOQUE</button>
         </div>
-        <div class="scroll-table"><table><thead><tr><th style="width:45px">FOTO</th><th style="width:32%">NOME</th><th style="width:25px">QTD</th><th style="width:48px">CUSTO</th><th style="width:48px">VENDA</th><th style="width:32px">%</th><th style="width:32px"></th></tr></thead><tbody id="listaE"></tbody></table></div>
+        <div class="scroll-table">
+            <table>
+                <thead><tr><th style="width:45px">FOTO</th><th style="width:32%">NOME</th><th style="width:25px">QTD</th><th style="width:48px">CUSTO</th><th style="width:48px">VENDA</th><th style="width:32px">%</th><th style="width:32px"></th></tr></thead>
+                <tbody id="listaE"></tbody>
+            </table>
+        </div>
     </div>
 
     <div id="aba4" class="secao">
@@ -138,6 +149,7 @@
     let dE = JSON.parse(localStorage.getItem('QD_V15_E')) || [];
     let dS = JSON.parse(localStorage.getItem('QD_V15_S')) || {};
     let carrinho = [];
+    let idParaTroca = null;
 
     const m = v => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
     function salvarTudo() { localStorage.setItem('QD_V15_C', JSON.stringify(dC)); localStorage.setItem('QD_V15_E', JSON.stringify(dE)); localStorage.setItem('QD_V15_S', JSON.stringify(dS)); }
@@ -162,8 +174,31 @@
         let n = document.getElementById('p_nome').value, q = parseInt(document.getElementById('p_qtd').value), c = parseFloat(document.getElementById('p_custo').value), v = parseFloat(document.getElementById('p_venda').value), f = document.getElementById('p_foto').files[0]; 
         let id = Math.floor(1000 + Math.random() * 9000); 
         let b64 = f ? await comprimirFoto(f) : ""; 
-        dE.push({id, n, q, c, v, f: b64}); salvarTudo(); render(); 
+        dE.push({id, n, q, c, v, f: b64}); 
+        document.getElementById('p_foto').value = ''; document.getElementById('p_nome').value = '';
+        salvarTudo(); render(); 
     }
+
+    // --- FUNÇÃO PARA TROCAR FOTO NO ESTOQUE ---
+    function iniciarTrocaFoto(id) {
+        idParaTroca = id;
+        document.getElementById('edit_foto_input').click();
+    }
+
+    document.getElementById('edit_foto_input').addEventListener('change', async function() {
+        if(this.files && this.files[0] && idParaTroca) {
+            let b64 = await comprimirFoto(this.files[0]);
+            let p = dE.find(x => x.id === idParaTroca);
+            if(p) p.f = b64;
+            // Atualizar também nos salões
+            for(let s in dS) {
+                let itemS = dS[s].itens.find(x => x.id === idParaTroca);
+                if(itemS) itemS.f = b64;
+            }
+            idParaTroca = null;
+            salvarTudo(); render();
+        }
+    });
 
     function addAoCarrinho() {
         let idx = document.getElementById('v_sel').value, q = parseInt(document.getElementById('v_qtd').value);
@@ -220,7 +255,14 @@
         let totalEst = 0, htmlE = '', htmlCat = '', htmlSel = '<option value="">Escolha uma peça...</option>', comSim = (parseFloat(document.getElementById('cat_com').value) || 0) / 100;
         dE.forEach((p, i) => {
             totalEst += p.q; let custoT = p.c + embUn; let mrg = p.v > 0 ? (((p.v - custoT) / p.v) * 100).toFixed(0) : 0;
-            htmlE += `<tr><td><img src="${p.f}" class="thumb"></td><td><b>${p.n}</b><br><small>ID: ${p.id}</small></td><td>${p.q}</td><td>${custoT.toFixed(2)}</td><td>${p.v.toFixed(2)}</td><td style="color:var(--verde)">${mrg}%</td><td><button class="btn-del" onclick="if(confirm('Apagar?')){dE.splice(${i},1);salvarTudo();render();}">X</button></td></tr>`;
+            htmlE += `<tr>
+                <td>
+                    <button class="thumb-edit-btn" onclick="iniciarTrocaFoto(${p.id})">
+                        <img src="${p.f}" class="thumb">
+                        <div class="edit-badge">✎</div>
+                    </button>
+                </td>
+                <td><b>${p.n}</b><br><small>ID: ${p.id}</small></td><td>${p.q}</td><td>${custoT.toFixed(2)}</td><td>${p.v.toFixed(2)}</td><td style="color:var(--verde)">${mrg}%</td><td><button class="btn-del" onclick="if(confirm('Apagar?')){dE.splice(${i},1);salvarTudo();render();}">X</button></td></tr>`;
             htmlCat += `<div class="card-cat"><img src="${p.f}"><div style="padding:5px"><strong>${p.n}</strong><br><small>ID: ${p.id}</small><br><strong>${m(p.v)}</strong><br><small style="color:var(--verde)">Comissão: ${m(p.v * comSim)}</small></div></div>`;
             if(p.q > 0) htmlSel += `<option value="${i}">${p.id} - ${p.n} (Estoque: ${p.q})</option>`;
         });
@@ -240,14 +282,30 @@
 
     function recalc(s) { let b = 0; dS[s].itens.forEach((it, i) => { b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; }); let com = b * (dS[s].com / 100); document.getElementById(`c-${s}`).innerText = m(com); document.getElementById(`r-${s}`).innerText = m(b - com); }
     function fechar(s) { let erro = false; dS[s].itens.forEach((it, i) => { if((parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) > it.q) erro = true; }); if(erro) { alert("Venda maior que o enviado!"); return; } if(!confirm("Fechar acerto?")) return; dS[s].itens.forEach((it, i) => { let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0; let p = dE.find(e => e.id === it.id); if(p) p.q += (it.q - v); }); delete dS[s]; salvarTudo(); render(); }
-    async function comprimirFoto(f) { return new Promise(res => { const r = new FileReader(); r.readAsDataURL(f); r.onload = e => { const i = new Image(); i.src = e.target.result; i.onload = () => { const c = document.createElement('canvas'); const m = 400; let w = i.width, h = i.height; if(w > h) { if(w > m) { h *= m/w; w = m; } } else { if(h > m) { w *= m/h; h = m; } } c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); res(c.toDataURL('image/jpeg', 0.7)); }; }; }); }
+    
+    async function comprimirFoto(f) { 
+        return new Promise(res => { 
+            const r = new FileReader(); 
+            r.readAsDataURL(f); 
+            r.onload = e => { 
+                const i = new Image(); 
+                i.src = e.target.result; 
+                i.onload = () => { 
+                    const c = document.createElement('canvas'); 
+                    const m = 400; 
+                    let w = i.width, h = i.height; 
+                    if(w > h) { if(w > m) { h *= m/w; w = m; } } else { if(h > m) { w *= m/h; h = m; } } 
+                    c.width = w; c.height = h; 
+                    c.getContext('2d').drawImage(i, 0, 0, w, h); 
+                    res(c.toDataURL('image/jpeg', 0.7)); 
+                }; 
+            }; 
+        }); 
+    }
+
     function exportar() { const b = new Blob([JSON.stringify({dC, dE, dS})], {type: 'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'Backup_Quintella.json'; a.click(); }
     function importar(i) { const r = new FileReader(); r.onload = (e) => { const d = JSON.parse(e.target.result); dC=d.dC; dE=d.dE; dS=d.dS; salvarTudo(); render(); }; r.readAsText(i.files[0]); }
     render();
 </script>
 </body>
 </html>
-
-
-
-
