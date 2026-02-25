@@ -348,31 +348,34 @@
     }
 
     function exportar() { const b = new Blob([JSON.stringify({dC, dE, dS})], {type: 'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'Backup_Quintella.json'; a.click(); }
-    function importar(i) { 
-        const r = new FileReader(); 
-        r.onload = (e) => { 
-            const d = JSON.parse(e.target.result); 
+    function salvarTudo() {
+        localStorage.setItem('dC', JSON.stringify(dC));
+        localStorage.setItem('dE', JSON.stringify(dE));
+        localStorage.setItem('dS', JSON.stringify(dS));
+    }
+
+   
+    function importar(i) {
+        const r = new FileReader();
+        r.onload = (e) => {
+            const d = JSON.parse(e.target.result);
+            dC = d.dC || [];
+            dE = d.dE || [];
+            dS = d.dS || {};
             
-            // 1. Carrega os dados para as variáveis do sistema
-            dC = d.dC || []; 
-            dE = d.dE || []; 
-            dS = d.dS || {}; 
-            
-            // 2. SALVAMENTO FORÇADO: Usa exatamente os nomes que estão no seu arquivo
-            // Isso garante que o navegador grave os dados no lugar certo
             localStorage.setItem('dC', JSON.stringify(dC));
             localStorage.setItem('dE', JSON.stringify(dE));
             localStorage.setItem('dS', JSON.stringify(dS));
             
-            // 3. Atualiza a tela
-            render(); 
-            alert("✅ Backup carregado e salvo com sucesso!");
-        }; 
-        r.readAsText(i.files[0]); 
+            render();
+            alert("✅ Sincronizado e Salvo!");
+        };
+        r.readAsText(i.files[0]);
     }
 </script>
 </body>
 </html>
+
 
 
 
