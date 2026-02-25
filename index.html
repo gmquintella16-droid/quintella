@@ -27,28 +27,15 @@
         td { padding: 8px 2px; border-bottom: 1px solid #222; vertical-align: middle; }
         .input-edit { width: 100%; background: #000; color: #fff; border: 1px solid #444; padding: 4px; border-radius: 4px; font-size: 10px; text-align: center; }
         .footer-custos { background: #000; color: var(--verde); font-weight: bold; text-align: left; padding: 12px 15px; border-radius: 0 0 10px 10px; margin-top: -1px; font-size: 12px; border: 1px solid #333; }
-        
         .thumb-edit-btn { background: none; border: none; padding: 0; position: relative; width: 40px; height: 40px; cursor: pointer; }
         .thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; border: 1px solid #444; }
         .edit-badge { position: absolute; bottom: -2px; right: -2px; background: var(--ouro); color: black; font-size: 8px; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #000; }
-        
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .card-cat { background: #fff; color: #000; border-radius: 10px; overflow: hidden; text-align: center; padding-bottom: 8px; cursor: pointer; }
         .card-cat img { width: 100%; height: 120px; object-fit: cover; }
-        .card-cat small { color: #888; display: block; margin-top: 2px; }
-
-        #modalFoto { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
-        #imgGrande { max-width: 100%; max-height: 70%; border-radius: 10px; border: 2px solid var(--ouro); object-fit: contain; }
-        #infoGrande { color: white; text-align: center; margin-top: 15px; }
-        #infoGrande strong { font-size: 1.5rem; color: var(--ouro); display: block; }
-        #infoGrande span { display: block; font-size: 1.1rem; margin-top: 5px; }
-        #infoGrande small { color: #aaa; }
-        .btn-fechar-modal { margin-top: 20px; background: var(--vermelho); color: white; border: none; padding: 10px 30px; border-radius: 8px; font-weight: bold; }
-
         .carrinho-item { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--roxo); }
         .cart-info { flex: 1; font-size: 11px; }
         .cart-total-box { background: #000; border: 2px solid var(--verde); border-radius: 12px; padding: 15px; text-align: center; margin: 15px 0; }
-        
         .salao-container { background: #222; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; overflow: hidden; }
         .salao-header { padding: 12px; background: #2a2a2a; color: #fff; display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; }
         .item-salao { display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #333; padding: 10px 5px; }
@@ -61,6 +48,9 @@
         .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
         .btn-whats { background: #25d366; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: bold; width: 100%; margin-top: 5px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
         .btn-del { background: transparent; color: var(--vermelho); border: 1px solid var(--vermelho); width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
+        #modalFoto { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        #imgGrande { max-width: 100%; max-height: 70%; border-radius: 10px; border: 2px solid var(--ouro); object-fit: contain; }
+        #infoGrande { color: white; text-align: center; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -68,7 +58,7 @@
 <div id="modalFoto" onclick="this.style.display='none'">
     <img id="imgGrande" src="">
     <div id="infoGrande"></div>
-    <button class="btn-fechar-modal">FECHAR</button>
+    <button style="margin-top:20px; background:var(--vermelho); color:white; border:none; padding:10px 30px; border-radius:8px; font-weight:bold;">FECHAR</button>
 </div>
 
 <div class="container">
@@ -158,17 +148,29 @@
 </div>
 
 <script>
-    let dC = JSON.parse(localStorage.getItem('QD_V15_C')) || [];
-    let dE = JSON.parse(localStorage.getItem('QD_V15_E')) || [];
-    let dS = JSON.parse(localStorage.getItem('QD_V15_S')) || {};
+    // PADRONIZAÇÃO DAS CHAVES PARA dC, dE, dS (COMO NO SEU BACKUP)
+    let dC = JSON.parse(localStorage.getItem('dC')) || [];
+    let dE = JSON.parse(localStorage.getItem('dE')) || [];
+    let dS = JSON.parse(localStorage.getItem('dS')) || {};
     let carrinho = [];
     let idParaTroca = null;
 
     const m = v => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
-    function salvarTudo() { localStorage.setItem('QD_V15_C', JSON.stringify(dC)); localStorage.setItem('QD_V15_E', JSON.stringify(dE)); localStorage.setItem('QD_V15_S', JSON.stringify(dS)); }
-    function trocar(n, btn) { document.querySelectorAll('.secao').forEach(s => s.classList.remove('active')); document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('active')); document.getElementById('aba'+n).classList.add('active'); btn.classList.add('active'); render(); }
+
+    function salvarTudo() { 
+        localStorage.setItem('dC', JSON.stringify(dC)); 
+        localStorage.setItem('dE', JSON.stringify(dE)); 
+        localStorage.setItem('dS', JSON.stringify(dS)); 
+    }
+
+    function trocar(n, btn) { 
+        document.querySelectorAll('.secao').forEach(s => s.classList.remove('active')); 
+        document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('active')); 
+        document.getElementById('aba'+n).classList.add('active'); 
+        btn.classList.add('active'); 
+        render(); 
+    }
     
-    // FUNÇÃO QUE PREENCHE O SELECT AUTOMATICAMENTE AO DIGITAR O ID
     function autoSelect(idSelect, idDigitado) {
         const sel = document.getElementById(idSelect);
         for (let i = 0; i < sel.options.length; i++) {
@@ -253,7 +255,7 @@
     function addS() {
         let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
         if(!s || idx === "" || isNaN(com) || q <= 0) return;
-        if(dS[s] && dS[s].com !== com) { alert("Este salão já possui uma comissão definida de " + dS[s].com + "%. Use o mesmo valor."); return; }
+        if(dS[s] && dS[s].com !== com) { alert("Comissão fixa desse salão é " + dS[s].com + "%."); return; }
         let peca = dE[idx];
         if(peca.q < q) { alert("Estoque insuficiente!"); return; }
         if(!dS[s]) dS[s] = { itens: [], com: com };
@@ -265,32 +267,16 @@
     }
 
     function removerPecaSalao(nomeSalao, idItem) {
-        if(!confirm("Remover do salão e voltar para estoque?")) return;
+        if(!confirm("Remover do salão?")) return;
         let salao = dS[nomeSalao], idx = salao.itens.findIndex(i => i.id === idItem);
         if(idx > -1) { let pE = dE.find(e => e.id === idItem); if(pE) pE.q += salao.itens[idx].q; salao.itens.splice(idx, 1); if(salao.itens.length === 0) delete dS[nomeSalao]; salvarTudo(); render(); }
     }
 
-   function enviarWhatsApp(s) {
-        let totalMercadoria = 0;
-        let itensTexto = "";
-        
-        dS[s].itens.forEach(it => {
-            let sub = it.q * it.v;
-            totalMercadoria += sub;
-            itensTexto += `💎 *${it.n}* (ID: ${it.id})\nQtd: ${it.q} un | Unit: ${m(it.v)}\n\n`;
-        });
-
-        let txt = `QUINTELLA DIAMOND - ROMANEIO\n`;
-        txt += `📍 Salão: *${s}*\n`;
-        txt += `------------------------------\n`;
-        txt += itensTexto;
-        txt += `------------------------------\n`;
-        txt += `Total em Mercadoria: ${m(totalMercadoria)}\n`;
-        txt += `Comissão acordada: ${dS[s].com}%\n\n`;
-        txt += `Responsabilidade sobre perda, furto ou danos conforme termo assinado.`;
-
+    function enviarWhatsApp(s) {
+        let totalMercadoria = 0; let itensTexto = "";
+        dS[s].itens.forEach(it => { totalMercadoria += (it.q * it.v); itensTexto += `💎 *${it.n}* (ID: ${it.id})\nQtd: ${it.q} un | Unit: ${m(it.v)}\n\n`; });
+        let txt = `QUINTELLA DIAMOND - ROMANEIO\n📍 Salão: *${s}*\n------------------------------\n${itensTexto}------------------------------\nTotal em Mercadoria: ${m(totalMercadoria)}\nComissão acordada: ${dS[s].com}%\n\nResponsabilidade sobre perda, furto ou danos conforme termo assinado.`;
         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(txt)}`);
-    
     }
 
     function render() {
@@ -323,8 +309,7 @@
     function recalc(s) { let b = 0; dS[s].itens.forEach((it, i) => { b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; }); let com = b * (dS[s].com / 100); document.getElementById(`c-${s}`).innerText = m(com); document.getElementById(`r-${s}`).innerText = m(b - com); }
     
     function fechar(s) { 
-        let erro = false; 
-        dS[s].itens.forEach((it, i) => { if((parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) > it.q) erro = true; }); 
+        let erro = false; dS[s].itens.forEach((it, i) => { if((parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) > it.q) erro = true; }); 
         if(erro) { alert("Atenção: A quantidade vendida não pode ser maior que a enviada!"); return; } 
         if(!confirm("Fechar acerto?")) return; 
         dS[s].itens.forEach((it, i) => { let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0; let p = dE.find(e => e.id === it.id); if(p) p.q += (it.q - v); }); 
@@ -348,31 +333,25 @@
     }
 
     function exportar() { const b = new Blob([JSON.stringify({dC, dE, dS})], {type: 'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'Backup_Quintella.json'; a.click(); }
+    
     function importar(i) {
         const r = new FileReader();
         r.onload = (e) => {
             const d = JSON.parse(e.target.result);
-            dC = d.dC || [];
-            dE = d.dE || [];
-            dS = d.dS || {};
+            dC = d.dC || []; dE = d.dE || []; dS = d.dS || {};
             
+            // GARANTE O SALVAMENTO NAS CHAVES dC, dE, dS
             localStorage.setItem('dC', JSON.stringify(dC));
             localStorage.setItem('dE', JSON.stringify(dE));
             localStorage.setItem('dS', JSON.stringify(dS));
             
             render();
-            alert("✅ Sincronizado e Salvo!");
+            alert("✅ Backup carregado e salvo com sucesso!");
         };
         r.readAsText(i.files[0]);
     }
+
+    render(); // Chama o render inicial ao abrir
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
