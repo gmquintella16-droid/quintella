@@ -348,9 +348,28 @@
     }
 
     function exportar() { const b = new Blob([JSON.stringify({dC, dE, dS})], {type: 'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'Backup_Quintella.json'; a.click(); }
-    function importar(i) { const r = new FileReader(); r.onload = (e) => { const d = JSON.parse(e.target.result); dC=d.dC; dE=d.dE; dS=d.dS; salvarTudo(); render(); }; r.readAsText(i.files[0]); }
+    function importar(i) {
+        const r = new FileReader();
+        r.onload = (e) => {
+            try {
+                const d = JSON.parse(e.target.result);
+                // O "||" garante que se uma parte do backup faltar, ele cria uma lista vazia em vez de dar erro
+                dC = d.dC || [];
+                dE = d.dE || [];
+                dS = d.dS || {};
+                
+                salvarTudo(); // Grava no cache do navegador
+                render();     // Atualiza a tela
+                alert("✅ Dados carregados e protegidos no sistema!");
+            } catch (err) {
+                alert("❌ Erro: O arquivo de backup parece estar corrompido ou é inválido.");
+            }
+        };
+        r.readAsText(i.files[0]);
+    }
     render();
 </script>
 </body>
 </html>
+
 
