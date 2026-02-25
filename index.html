@@ -352,20 +352,28 @@
         const r = new FileReader(); 
         r.onload = (e) => { 
             const d = JSON.parse(e.target.result); 
-            dC = d.dC || []; dE = d.dE || []; dS = d.dS || {}; 
-            // Salva no cache imediatamente após ler o arquivo
-            localStorage.setItem('QD_V15_C', JSON.stringify(dC));
-            localStorage.setItem('QD_V15_E', JSON.stringify(dE));
-            localStorage.setItem('QD_V15_S', JSON.stringify(dS));
+            
+            // 1. Carrega os dados para as variáveis do sistema
+            dC = d.dC || []; 
+            dE = d.dE || []; 
+            dS = d.dS || {}; 
+            
+            // 2. SALVAMENTO FORÇADO: Usa exatamente os nomes que estão no seu arquivo
+            // Isso garante que o navegador grave os dados no lugar certo
+            localStorage.setItem('dC', JSON.stringify(dC));
+            localStorage.setItem('dE', JSON.stringify(dE));
+            localStorage.setItem('dS', JSON.stringify(dS));
+            
+            // 3. Atualiza a tela
             render(); 
-            alert("✅ Carregado e salvo com sucesso!");
+            alert("✅ Backup carregado e salvo com sucesso!");
         }; 
         r.readAsText(i.files[0]); 
     }
-    render();
 </script>
 </body>
 </html>
+
 
 
 
