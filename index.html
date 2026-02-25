@@ -9,11 +9,8 @@
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--fundo-app); margin: 0; padding: 10px; padding-top: env(safe-area-inset-top); }
         .container { max-width: 100%; margin: 0 auto; padding-bottom: 80px; box-sizing: border-box; }
         h1 { color: #000; text-align: center; text-transform: uppercase; font-size: 1.3rem; margin: 15px 0; letter-spacing: 1px; font-weight: 800; }
-        
-        .backup-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .btn-backup { background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 8px; font-size: 0.65rem; font-weight: bold; text-align: center; }
-        .btn-copiar { background: #eee; border: 1px solid #ccc; grid-column: span 2; padding: 8px; border-radius: 8px; font-size: 0.7rem; font-weight: bold; }
-
+        .backup-area { display: flex; gap: 8px; margin-bottom: 15px; }
+        .btn-backup { background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.7rem; font-weight: bold; }
         .resumo-topo { background: #fff; padding: 12px; border-radius: 12px; display: flex; justify-content: space-around; margin-bottom: 20px; font-size: 0.75rem; text-align: center; border: 1px solid #eee; }
         .resumo-topo span { display: block; color: var(--ouro); font-size: 0.9rem; font-weight: bold; }
         .menu { display: flex; gap: 4px; margin-bottom: 15px; position: sticky; top: 0; background: var(--fundo-app); padding: 10px 0; z-index: 100; overflow-x: auto; }
@@ -24,34 +21,46 @@
         .form-box { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 15px; }
         label { display: block; font-size: 9px; color: var(--ouro); margin-bottom: 4px; font-weight: bold; text-transform: uppercase; }
         input, select { background: #fff; border: 1px solid #ddd; color: #333; padding: 12px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 15px; margin-bottom: 10px; }
-        
-        /* Estilo da busca rápida */
-        .busca-rapida { background: #000; border: 1px solid var(--ouro); color: var(--ouro); font-weight: bold; margin-bottom: 5px; }
-
         .btn-add { background: var(--verde); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; font-size: 0.9rem; }
         table { width: 100%; border-collapse: collapse; color: #fff; font-size: 10px; table-layout: fixed; }
         th { text-align: left; color: var(--ouro); padding: 5px 2px; border-bottom: 1px solid #333; font-size: 8px; }
         td { padding: 8px 2px; border-bottom: 1px solid #222; vertical-align: middle; }
+        .input-edit { width: 100%; background: #000; color: #fff; border: 1px solid #444; padding: 4px; border-radius: 4px; font-size: 10px; text-align: center; }
         .footer-custos { background: #000; color: var(--verde); font-weight: bold; text-align: left; padding: 12px 15px; border-radius: 0 0 10px 10px; margin-top: -1px; font-size: 12px; border: 1px solid #333; }
         
         .thumb-edit-btn { background: none; border: none; padding: 0; position: relative; width: 40px; height: 40px; cursor: pointer; }
         .thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; border: 1px solid #444; }
         .edit-badge { position: absolute; bottom: -2px; right: -2px; background: var(--ouro); color: black; font-size: 8px; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #000; }
         
+        /* Grid Catálogo */
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .card-cat { background: #fff; color: #000; border-radius: 10px; overflow: hidden; text-align: center; padding-bottom: 8px; cursor: pointer; }
         .card-cat img { width: 100%; height: 120px; object-fit: cover; }
-        
+        .card-cat small { color: #888; display: block; margin-top: 2px; }
+
+        /* Modal Foto Grande */
         #modalFoto { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
         #imgGrande { max-width: 100%; max-height: 70%; border-radius: 10px; border: 2px solid var(--ouro); object-fit: contain; }
         #infoGrande { color: white; text-align: center; margin-top: 15px; }
+        #infoGrande strong { font-size: 1.5rem; color: var(--ouro); display: block; }
+        #infoGrande span { display: block; font-size: 1.1rem; margin-top: 5px; }
+        #infoGrande small { color: #aaa; }
+        .btn-fechar-modal { margin-top: 20px; background: var(--vermelho); color: white; border: none; padding: 10px 30px; border-radius: 8px; font-weight: bold; }
 
+        .carrinho-item { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--roxo); }
+        .cart-info { flex: 1; font-size: 11px; }
+        .cart-total-box { background: #000; border: 2px solid var(--verde); border-radius: 12px; padding: 15px; text-align: center; margin: 15px 0; }
+        
         .salao-container { background: #222; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; overflow: hidden; }
         .salao-header { padding: 12px; background: #2a2a2a; color: #fff; display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; }
         .item-salao { display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #333; padding: 10px 5px; }
         .item-info { flex: 1; }
-        .btn-whatsapp { background: #25d366; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 8px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
+        .nome-label { font-weight: bold; color: #fff; font-size: 12px; display: block; }
+        .valor-label { color: var(--ouro); font-size: 10px; display: block; margin: 2px 0; }
+        .unitario-label { color: #aaa; font-size: 10px; display: block; margin: 2px 0; }
+        .enviado-label { color: var(--ouro); font-size: 10px; font-weight: bold; }
+        .input-venda { width: 45px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 6px !important; text-align: center; border-radius: 4px; margin: 0 !important; }
+        .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
         .btn-del { background: transparent; color: var(--vermelho); border: 1px solid var(--vermelho); width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
     </style>
 </head>
@@ -60,17 +69,14 @@
 <div id="modalFoto" onclick="this.style.display='none'">
     <img id="imgGrande" src="">
     <div id="infoGrande"></div>
-    <button style="margin-top:20px; background:var(--vermelho); color:white; border:none; padding:10px 30px; border-radius:8px; font-weight:bold;">FECHAR</button>
+    <button class="btn-fechar-modal">FECHAR</button>
 </div>
 
 <div class="container">
     <h1>Quintella Diamond 💎</h1>
-    
     <div class="backup-area">
-        <button class="btn-backup" onclick="exportar()">📥 SALVAR ARQUIVO</button>
-        <button class="btn-backup" onclick="document.getElementById('imp').click()">📤 ABRIR ARQUIVO</button>
-        <button class="btn-copiar" onclick="copiarBackup()">📋 COPIAR TEXTO DO BACKUP</button>
-        <button class="btn-copiar" style="background:#fff" onclick="colarBackup()">📥 COLAR TEXTO DO BACKUP</button>
+        <button class="btn-backup" onclick="exportar()">📥 BACKUP</button>
+        <button class="btn-backup" onclick="document.getElementById('imp').click()">📤 ABRIR</button>
         <input type="file" id="imp" style="display:none" onchange="importar(this)">
     </div>
     
@@ -126,8 +132,7 @@
 
     <div id="aba5" class="secao">
         <div class="form-box">
-            <label>🔍 BUSCAR POR ID</label><input type="number" class="busca-rapida" placeholder="Digite o ID..." oninput="buscarPeca(this.value, 'v_sel')">
-            <label>Escolher Produto (Ordem ID)</label><select id="v_sel"></select>
+            <label>Escolher Produto (ID - NOME - QTD)</label><select id="v_sel"></select>
             <label>Quantidade para Vender</label><input type="number" id="v_qtd" value="1">
             <button class="btn-add" style="background:var(--azul)" onclick="addAoCarrinho()">+ ADICIONAR AO PEDIDO</button>
         </div>
@@ -142,8 +147,7 @@
     <div id="aba3" class="secao">
         <div class="form-box">
             <label>Salão</label><input type="text" id="s_nome">
-            <label>🔍 BUSCAR POR ID</label><input type="number" class="busca-rapida" placeholder="Digite o ID..." oninput="buscarPeca(this.value, 's_sel')">
-            <label>Peça (Ordem ID)</label><select id="s_sel"></select>
+            <label>Peça (ID - NOME - ESTOQUE)</label><select id="s_sel"></select>
             <label>Qtd Enviar</label><input type="number" id="s_qtd" value="1">
             <label>% Comissão</label><input type="number" id="s_com" value="30">
             <button class="btn-add" style="background: var(--azul);" onclick="addS()">🚀 ENVIAR PARA SALÃO</button>
@@ -163,6 +167,13 @@
     function salvarTudo() { localStorage.setItem('QD_V15_C', JSON.stringify(dC)); localStorage.setItem('QD_V15_E', JSON.stringify(dE)); localStorage.setItem('QD_V15_S', JSON.stringify(dS)); }
     function trocar(n, btn) { document.querySelectorAll('.secao').forEach(s => s.classList.remove('active')); document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('active')); document.getElementById('aba'+n).classList.add('active'); btn.classList.add('active'); render(); }
     
+    function updateCustoReal(index, field, value) {
+        let val = parseFloat(value) || 0;
+        if(field === 'v') dC[index].v = val;
+        if(field === 'q') dC[index].q = val > 0 ? val : 1;
+        salvarTudo(); render();
+    }
+
     function addC() { 
         let n = document.getElementById('c_nome').value, v = parseFloat(document.getElementById('c_valor').value), q = parseInt(document.getElementById('c_qtd').value); 
         if(n && v >= 0 && q > 0) { dC.push({n, v, q}); document.getElementById('c_nome').value = ''; document.getElementById('c_valor').value = ''; salvarTudo(); render(); } 
@@ -180,29 +191,30 @@
         salvarTudo(); render(); 
     }
 
-    // FUNÇÃO DE BUSCA POR ID
-    function buscarPeca(idBuscado, selectId) {
-        const select = document.getElementById(selectId);
-        for (let i = 0; i < select.options.length; i++) {
-            if (select.options[i].text.startsWith(idBuscado) && idBuscado !== "") {
-                select.selectedIndex = i;
-                break;
-            }
+    function iniciarTrocaFoto(id) { idParaTroca = id; document.getElementById('edit_foto_input').click(); }
+
+    document.getElementById('edit_foto_input').addEventListener('change', async function() {
+        if(this.files && this.files[0] && idParaTroca) {
+            let b64 = await comprimirFoto(this.files[0]);
+            let p = dE.find(x => x.id === idParaTroca);
+            if(p) p.f = b64;
+            for(let s in dS) { let itemS = dS[s].itens.find(x => x.id === idParaTroca); if(itemS) itemS.f = b64; }
+            idParaTroca = null; salvarTudo(); render();
         }
-    }
+    });
 
     function abrirZoom(id) {
         let p = dE.find(x => x.id === id);
         if(!p) return;
         document.getElementById('imgGrande').src = p.f;
-        document.getElementById('infoGrande').innerHTML = `<strong>${p.n}</strong><br><small>ID: ${p.id}</small><br><span>Preço: ${m(p.v)}</span>`;
+        document.getElementById('infoGrande').innerHTML = `<strong>${p.n}</strong><small>ID: ${p.id}</small><span>Preço: ${m(p.v)}</span>`;
         document.getElementById('modalFoto').style.display = 'flex';
     }
 
     function addAoCarrinho() {
-        let idSelecionado = document.getElementById('v_sel').value, q = parseInt(document.getElementById('v_qtd').value);
-        if(!idSelecionado || q <= 0) return;
-        let peca = dE.find(x => x.id == idSelecionado);
+        let idx = document.getElementById('v_sel').value, q = parseInt(document.getElementById('v_qtd').value);
+        if(idx === "" || q <= 0) return;
+        let peca = dE[idx];
         let noCart = carrinho.find(c => c.id === peca.id);
         if(peca.q < (q + (noCart?noCart.q:0))) { alert("Estoque insuficiente!"); return; }
         if(noCart) noCart.q += q; else carrinho.push({ ...peca, q: q });
@@ -226,9 +238,9 @@
     function limparCarrinho() { if(confirm("Limpar pedido?")) { carrinho = []; renderCarrinho(); } }
 
     function addS() {
-        let s = document.getElementById('s_nome').value, idSelecionado = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
-        if(!s || !idSelecionado || isNaN(com) || q <= 0) return;
-        let peca = dE.find(x => x.id == idSelecionado);
+        let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
+        if(!s || idx === "" || isNaN(com) || q <= 0) return;
+        let peca = dE[idx];
         if(peca.q < q) { alert("Estoque insuficiente!"); return; }
         if(!dS[s]) dS[s] = { itens: [], com: com };
         let it = dS[s].itens.find(i => i.id === peca.id);
@@ -236,67 +248,58 @@
         peca.q -= q; salvarTudo(); render();
     }
 
-    function compartilharWhatsApp(s) {
-        let texto = `*QUINTELLA DIAMOND - ROMANEIO*\n📍 *Salão:* ${s}\n------------------------------\n`;
-        let total = 0;
-        dS[s].itens.forEach(it => {
-            texto += `💎 *${it.n}* (ID: ${it.id})\nQtd: ${it.q} un | Unit: ${m(it.v)}\n\n`;
-            total += (it.q * it.v);
-        });
-        texto += `------------------------------\n*Total Mercadoria:* ${m(total)}\n*Comissão:* ${dS[s].com}%`;
-        window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(texto), '_blank');
-    }
-
-    function copiarBackup() {
-        navigator.clipboard.writeText(JSON.stringify({dC, dE, dS})).then(() => alert("Copiado!"));
-    }
-
-    function colarBackup() {
-        const texto = prompt("Cole o backup:");
-        if (texto) { try { const d = JSON.parse(texto); dC=d.dC; dE=d.dE; dS=d.dS; salvarTudo(); render(); alert("Sucesso!"); } catch (e) { alert("Erro!"); } }
+    function removerPecaSalao(nomeSalao, idItem) {
+        if(!confirm("Remover do salão e voltar para estoque?")) return;
+        let salao = dS[nomeSalao], idx = salao.itens.findIndex(i => i.id === idItem);
+        if(idx > -1) { let pE = dE.find(e => e.id === idItem); if(pE) pE.q += salao.itens[idx].q; salao.itens.splice(idx, 1); if(salao.itens.length === 0) delete dS[nomeSalao]; salvarTudo(); render(); }
     }
 
     function render() {
         let embUn = getEmbalagemUn(); document.getElementById('fixo').innerText = m(embUn);
-        let htmlC = '', subC = 0; dC.forEach((c, i) => { subC += c.v; htmlC += `<tr><td style="padding-left:10px">${c.n}</td><td>${m(c.v)}</td><td>${c.q}</td><td>${m(c.v/c.q)}</td><td><button class="btn-del" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
+        let htmlC = '', subC = 0; dC.forEach((c, i) => { subC += c.v; htmlC += `<tr><td style="padding-left:10px">${c.n}</td><td><input type="number" class="input-edit" value="${c.v}" onchange="updateCustoReal(${i}, 'v', this.value)"></td><td><input type="number" class="input-edit" value="${c.q}" onchange="updateCustoReal(${i}, 'q', this.value)"></td><td>${m(c.v/c.q)}</td><td><button class="btn-del" onclick="dC.splice(${i},1);salvarTudo();render()">X</button></td></tr>`; });
         document.getElementById('listaC').innerHTML = htmlC;
         document.getElementById('subtotal_custos').innerText = "SUBTOTAL INVESTIDO: " + m(subC);
         
-        // ORDENAR ESTOQUE POR ID PARA O SELECT E CATALOGO
-        let estoqueOrdenado = [...dE].sort((a, b) => a.id - b.id);
-        
         let totE = 0, htmlE = '', htmlCat = '', htmlSel = '<option value="">Escolha...</option>', comSim = (parseFloat(document.getElementById('cat_com').value) || 0) / 100;
-        
-        estoqueOrdenado.forEach((p) => {
-            totE += p.q; 
-            let custoT = p.c + embUn; 
-            let mrg = p.v > 0 ? (((p.v - custoT) / p.v) * 100).toFixed(0) : 0;
-            htmlE += `<tr><td><button class="thumb-edit-btn" onclick="iniciarTrocaFoto(${p.id})"><img src="${p.f}" class="thumb"><div class="edit-badge">✎</div></button></td><td><b>${p.n}</b><br><small>ID: ${p.id}</small></td><td>${p.q}</td><td>${custoT.toFixed(2)}</td><td>${p.v.toFixed(2)}</td><td style="color:var(--verde)">${mrg}%</td><td><button class="btn-del" onclick="if(confirm('Apagar?')){dE = dE.filter(x => x.id !== ${p.id});salvarTudo();render();}">X</button></td></tr>`;
-            htmlCat += `<div class="card-cat" onclick="abrirZoom(${p.id})"><img src="${p.f}"><div style="padding:5px"><strong>${p.n}</strong><br><small>ID: ${p.id}</small><br><strong>${m(p.v)}</strong></div></div>`;
-            if(p.q > 0) htmlSel += `<option value="${p.id}">${p.id} - ${p.n} (Estoque: ${p.q})</option>`;
+        dE.forEach((p, i) => {
+            totE += p.q; let custoT = p.c + embUn; let mrg = p.v > 0 ? (((p.v - custoT) / p.v) * 100).toFixed(0) : 0;
+            htmlE += `<tr><td><button class="thumb-edit-btn" onclick="iniciarTrocaFoto(${p.id})"><img src="${p.f}" class="thumb"><div class="edit-badge">✎</div></button></td><td><b>${p.n}</b><br><small>ID: ${p.id}</small></td><td>${p.q}</td><td>${custoT.toFixed(2)}</td><td>${p.v.toFixed(2)}</td><td style="color:var(--verde)">${mrg}%</td><td><button class="btn-del" onclick="if(confirm('Apagar?')){dE.splice(${i},1);salvarTudo();render();}">X</button></td></tr>`;
+            htmlCat += `<div class="card-cat" onclick="abrirZoom(${p.id})"><img src="${p.f}"><div style="padding:5px"><strong>${p.n}</strong><small>ID: ${p.id}</small><strong>${m(p.v)}</strong><small style="color:var(--verde)">Comissão: ${m(p.v * comSim)}</small></div></div>`;
+            if(p.q > 0) htmlSel += `<option value="${i}">${p.id} - ${p.n} (Estoque: ${p.q})</option>`;
         });
-
-        document.getElementById('listaE').innerHTML = htmlE; 
-        document.getElementById('listaCat').innerHTML = htmlCat; 
-        document.getElementById('totalEst').innerText = totE; 
-        document.getElementById('s_sel').innerHTML = htmlSel; 
-        document.getElementById('v_sel').innerHTML = htmlSel;
+        document.getElementById('listaE').innerHTML = htmlE; document.getElementById('listaCat').innerHTML = htmlCat; document.getElementById('totalEst').innerText = totE; 
+        document.getElementById('s_sel').innerHTML = htmlSel; document.getElementById('v_sel').innerHTML = htmlSel;
 
         let htmlS = '';
         for(let s in dS) {
             let rws = ''; 
             dS[s].itens.forEach((it, i) => { 
-                rws += `<div class="item-salao"><img src="${it.f}" style="width:45px;height:45px;border-radius:4px;object-fit:cover"><div class="item-info"><span class="nome-label">${it.n}</span><span class="valor-label">ID: ${it.id} | ${m(it.v)}</span><span class="enviado-label">Enviado: ${it.q}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda"><button class="btn-del" onclick="removerPecaSalao('${s}', ${it.id})">X</button></div>`; 
+                rws += `<div class="item-salao"><img src="${it.f}" style="width:45px;height:45px;border-radius:4px;object-fit:cover"><div class="item-info"><span class="nome-label">${it.n}</span><span class="valor-label">ID: ${it.id} </span><span class="unitario-label"> Unit: ${m(it.v)}</span><span class="enviado-label">Quantidade Enviada: ${it.q}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda"><button class="btn-del" style="margin-left:5px" onclick="removerPecaSalao('${s}', ${it.id})">X</button></div>`; 
             });
-            htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s}</span><span>▾</span></div><div style="display:none; padding:10px;">${rws}<button class="btn-whatsapp" onclick="compartilharWhatsApp('${s}')">📱 ENVIAR LISTA WHATSAPP</button><button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
+            htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div><div style="display:none">${rws}<div style="display:flex;padding:10px;text-align:center;border-top:1px solid #444"><div style="flex:1"><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div style="flex:1"><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
         }
         document.getElementById('listaS').innerHTML = htmlS;
     }
 
-    function recalc(s) { let b = 0; dS[s].itens.forEach((it, i) => { b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; }); let com = b * (dS[s].com / 100); }
-    function fechar(s) { if(!confirm("Fechar?")) return; dS[s].itens.forEach((it, i) => { let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0; let p = dE.find(e => e.id === it.id); if(p) p.q += (it.q - v); }); delete dS[s]; salvarTudo(); render(); }
-    function removerPecaSalao(s, id) { let it = dS[s].itens.findIndex(x => x.id === id); if(it > -1) { let p = dE.find(e => e.id === id); if(p) p.q += dS[s].itens[it].q; dS[s].itens.splice(it, 1); if(dS[s].itens.length === 0) delete dS[s]; salvarTudo(); render(); } }
-    async function comprimirFoto(f) { return new Promise(res => { const r = new FileReader(); r.readAsDataURL(f); r.onload = e => { const i = new Image(); i.src = e.target.result; i.onload = () => { const c = document.createElement('canvas'); const m = 600; let w = i.width, h = i.height; if(w > h) { if(w > m) { h *= m/w; w = m; } } else { if(h > m) { w *= m/h; h = m; } } c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); res(c.toDataURL('image/jpeg', 0.8)); }; }; }); }
+    function recalc(s) { let b = 0; dS[s].itens.forEach((it, i) => { b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; }); let com = b * (dS[s].com / 100); document.getElementById(`c-${s}`).innerText = m(com); document.getElementById(`r-${s}`).innerText = m(b - com); }
+    function fechar(s) { let erro = false; dS[s].itens.forEach((it, i) => { if((parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) > it.q) erro = true; }); if(erro) { alert("Venda maior que o enviado!"); return; } if(!confirm("Fechar acerto?")) return; dS[s].itens.forEach((it, i) => { let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0; let p = dE.find(e => e.id === it.id); if(p) p.q += (it.q - v); }); delete dS[s]; salvarTudo(); render(); }
+    
+    async function comprimirFoto(f) { 
+        return new Promise(res => { 
+            const r = new FileReader(); r.readAsDataURL(f); 
+            r.onload = e => { 
+                const i = new Image(); i.src = e.target.result; 
+                i.onload = () => { 
+                    const c = document.createElement('canvas'); const m = 600; 
+                    let w = i.width, h = i.height; 
+                    if(w > h) { if(w > m) { h *= m/w; w = m; } } else { if(h > m) { w *= m/h; h = m; } } 
+                    c.width = w; c.height = h; c.getContext('2d').drawImage(i, 0, 0, w, h); 
+                    res(c.toDataURL('image/jpeg', 0.8)); 
+                }; 
+            }; 
+        }); 
+    }
+
     function exportar() { const b = new Blob([JSON.stringify({dC, dE, dS})], {type: 'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'Backup_Quintella.json'; a.click(); }
     function importar(i) { const r = new FileReader(); r.onload = (e) => { const d = JSON.parse(e.target.result); dC=d.dC; dE=d.dE; dS=d.dS; salvarTudo(); render(); }; r.readAsText(i.files[0]); }
     render();
