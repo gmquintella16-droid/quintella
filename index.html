@@ -270,11 +270,27 @@
         if(idx > -1) { let pE = dE.find(e => e.id === idItem); if(pE) pE.q += salao.itens[idx].q; salao.itens.splice(idx, 1); if(salao.itens.length === 0) delete dS[nomeSalao]; salvarTudo(); render(); }
     }
 
-    function enviarWhatsApp(s) {
-        let txt = `💎 *QUINTELLA DIAMOND - ENVIO SALÃO*\n📍 Salão: *${s}*\n--------------------------\n`;
-        dS[s].itens.forEach(it => { txt += `▪️ ${it.n} (ID: ${it.id})\n   Qtd: ${it.q} | Valor: ${m(it.v)}\n`; });
-        txt += `--------------------------\n🔸 Comissão: ${dS[s].com}%`;
+   function enviarWhatsApp(s) {
+        let totalMercadoria = 0;
+        let itensTexto = "";
+        
+        dS[s].itens.forEach(it => {
+            let sub = it.q * it.v;
+            totalMercadoria += sub;
+            itensTexto += `💎 *${it.n}* (ID: ${it.id})\nQtd: ${it.q} un | Unit: ${m(it.v)}\n\n`;
+        });
+
+        let txt = `QUINTELLA DIAMOND - ROMANEIO\n`;
+        txt += `📍 Salão: *${s}*\n`;
+        txt += `------------------------------\n`;
+        txt += itensTexto;
+        txt += `------------------------------\n`;
+        txt += `Total em Mercadoria: ${m(totalMercadoria)}\n`;
+        txt += `Comissão acordada: ${dS[s].com}%\n\n`;
+        txt += `Responsabilidade sobre perda, furto ou danos conforme termo assinado.`;
+
         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(txt)}`);
+    
     }
 
     function render() {
@@ -337,3 +353,4 @@
 </script>
 </body>
 </html>
+
