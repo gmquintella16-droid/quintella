@@ -351,19 +351,21 @@
     function importar(i) {
         const r = new FileReader();
         r.onload = (e) => {
-            try {
-                const d = JSON.parse(e.target.result);
-                // O "||" garante que se uma parte do backup faltar, ele cria uma lista vazia em vez de dar erro
-                dC = d.dC || [];
-                dE = d.dE || [];
-                dS = d.dS || {};
-                
-                salvarTudo(); // Grava no cache do navegador
-                render();     // Atualiza a tela
-                alert("✅ Dados carregados e protegidos no sistema!");
-            } catch (err) {
-                alert("❌ Erro: O arquivo de backup parece estar corrompido ou é inválido.");
-            }
+            const d = JSON.parse(e.target.result);
+            
+            // Força a leitura dos dados
+            dC = d.dC || [];
+            dE = d.dE || [];
+            dS = d.dS || {};
+            
+            // GRAVA NO CACHE IMEDIATAMENTE
+            localStorage.setItem('QD_V15_C', JSON.stringify(dC));
+            localStorage.setItem('QD_V15_E', JSON.stringify(dE));
+            localStorage.setItem('QD_V15_S', JSON.stringify(dS));
+            
+            // Atualiza a tela
+            render();
+            alert("✅ Dados carregados e salvos com sucesso!");
         };
         r.readAsText(i.files[0]);
     }
@@ -371,5 +373,6 @@
 </script>
 </body>
 </html>
+
 
 
