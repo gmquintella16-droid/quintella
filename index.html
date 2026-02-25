@@ -334,25 +334,39 @@
 
     function exportar() { const b = new Blob([JSON.stringify({dC, dE, dS})], {type: 'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'Backup_Quintella.json'; a.click(); }
     
-    function importar(i) {
-        const r = new FileReader();
-        r.onload = (e) => {
-            const d = JSON.parse(e.target.result);
-            dC = d.dC || []; dE = d.dE || []; dS = d.dS || {};
-            
-            // GARANTE O SALVAMENTO NAS CHAVES dC, dE, dS
-            localStorage.setItem('dC', JSON.stringify(dC));
-            localStorage.setItem('dE', JSON.stringify(dE));
-            localStorage.setItem('dS', JSON.stringify(dS));
-            
-            render();
-            alert("✅ Backup carregado e salvo com sucesso!");
-        };
-        r.readAsText(i.files[0]);
-    }
+    <script>
+    // ESTA FUNÇÃO VAI LER O SEU ARQUIVO DE QUALQUER JEITO
+    function importar(input) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                
+                // Aqui está o segredo: ele aceita tanto o nome novo quanto o antigo
+                dC = data.QD_V15_C || data.dC || [];
+                dE = data.QD_V15_E || data.dE || [];
+                dS = data.QD_V15_S || data.dS || {};
+                
+                // Força o salvamento com os nomes que o seu programa gosta
+                localStorage.setItem('QD_V15_C', JSON.stringify(dC));
+                localStorage.setItem('QD_V15_E', JSON.stringify(dE));
+                localStorage.setItem('QD_V15_S', JSON.stringify(dS));
+                
+                // Também salva no formato simples para garantir
+                localStorage.setItem('dC', JSON.stringify(dC));
+                localStorage.setItem('dE', JSON.stringify(dE));
+                localStorage.setItem('dS', JSON.stringify(dS));
 
-    render(); // Chama o render inicial ao abrir
+                render();
+                alert("✅ Concluído! " + dE.length + " itens carregados com sucesso.");
+            } catch (err) {
+                alert("Erro ao ler o arquivo. Certifique-se de que selecionou o Backup_Quintella.json");
+            }
+        };
+        reader.readAsText(input.files[0]);
+    }
 </script>
 </body>
 </html>
+
 
