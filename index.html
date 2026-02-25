@@ -32,13 +32,11 @@
         .thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; border: 1px solid #444; }
         .edit-badge { position: absolute; bottom: -2px; right: -2px; background: var(--ouro); color: black; font-size: 8px; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #000; }
         
-        /* Grid Catálogo */
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .card-cat { background: #fff; color: #000; border-radius: 10px; overflow: hidden; text-align: center; padding-bottom: 8px; cursor: pointer; }
         .card-cat img { width: 100%; height: 120px; object-fit: cover; }
         .card-cat small { color: #888; display: block; margin-top: 2px; }
 
-        /* Modal Foto Grande */
         #modalFoto { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
         #imgGrande { max-width: 100%; max-height: 70%; border-radius: 10px; border: 2px solid var(--ouro); object-fit: contain; }
         #infoGrande { color: white; text-align: center; margin-top: 15px; }
@@ -61,6 +59,7 @@
         .enviado-label { color: var(--ouro); font-size: 10px; font-weight: bold; }
         .input-venda { width: 45px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 6px !important; text-align: center; border-radius: 4px; margin: 0 !important; }
         .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
+        .btn-whats { background: #25d366; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: bold; width: 100%; margin-top: 5px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
         .btn-del { background: transparent; color: var(--vermelho); border: 1px solid var(--vermelho); width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
     </style>
 </head>
@@ -132,7 +131,8 @@
 
     <div id="aba5" class="secao">
         <div class="form-box">
-            <label>Escolher Produto (ID - NOME - QTD)</label><select id="v_sel"></select>
+            <label>Digitar ID da Peça</label><input type="number" id="busca_venda" placeholder="Ex: 4502" oninput="autoSelect('v_sel', this.value)">
+            <label>Produto Selecionado</label><select id="v_sel"></select>
             <label>Quantidade para Vender</label><input type="number" id="v_qtd" value="1">
             <button class="btn-add" style="background:var(--azul)" onclick="addAoCarrinho()">+ ADICIONAR AO PEDIDO</button>
         </div>
@@ -147,7 +147,8 @@
     <div id="aba3" class="secao">
         <div class="form-box">
             <label>Salão</label><input type="text" id="s_nome">
-            <label>Peça (ID - NOME - ESTOQUE)</label><select id="s_sel"></select>
+            <label>Digitar ID da Peça</label><input type="number" id="busca_salao" placeholder="Ex: 4502" oninput="autoSelect('s_sel', this.value)">
+            <label>Peça Selecionada</label><select id="s_sel"></select>
             <label>Qtd Enviar</label><input type="number" id="s_qtd" value="1">
             <label>% Comissão</label><input type="number" id="s_com" value="30">
             <button class="btn-add" style="background: var(--azul);" onclick="addS()">🚀 ENVIAR PARA SALÃO</button>
@@ -167,6 +168,17 @@
     function salvarTudo() { localStorage.setItem('QD_V15_C', JSON.stringify(dC)); localStorage.setItem('QD_V15_E', JSON.stringify(dE)); localStorage.setItem('QD_V15_S', JSON.stringify(dS)); }
     function trocar(n, btn) { document.querySelectorAll('.secao').forEach(s => s.classList.remove('active')); document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('active')); document.getElementById('aba'+n).classList.add('active'); btn.classList.add('active'); render(); }
     
+    // FUNÇÃO QUE PREENCHE O SELECT AUTOMATICAMENTE AO DIGITAR O ID
+    function autoSelect(idSelect, idDigitado) {
+        const sel = document.getElementById(idSelect);
+        for (let i = 0; i < sel.options.length; i++) {
+            if (sel.options[i].text.startsWith(idDigitado + " -")) {
+                sel.selectedIndex = i;
+                break;
+            }
+        }
+    }
+
     function updateCustoReal(index, field, value) {
         let val = parseFloat(value) || 0;
         if(field === 'v') dC[index].v = val;
@@ -218,6 +230,7 @@
         let noCart = carrinho.find(c => c.id === peca.id);
         if(peca.q < (q + (noCart?noCart.q:0))) { alert("Estoque insuficiente!"); return; }
         if(noCart) noCart.q += q; else carrinho.push({ ...peca, q: q });
+        document.getElementById('busca_venda').value = '';
         renderCarrinho();
     }
 
@@ -240,18 +253,28 @@
     function addS() {
         let s = document.getElementById('s_nome').value, idx = document.getElementById('s_sel').value, q = parseInt(document.getElementById('s_qtd').value), com = parseFloat(document.getElementById('s_com').value);
         if(!s || idx === "" || isNaN(com) || q <= 0) return;
+        if(dS[s] && dS[s].com !== com) { alert("Este salão já possui uma comissão definida de " + dS[s].com + "%. Use o mesmo valor."); return; }
         let peca = dE[idx];
         if(peca.q < q) { alert("Estoque insuficiente!"); return; }
         if(!dS[s]) dS[s] = { itens: [], com: com };
         let it = dS[s].itens.find(i => i.id === peca.id);
         if(it) it.q += q; else dS[s].itens.push({ ...peca, q: q });
-        peca.q -= q; salvarTudo(); render();
+        peca.q -= q; 
+        document.getElementById('busca_salao').value = '';
+        salvarTudo(); render();
     }
 
     function removerPecaSalao(nomeSalao, idItem) {
         if(!confirm("Remover do salão e voltar para estoque?")) return;
         let salao = dS[nomeSalao], idx = salao.itens.findIndex(i => i.id === idItem);
         if(idx > -1) { let pE = dE.find(e => e.id === idItem); if(pE) pE.q += salao.itens[idx].q; salao.itens.splice(idx, 1); if(salao.itens.length === 0) delete dS[nomeSalao]; salvarTudo(); render(); }
+    }
+
+    function enviarWhatsApp(s) {
+        let txt = `💎 *QUINTELLA DIAMOND - ENVIO SALÃO*\n📍 Salão: *${s}*\n--------------------------\n`;
+        dS[s].itens.forEach(it => { txt += `▪️ ${it.n} (ID: ${it.id})\n   Qtd: ${it.q} | Valor: ${m(it.v)}\n`; });
+        txt += `--------------------------\n🔸 Comissão: ${dS[s].com}%`;
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(txt)}`);
     }
 
     function render() {
@@ -276,13 +299,21 @@
             dS[s].itens.forEach((it, i) => { 
                 rws += `<div class="item-salao"><img src="${it.f}" style="width:45px;height:45px;border-radius:4px;object-fit:cover"><div class="item-info"><span class="nome-label">${it.n}</span><span class="valor-label">ID: ${it.id} </span><span class="unitario-label"> Unit: ${m(it.v)}</span><span class="enviado-label">Quantidade Enviada: ${it.q}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda"><button class="btn-del" style="margin-left:5px" onclick="removerPecaSalao('${s}', ${it.id})">X</button></div>`; 
             });
-            htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div><div style="display:none">${rws}<div style="display:flex;padding:10px;text-align:center;border-top:1px solid #444"><div style="flex:1"><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div style="flex:1"><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
+            htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div><div style="display:none">${rws}<div style="display:flex;padding:10px;text-align:center;border-top:1px solid #444"><div style="flex:1"><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div style="flex:1"><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-whats" onclick="enviarWhatsApp('${s}')">📱 ENVIAR LISTA WHATSAPP</button><button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
         }
         document.getElementById('listaS').innerHTML = htmlS;
     }
 
     function recalc(s) { let b = 0; dS[s].itens.forEach((it, i) => { b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; }); let com = b * (dS[s].com / 100); document.getElementById(`c-${s}`).innerText = m(com); document.getElementById(`r-${s}`).innerText = m(b - com); }
-    function fechar(s) { let erro = false; dS[s].itens.forEach((it, i) => { if((parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) > it.q) erro = true; }); if(erro) { alert("Venda maior que o enviado!"); return; } if(!confirm("Fechar acerto?")) return; dS[s].itens.forEach((it, i) => { let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0; let p = dE.find(e => e.id === it.id); if(p) p.q += (it.q - v); }); delete dS[s]; salvarTudo(); render(); }
+    
+    function fechar(s) { 
+        let erro = false; 
+        dS[s].itens.forEach((it, i) => { if((parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) > it.q) erro = true; }); 
+        if(erro) { alert("Atenção: A quantidade vendida não pode ser maior que a enviada!"); return; } 
+        if(!confirm("Fechar acerto?")) return; 
+        dS[s].itens.forEach((it, i) => { let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0; let p = dE.find(e => e.id === it.id); if(p) p.q += (it.q - v); }); 
+        delete dS[s]; salvarTudo(); render(); 
+    }
     
     async function comprimirFoto(f) { 
         return new Promise(res => { 
