@@ -348,15 +348,25 @@
     }
 
     function exportar() { const b = new Blob([JSON.stringify({dC, dE, dS})], {type: 'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'Backup_Quintella.json'; a.click(); }
-  function importar(i) { const r = new FileReader(); r.onload = (e) => { const d = JSON.parse(e.target.result); dC=d.dC; dE=d.dE; dS=d.dS; salvarTudo(); render(); }; r.readAsText(i.files[0]); }
-
+    function importar(i) { 
+        const r = new FileReader(); 
+        r.onload = (e) => { 
+            const d = JSON.parse(e.target.result); 
+            dC = d.dC || []; dE = d.dE || []; dS = d.dS || {}; 
+            // Salva no cache imediatamente após ler o arquivo
+            localStorage.setItem('QD_V15_C', JSON.stringify(dC));
+            localStorage.setItem('QD_V15_E', JSON.stringify(dE));
+            localStorage.setItem('QD_V15_S', JSON.stringify(dS));
+            render(); 
+            alert("✅ Carregado e salvo com sucesso!");
+        }; 
+        r.readAsText(i.files[0]); 
+    }
     render();
-
 </script>
-
 </body>
-
 </html>
+
 
 
 
