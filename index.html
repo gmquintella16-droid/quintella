@@ -348,13 +348,6 @@
     }
 
     function exportar() { const b = new Blob([JSON.stringify({dC, dE, dS})], {type: 'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'Backup_Quintella.json'; a.click(); }
-    function salvarTudo() {
-        localStorage.setItem('dC', JSON.stringify(dC));
-        localStorage.setItem('dE', JSON.stringify(dE));
-        localStorage.setItem('dS', JSON.stringify(dS));
-    }
-
-   
     function importar(i) {
         const r = new FileReader();
         r.onload = (e) => {
@@ -375,6 +368,7 @@
 </script>
 </body>
 </html>
+
 
 
 
