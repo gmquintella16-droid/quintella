@@ -37,17 +37,18 @@
         .cart-info { flex: 1; font-size: 11px; }
         .cart-total-box { background: #000; border: 2px solid var(--verde); border-radius: 12px; padding: 15px; text-align: center; margin: 15px 0; }
         .salao-container { background: #222; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; overflow: hidden; }
-        .salao-header { padding: 12px; background: #2a2a2a; color: #fff; display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; }
-        .item-salao { display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #333; padding: 10px 5px; }
+        .salao-header { padding: 12px; background: #2a2a2a; color: #fff; display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; cursor: pointer; }
+        .item-salao { display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #333; padding: 10px 5px; transition: background 0.5s; }
         .item-info { flex: 1; }
         .nome-label { font-weight: bold; color: #fff; font-size: 12px; display: block; }
         .valor-label { color: var(--ouro); font-size: 10px; display: block; margin: 2px 0; }
         .unitario-label { color: #aaa; font-size: 10px; display: block; margin: 2px 0; }
         .enviado-label { color: var(--ouro); font-size: 10px; font-weight: bold; }
-        .input-venda { width: 45px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 6px !important; text-align: center; border-radius: 4px; margin: 0 !important; }
+        .input-venda { width: 45px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 6px !important; text-align: center; border-radius: 4px; margin: 0 !important; font-size: 14px; }
         .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
         .btn-whats { background: #25d366; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: bold; width: 100%; margin-top: 5px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
         .btn-del { background: transparent; color: var(--vermelho); border: 1px solid var(--vermelho); width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
+        .busca-acerto-salao { background: #333; border: 1px solid var(--ouro); color: #fff; padding: 8px; border-radius: 6px; width: 95%; margin: 10px auto; display: block; font-size: 13px; }
         #modalFoto { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
         #imgGrande { max-width: 100%; max-height: 70%; border-radius: 10px; border: 2px solid var(--ouro); object-fit: contain; }
         #infoGrande { color: white; text-align: center; margin-top: 15px; }
@@ -148,7 +149,6 @@
 </div>
 
 <script>
-    // PADRONIZAÇÃO DAS CHAVES PARA dC, dE, dS (COMO NO SEU BACKUP)
     let dC = JSON.parse(localStorage.getItem('dC')) || [];
     let dE = JSON.parse(localStorage.getItem('dE')) || [];
     let dS = JSON.parse(localStorage.getItem('dS')) || {};
@@ -178,6 +178,19 @@
                 sel.selectedIndex = i;
                 break;
             }
+        }
+    }
+
+    function localizarNoAcerto(salao, idProcurado) {
+        if(!idProcurado || idProcurado.length < 3) return;
+        const idDiv = `item-${salao}-${idProcurado}`;
+        const el = document.getElementById(idDiv);
+        if(el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.style.background = '#d4af3766';
+            setTimeout(() => { el.style.background = 'transparent'; }, 2000);
+            const inputVenda = el.querySelector('.input-venda');
+            if(inputVenda) inputVenda.focus();
         }
     }
 
@@ -299,9 +312,18 @@
         for(let s in dS) {
             let rws = ''; 
             dS[s].itens.forEach((it, i) => { 
-                rws += `<div class="item-salao"><img src="${it.f}" style="width:45px;height:45px;border-radius:4px;object-fit:cover"><div class="item-info"><span class="nome-label">${it.n}</span><span class="valor-label">ID: ${it.id} </span><span class="unitario-label"> Unit: ${m(it.v)}</span><span class="enviado-label">Quantidade Enviada: ${it.q}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda"><button class="btn-del" style="margin-left:5px" onclick="removerPecaSalao('${s}', ${it.id})">X</button></div>`; 
+                rws += `<div class="item-salao" id="item-${s}-${it.id}"><img src="${it.f}" style="width:45px;height:45px;border-radius:4px;object-fit:cover"><div class="item-info"><span class="nome-label">${it.n}</span><span class="valor-label">ID: ${it.id} </span><span class="unitario-label"> Unit: ${m(it.v)}</span><span class="enviado-label">Qtd: ${it.q}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda"><button class="btn-del" style="margin-left:5px" onclick="removerPecaSalao('${s}', ${it.id})">X</button></div>`; 
             });
-            htmlS += `<div class="salao-container"><div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div><div style="display:none">${rws}<div style="display:flex;padding:10px;text-align:center;border-top:1px solid #444"><div style="flex:1"><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div style="flex:1"><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div><button class="btn-whats" onclick="enviarWhatsApp('${s}')">📱 ENVIAR LISTA WHATSAPP</button><button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button></div></div>`;
+            htmlS += `<div class="salao-container">
+                        <div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div>
+                        <div style="display:none">
+                            <input type="number" class="busca-acerto-salao" placeholder="🔍 Localizar ID para Venda..." oninput="localizarNoAcerto('${s}', this.value)">
+                            ${rws}
+                            <div style="display:flex;padding:10px;text-align:center;border-top:1px solid #444"><div style="flex:1"><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div style="flex:1"><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div>
+                            <button class="btn-whats" onclick="enviarWhatsApp('${s}')">📱 ENVIAR LISTA WHATSAPP</button>
+                            <button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button>
+                        </div>
+                      </div>`;
         }
         document.getElementById('listaS').innerHTML = htmlS;
     }
@@ -339,20 +361,16 @@
         r.onload = (e) => {
             const d = JSON.parse(e.target.result);
             dC = d.dC || []; dE = d.dE || []; dS = d.dS || {};
-            
-            // GARANTE O SALVAMENTO NAS CHAVES dC, dE, dS
             localStorage.setItem('dC', JSON.stringify(dC));
             localStorage.setItem('dE', JSON.stringify(dE));
             localStorage.setItem('dS', JSON.stringify(dS));
-            
             render();
             alert("✅ Backup carregado e salvo com sucesso!");
         };
         r.readAsText(i.files[0]);
     }
 
-    render(); // Chama o render inicial ao abrir
+    render();
 </script>
 </body>
 </html>
-
