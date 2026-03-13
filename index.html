@@ -30,9 +30,17 @@
         .thumb-edit-btn { background: none; border: none; padding: 0; position: relative; width: 40px; height: 40px; cursor: pointer; }
         .thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; border: 1px solid #444; }
         .edit-badge { position: absolute; bottom: -2px; right: -2px; background: var(--ouro); color: black; font-size: 8px; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #000; }
-        .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .card-cat { background: #fff; color: #000; border-radius: 10px; overflow: hidden; text-align: center; padding-bottom: 8px; cursor: pointer; }
-        .card-cat img { width: 100%; height: 120px; object-fit: cover; }
+        
+        /* AJUSTE NO CATÁLOGO PARA ORGANIZAR AS ESCRITAS */
+        .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+        .card-cat { background: #fff; color: #000; border-radius: 12px; overflow: hidden; text-align: center; padding-bottom: 12px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card-cat img { width: 100%; height: 130px; object-fit: cover; border-bottom: 1px solid #eee; }
+        .card-info-box { padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+        .card-cat strong { font-size: 13px; color: #222; display: block; line-height: 1.2; }
+        .card-cat .id-label { font-size: 9px; color: #888; text-transform: uppercase; margin-bottom: 2px; }
+        .card-cat .preco-label { font-size: 14px; color: var(--ouro); font-weight: 800; margin-top: 4px; }
+        .card-cat .comissao-label { font-size: 10px; color: var(--verde); font-weight: 600; background: #f0fff4; padding: 2px; border-radius: 4px; margin-top: 2px; }
+
         .carrinho-item { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--roxo); }
         .cart-info { flex: 1; font-size: 11px; }
         .cart-total-box { background: #000; border: 2px solid var(--verde); border-radius: 12px; padding: 15px; text-align: center; margin: 15px 0; }
@@ -157,19 +165,9 @@
 
     const m = v => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
 
-    function salvarTudo() { 
-        localStorage.setItem('dC', JSON.stringify(dC)); 
-        localStorage.setItem('dE', JSON.stringify(dE)); 
-        localStorage.setItem('dS', JSON.stringify(dS)); 
-    }
+    function salvarTudo() { localStorage.setItem('dC', JSON.stringify(dC)); localStorage.setItem('dE', JSON.stringify(dE)); localStorage.setItem('dS', JSON.stringify(dS)); }
 
-    function trocar(n, btn) { 
-        document.querySelectorAll('.secao').forEach(s => s.classList.remove('active')); 
-        document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('active')); 
-        document.getElementById('aba'+n).classList.add('active'); 
-        btn.classList.add('active'); 
-        render(); 
-    }
+    function trocar(n, btn) { document.querySelectorAll('.secao').forEach(s => s.classList.remove('active')); document.querySelectorAll('.btn-menu').forEach(b => b.classList.remove('active')); document.getElementById('aba'+n).classList.add('active'); btn.classList.add('active'); render(); }
     
     function autoSelect(idSelect, idDigitado) {
         const sel = document.getElementById(idSelect);
@@ -201,10 +199,7 @@
         salvarTudo(); render();
     }
 
-    function addC() { 
-        let n = document.getElementById('c_nome').value, v = parseFloat(document.getElementById('c_valor').value), q = parseInt(document.getElementById('c_qtd').value); 
-        if(n && v >= 0 && q > 0) { dC.push({n, v, q}); document.getElementById('c_nome').value = ''; document.getElementById('c_valor').value = ''; salvarTudo(); render(); } 
-    }
+    function addC() { let n = document.getElementById('c_nome').value, v = parseFloat(document.getElementById('c_valor').value), q = parseInt(document.getElementById('c_qtd').value); if(n && v >= 0 && q > 0) { dC.push({n, v, q}); document.getElementById('c_nome').value = ''; document.getElementById('c_valor').value = ''; salvarTudo(); render(); } }
 
     function sugerir() { let f = getEmbalagemUn(), c = parseFloat(document.getElementById('p_custo').value) || 0; let ma = (parseFloat(document.getElementById('p_margem').value) || 0) / 100; if(c > 0) document.getElementById('p_venda').value = ((c + f) / (1 - (ma >= 1 ? 0.9 : ma))).toFixed(2); }
     function getEmbalagemUn() { let total = 0; dC.forEach(c => { total += (c.v / c.q); }); return total || 0; }
@@ -234,7 +229,7 @@
         let p = dE.find(x => x.id === id);
         if(!p) return;
         document.getElementById('imgGrande').src = p.f;
-        document.getElementById('infoGrande').innerHTML = `<strong>${p.n}</strong><small>ID: ${p.id}</small><span>Preço: ${m(p.v)}</span>`;
+        document.getElementById('infoGrande').innerHTML = `<strong>${p.n}</strong><br><small>ID: ${p.id}</small><br><span style="color:var(--ouro); font-size:1.2rem; font-weight:bold">${m(p.v)}</span>`;
         document.getElementById('modalFoto').style.display = 'flex';
     }
 
@@ -302,7 +297,19 @@
         dE.forEach((p, i) => {
             totE += p.q; let custoT = p.c + embUn; let mrg = p.v > 0 ? (((p.v - custoT) / p.v) * 100).toFixed(0) : 0;
             htmlE += `<tr><td><button class="thumb-edit-btn" onclick="iniciarTrocaFoto(${p.id})"><img src="${p.f}" class="thumb"><div class="edit-badge">✎</div></button></td><td><b>${p.n}</b><br><small>ID: ${p.id}</small></td><td>${p.q}</td><td>${custoT.toFixed(2)}</td><td>${p.v.toFixed(2)}</td><td style="color:var(--verde)">${mrg}%</td><td><button class="btn-del" onclick="if(confirm('Apagar?')){dE.splice(${i},1);salvarTudo();render();}">X</button></td></tr>`;
-            htmlCat += `<div class="card-cat" onclick="abrirZoom(${p.id})"><img src="${p.f}"><div style="padding:5px"><strong>${p.n}</strong><small>ID: ${p.id}</small><strong>${m(p.v)}</strong><small style="color:var(--verde)">Comissão: ${m(p.v * comSim)}</small></div></div>`;
+            
+            // RENDERIZAÇÃO DO CATÁLOGO MAIS ORGANIZADA
+            htmlCat += `
+                <div class="card-cat" onclick="abrirZoom(${p.id})">
+                    <img src="${p.f}">
+                    <div class="card-info-box">
+                        <span class="id-label">Ref: ${p.id}</span>
+                        <strong>${p.n}</strong>
+                        <span class="preco-label">${m(p.v)}</span>
+                        <span class="comissao-label">💰 Comissão: ${m(p.v * comSim)}</span>
+                    </div>
+                </div>`;
+            
             if(p.q > 0) htmlSel += `<option value="${i}">${p.id} - ${p.n} (Estoque: ${p.q})</option>`;
         });
         document.getElementById('listaE').innerHTML = htmlE; document.getElementById('listaCat').innerHTML = htmlCat; document.getElementById('totalEst').innerText = totE; 
