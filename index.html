@@ -31,7 +31,6 @@
         .thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; border: 1px solid #444; }
         .edit-badge { position: absolute; bottom: -2px; right: -2px; background: var(--ouro); color: black; font-size: 8px; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #000; }
         
-        /* AJUSTE NO CATÁLOGO PARA ORGANIZAR AS ESCRITAS */
         .grid-catalogo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
         .card-cat { background: #fff; color: #000; border-radius: 12px; overflow: hidden; text-align: center; padding-bottom: 12px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .card-cat img { width: 100%; height: 130px; object-fit: cover; border-bottom: 1px solid #eee; }
@@ -53,7 +52,8 @@
         .unitario-label { color: #aaa; font-size: 10px; display: block; margin: 2px 0; }
         .enviado-label { color: var(--ouro); font-size: 10px; font-weight: bold; }
         .input-venda { width: 45px !important; background: #000 !important; color: #fff !important; border: 1px solid var(--verde) !important; padding: 6px !important; text-align: center; border-radius: 4px; margin: 0 !important; font-size: 14px; }
-        .btn-fechar { background: var(--ouro); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
+        .btn-baixa-parcial { background: var(--azul); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
+        .btn-fechar-total { background: var(--vermelho); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; margin-top: 8px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; opacity: 0.8; }
         .btn-whats { background: #25d366; color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: bold; width: 100%; margin-top: 5px; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; }
         .btn-del { background: transparent; color: var(--vermelho); border: 1px solid var(--vermelho); width: 26px; height: 26px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
         .busca-acerto-salao { background: #333; border: 1px solid var(--ouro); color: #fff; padding: 8px; border-radius: 6px; width: 95%; margin: 10px auto; display: block; font-size: 13px; }
@@ -298,7 +298,6 @@
             totE += p.q; let custoT = p.c + embUn; let mrg = p.v > 0 ? (((p.v - custoT) / p.v) * 100).toFixed(0) : 0;
             htmlE += `<tr><td><button class="thumb-edit-btn" onclick="iniciarTrocaFoto(${p.id})"><img src="${p.f}" class="thumb"><div class="edit-badge">✎</div></button></td><td><b>${p.n}</b><br><small>ID: ${p.id}</small></td><td>${p.q}</td><td>${custoT.toFixed(2)}</td><td>${p.v.toFixed(2)}</td><td style="color:var(--verde)">${mrg}%</td><td><button class="btn-del" onclick="if(confirm('Apagar?')){dE.splice(${i},1);salvarTudo();render();}">X</button></td></tr>`;
             
-            // RENDERIZAÇÃO DO CATÁLOGO MAIS ORGANIZADA
             htmlCat += `
                 <div class="card-cat" onclick="abrirZoom(${p.id})">
                     <img src="${p.f}">
@@ -319,7 +318,7 @@
         for(let s in dS) {
             let rws = ''; 
             dS[s].itens.forEach((it, i) => { 
-                rws += `<div class="item-salao" id="item-${s}-${it.id}"><img src="${it.f}" style="width:45px;height:45px;border-radius:4px;object-fit:cover"><div class="item-info"><span class="nome-label">${it.n}</span><span class="valor-label">ID: ${it.id} </span><span class="unitario-label"> Unit: ${m(it.v)}</span><span class="enviado-label">Qtd: ${it.q}</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda"><button class="btn-del" style="margin-left:5px" onclick="removerPecaSalao('${s}', ${it.id})">X</button></div>`; 
+                rws += `<div class="item-salao" id="item-${s}-${it.id}"><img src="${it.f}" style="width:45px;height:45px;border-radius:4px;object-fit:cover"><div class="item-info"><span class="nome-label">${it.n}</span><span class="valor-label">ID: ${it.id} </span><span class="unitario-label"> Unit: ${m(it.v)}</span><span class="enviado-label">Saldo: ${it.q} un</span></div><input type="number" id="v-${s}-${i}" value="0" oninput="recalc('${s}')" class="input-venda"><button class="btn-del" style="margin-left:5px" onclick="removerPecaSalao('${s}', ${it.id})">X</button></div>`; 
             });
             htmlS += `<div class="salao-container">
                         <div class="salao-header" onclick="let el=this.nextElementSibling; el.style.display=el.style.display==='block'?'none':'block'"><span>📍 ${s} | ${dS[s].com}%</span><span>▾</span></div>
@@ -327,8 +326,9 @@
                             <input type="number" class="busca-acerto-salao" placeholder="🔍 Localizar ID para Venda..." oninput="localizarNoAcerto('${s}', this.value)">
                             ${rws}
                             <div style="display:flex;padding:10px;text-align:center;border-top:1px solid #444"><div style="flex:1"><small>Comissão</small><br><strong style="color:var(--vermelho)" id="c-${s}">R$ 0,00</strong></div><div style="flex:1"><small>Receber</small><br><strong style="color:var(--verde)" id="r-${s}">R$ 0,00</strong></div></div>
-                            <button class="btn-whats" onclick="enviarWhatsApp('${s}')">📱 ENVIAR LISTA WHATSAPP</button>
-                            <button class="btn-fechar" onclick="fechar('${s}')">FECHAR ACERTO</button>
+                            <button class="btn-baixa-parcial" onclick="baixaParcial('${s}')">💰 BAIXAR VENDAS (MANTER SALDO)</button>
+                            <button class="btn-fechar-total" onclick="fecharTotal('${s}')">❌ FECHAR ACERTO (RECOLHER TUDO)</button>
+                            <button class="btn-whats" onclick="enviarWhatsApp('${s}')">📱 ENVIAR LISTA ATUALIZADA</button>
                         </div>
                       </div>`;
         }
@@ -337,12 +337,46 @@
 
     function recalc(s) { let b = 0; dS[s].itens.forEach((it, i) => { b += (parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) * it.v; }); let com = b * (dS[s].com / 100); document.getElementById(`c-${s}`).innerText = m(com); document.getElementById(`r-${s}`).innerText = m(b - com); }
     
-    function fechar(s) { 
+    // NOVO: BAIXA PARCIAL (O SALÃO CONTINUA COM O QUE SOBROU)
+    function baixaParcial(s) {
+        let vendendo = false;
+        let erro = false;
+        dS[s].itens.forEach((it, i) => {
+            let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
+            if(v > 0) vendendo = true;
+            if(v > it.q) erro = true;
+        });
+
+        if(erro) { alert("Erro: Quantidade vendida maior que o saldo!"); return; }
+        if(!vendendo) { alert("Nenhuma venda digitada."); return; }
+        
+        if(!confirm("Deseja baixar apenas as vendas? As peças restantes continuarão no salão.")) return;
+
+        dS[s].itens.forEach((it, i) => {
+            let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0;
+            it.q -= v; // Reduz apenas do saldo do salão
+        });
+
+        // Remove itens que zeraram
+        dS[s].itens = dS[s].itens.filter(it => it.q > 0);
+        
+        if(dS[s].itens.length === 0) delete dS[s];
+
+        salvarTudo(); render(); alert("Vendas baixadas! O saldo do salão foi atualizado.");
+    }
+
+    // FECHAMENTO TOTAL (O QUE SOBROU VOLTA PRO ESTOQUE CENTRAL)
+    function fecharTotal(s) { 
         let erro = false; dS[s].itens.forEach((it, i) => { if((parseInt(document.getElementById(`v-${s}-${i}`).value) || 0) > it.q) erro = true; }); 
-        if(erro) { alert("Atenção: A quantidade vendida não pode ser maior que a enviada!"); return; } 
-        if(!confirm("Fechar acerto?")) return; 
-        dS[s].itens.forEach((it, i) => { let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0; let p = dE.find(e => e.id === it.id); if(p) p.q += (it.q - v); }); 
-        delete dS[s]; salvarTudo(); render(); 
+        if(erro) { alert("Atenção: A quantidade vendida não pode ser maior que o saldo!"); return; } 
+        if(!confirm("Fechar acerto total? O que não foi vendido voltará para o seu estoque principal.")) return; 
+        
+        dS[s].itens.forEach((it, i) => { 
+            let v = parseInt(document.getElementById(`v-${s}-${i}`).value) || 0; 
+            let p = dE.find(e => e.id === it.id); 
+            if(p) p.q += (it.q - v); // Devolve a sobra pro estoque central
+        }); 
+        delete dS[s]; salvarTudo(); render(); alert("Acerto finalizado e estoque central atualizado!");
     }
     
     async function comprimirFoto(f) { 
